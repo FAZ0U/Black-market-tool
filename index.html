@@ -75,10 +75,10 @@
             gap: 12px;
         }
 
-        .pirate-icon {
-            font-size: 2.5rem;
-            color: var(--accent);
-            text-shadow: 0 0 6px var(--accent-glow);
+        .pirate-logo {
+            width: 50px;
+            height: 50px;
+            filter: drop-shadow(0 0 6px var(--accent-glow));
         }
 
         h1 {
@@ -450,7 +450,18 @@
 <div class="container">
     <div class="pirate-header">
         <div class="title-area">
-            <i class="fas fa-skull-crossbones pirate-icon"></i>
+            <!-- Imagen de calavera pirata realista (SVG) -->
+            <svg class="pirate-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M50 10C30 10 15 25 15 45C15 55 20 65 28 70L25 85L35 78C40 80 45 82 50 82C55 82 60 80 65 78L75 85L72 70C80 65 85 55 85 45C85 25 70 10 50 10Z" fill="#1a1a1a" stroke="#b91c1c" stroke-width="2"/>
+                <circle cx="35" cy="45" r="5" fill="#b91c1c"/>
+                <circle cx="65" cy="45" r="5" fill="#b91c1c"/>
+                <path d="M40 60 Q50 70 60 60" stroke="#b91c1c" stroke-width="2" fill="none"/>
+                <rect x="45" y="30" width="10" height="15" fill="#b91c1c" rx="2"/>
+                <path d="M50 20 L50 28" stroke="#b91c1c" stroke-width="2"/>
+                <path d="M30 25 L35 32" stroke="#b91c1c" stroke-width="2"/>
+                <path d="M70 25 L65 32" stroke="#b91c1c" stroke-width="2"/>
+                <text x="50" y="92" text-anchor="middle" fill="#b91c1c" font-size="8" font-family="Cinzel">BMT</text>
+            </svg>
             <div>
                 <h1>BLACK MARKET TOOL</h1>
                 <div class="sub">Albion Online · Comercio oscuro</div>
