@@ -110,26 +110,80 @@
             text-align: center;
             font-family: 'Inter', monospace;
         }
+        
+        /* Formulario de nuevo objeto */
         .add-section, .data-management { background: var(--bg-input); border-radius: 20px; padding: 12px; margin-bottom: 16px; }
         .section-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-        .add-fields { display: flex; flex-direction: column; gap: 10px; }
-        .add-row { display: flex; gap: 8px; flex-wrap: wrap; }
-        .add-row input { flex: 1; background: var(--bg-card); border: 1px solid var(--border); padding: 12px; border-radius: 14px; color: var(--text-primary); }
+        
+        .form-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .form-row {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .form-row label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            letter-spacing: 0.5px;
+        }
+        .form-row input, .form-row select {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 12px;
+            border-radius: 14px;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+        .cities-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 8px 0;
+        }
+        .city-input {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .city-input label {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+        }
+        .city-input input {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 10px;
+            border-radius: 12px;
+            color: var(--text-primary);
+        }
+        .black-market-row {
+            margin: 12px 0;
+            padding: 12px;
+            background: rgba(185, 28, 28, 0.1);
+            border-radius: 14px;
+            border-left: 3px solid var(--accent);
+        }
         .btn {
             background: var(--accent);
             border: none;
-            padding: 12px;
+            padding: 14px;
             border-radius: 14px;
             color: white;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s;
+            width: 100%;
         }
         .btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
         .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
         .btn-outline:hover { background: var(--accent); color: white; }
         .data-buttons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-        .simulator-btn { background: linear-gradient(135deg, #2d2d2d, #1a1a1a); border: 1px solid var(--accent); width: 100%; margin-top: 8px; }
+        .simulator-btn { background: linear-gradient(135deg, #2d2d2d, #1a1a1a); border: 1px solid var(--accent); width: 100%; margin-top: 12px; }
 
         /* Stats */
         .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
@@ -137,7 +191,7 @@
         .stat-card h4 { font-size: 0.65rem; color: var(--text-secondary); }
         .stat-card .value { font-size: 1rem; font-weight: bold; color: var(--accent); }
 
-        /* Items - NUEVO DISEÑO CON 5 CIUDADES */
+        /* Items */
         .items-container { display: flex; flex-direction: column; gap: 12px; }
         .item-card { background: var(--bg-card); border-radius: 20px; padding: 12px; border: 1px solid var(--border); }
         .item-header { display: flex; justify-content: space-between; margin-bottom: 12px; }
@@ -281,7 +335,7 @@
             <img src="2011.jpg" alt="Pirate Logo" class="pirate-logo">
             <div>
                 <h1>BLACK MARKET TOOL</h1>
-                <div class="sub">Albion Online · Comercio oscuro · 5 ciudades</div>
+                <div class="sub">Albion Online · 5 ciudades + Black Market</div>
             </div>
         </div>
         <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
@@ -300,13 +354,45 @@
         </div>
 
         <div class="add-section">
-            <div class="section-title"><i class="fas fa-plus-circle"></i> AGREGAR OBJETO</div>
-            <div class="add-fields">
-                <div class="add-row">
-                    <input type="text" id="newName" placeholder="Nombre del objeto">
-                    <input type="number" id="newBuy" placeholder="Precio compra (silver)">
+            <div class="section-title"><i class="fas fa-plus-circle"></i> NUEVO OBJETO</div>
+            <div class="form-grid">
+                <div class="form-row">
+                    <label><i class="fas fa-tag"></i> NOMBRE DEL OBJETO</label>
+                    <input type="text" id="newName" placeholder="Ej: Bolsa T5, Calavera Ósea, etc.">
                 </div>
-                <button class="btn" onclick="addItem()"><i class="fas fa-skull"></i> Agregar al cargamento</button>
+                
+                <div class="form-row">
+                    <label><i class="fas fa-city"></i> PRECIOS DE COMPRA POR CIUDAD</label>
+                    <div class="cities-grid">
+                        <div class="city-input">
+                            <label>🏔️ Fort Sterling</label>
+                            <input type="number" id="priceFS" placeholder="Precio compra">
+                        </div>
+                        <div class="city-input">
+                            <label>🏜️ Bridgewatch</label>
+                            <input type="number" id="priceBW" placeholder="Precio compra">
+                        </div>
+                        <div class="city-input">
+                            <label>🌳 Lymhurst</label>
+                            <input type="number" id="priceLH" placeholder="Precio compra">
+                        </div>
+                        <div class="city-input">
+                            <label>⚙️ Martlock</label>
+                            <input type="number" id="priceML" placeholder="Precio compra">
+                        </div>
+                        <div class="city-input">
+                            <label>✨ Thetford</label>
+                            <input type="number" id="priceTH" placeholder="Precio compra">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="black-market-row">
+                    <label><i class="fas fa-skull"></i> PRECIO BLACK MARKET</label>
+                    <input type="number" id="blackMarketPrice" placeholder="Precio de venta en Black Market" style="width:100%; margin-top:8px; background:var(--bg-card); border:1px solid var(--border); padding:12px; border-radius:12px; color:var(--text-primary);">
+                </div>
+
+                <button class="btn" onclick="addItem()"><i class="fas fa-skull"></i> AGREGAR OBJETO</button>
             </div>
         </div>
 
@@ -326,7 +412,7 @@
 
     <div class="stats-grid" id="statsGrid"></div>
     <div class="items-container" id="itemsContainer"></div>
-    <footer><i class="fas fa-anchor"></i> Precio medio calculado automáticamente entre 5 ciudades · Datos guardados localmente</footer>
+    <footer><i class="fas fa-anchor"></i> Precio promedio = (Suma de ciudades con datos + Black Market) / Cantidad · Datos guardados localmente</footer>
 </div>
 
 <div id="simulatorModal" class="modal">
@@ -358,24 +444,35 @@
     function getTaxRate() { return parseFloat(document.getElementById('taxRate').value) / 100; }
     function getLossRate() { return parseFloat(document.getElementById('lossRate').value) / 100; }
 
-    // Calcular precio medio de las 5 ciudades
-    function getAveragePrice(cities) {
+    // Calcular precio promedio (ciudades + black market)
+    function getAveragePrice(prices) {
         let sum = 0;
         let count = 0;
-        for (let i = 1; i <= 5; i++) {
-            let price = parseFloat(cities['city' + i]);
+        
+        // Ciudades
+        const cities = ['fortSterling', 'bridgewatch', 'lymhurst', 'martlock', 'thetford'];
+        cities.forEach(city => {
+            let price = parseFloat(prices[city]);
             if (!isNaN(price) && price > 0) {
                 sum += price;
                 count++;
             }
+        });
+        
+        // Black Market
+        let blackMarket = parseFloat(prices.blackMarket);
+        if (!isNaN(blackMarket) && blackMarket > 0) {
+            sum += blackMarket;
+            count++;
         }
+        
         return count > 0 ? sum / count : 0;
     }
 
     function calculateItem(item) {
         const tax = getTaxRate();
         const loss = getLossRate();
-        const precioMedio = getAveragePrice(item.cities || {});
+        const precioMedio = getAveragePrice(item.prices || {});
         const factor = 1 - tax;
         const ingresoNeto = precioMedio * factor;
         const utilidadBruta = ingresoNeto - item.buy;
@@ -496,27 +593,31 @@
         }
         container.innerHTML = data.map((item, idx) => {
             let rank = idx === 0 ? '⚔️' : idx === 1 ? '🔪' : idx === 2 ? '🏴' : '';
-            const cities = item.cities || { city1: '', city2: '', city3: '', city4: '', city5: '' };
+            const prices = item.prices || {};
             return `
             <div class="item-card">
                 <div class="item-header">
                     <span class="item-name">${rank} ${item.name}</span>
                     <button class="delete-btn" onclick="deleteItem('${item.name}')"><i class="fas fa-trash"></i></button>
                 </div>
-                <div class="field">
-                    <label><i class="fas fa-shopping-cart"></i> PRECIO COMPRA (silver)</label>
-                    <input type="number" value="${item.buy}" onchange="updateItem('${item.name}', 'buy', this.value)">
-                </div>
+                
                 <div class="city-grid">
-                    <div class="city-field"><label><i class="fas fa-city"></i> Ciudad A</label><input type="number" value="${cities.city1 || ''}" onchange="updateCity('${item.name}', 1, this.value)" placeholder="0"></div>
-                    <div class="city-field"><label><i class="fas fa-city"></i> Ciudad B</label><input type="number" value="${cities.city2 || ''}" onchange="updateCity('${item.name}', 2, this.value)" placeholder="0"></div>
-                    <div class="city-field"><label><i class="fas fa-city"></i> Ciudad C</label><input type="number" value="${cities.city3 || ''}" onchange="updateCity('${item.name}', 3, this.value)" placeholder="0"></div>
-                    <div class="city-field"><label><i class="fas fa-city"></i> Ciudad D</label><input type="number" value="${cities.city4 || ''}" onchange="updateCity('${item.name}', 4, this.value)" placeholder="0"></div>
-                    <div class="city-field"><label><i class="fas fa-city"></i> Ciudad E</label><input type="number" value="${cities.city5 || ''}" onchange="updateCity('${item.name}', 5, this.value)" placeholder="0"></div>
+                    <div class="city-field"><label>🏔️ Fort Sterling</label><input type="number" value="${prices.fortSterling || ''}" onchange="updatePrice('${item.name}', 'fortSterling', this.value)"></div>
+                    <div class="city-field"><label>🏜️ Bridgewatch</label><input type="number" value="${prices.bridgewatch || ''}" onchange="updatePrice('${item.name}', 'bridgewatch', this.value)"></div>
+                    <div class="city-field"><label>🌳 Lymhurst</label><input type="number" value="${prices.lymhurst || ''}" onchange="updatePrice('${item.name}', 'lymhurst', this.value)"></div>
+                    <div class="city-field"><label>⚙️ Martlock</label><input type="number" value="${prices.martlock || ''}" onchange="updatePrice('${item.name}', 'martlock', this.value)"></div>
+                    <div class="city-field"><label>✨ Thetford</label><input type="number" value="${prices.thetford || ''}" onchange="updatePrice('${item.name}', 'thetford', this.value)"></div>
                 </div>
+                
+                <div class="field">
+                    <label><i class="fas fa-skull"></i> BLACK MARKET</label>
+                    <input type="number" value="${prices.blackMarket || ''}" onchange="updatePrice('${item.name}', 'blackMarket', this.value)">
+                </div>
+                
                 <div class="precio-medio">
-                    <span><i class="fas fa-chart-line"></i> PRECIO MEDIO:</span> ${Math.round(item.precioMedio).toLocaleString()} silver
+                    <span><i class="fas fa-chart-line"></i> PRECIO PROMEDIO:</span> ${Math.round(item.precioMedio).toLocaleString()} silver
                 </div>
+                
                 <div class="item-results">
                     <div class="result"><div class="label">Neto (impuesto)</div><div class="number">${Math.round(item.ingresoNeto).toLocaleString()}</div></div>
                     <div class="result"><div class="label">Ganancia neta</div><div class="number positive">${Math.round(item.utilidadNeta).toLocaleString()}</div></div>
@@ -529,16 +630,11 @@
         saveToLocal();
     }
 
-    function updateItem(name, field, val) {
-        const i = items.find(x => x.name === name);
-        if (i) { i[field] = parseFloat(val) || 0; renderItems(); if (document.getElementById('simulatorModal').classList.contains('active')) renderSimulator(); }
-    }
-
-    function updateCity(name, cityNum, val) {
+    function updatePrice(name, field, val) {
         const i = items.find(x => x.name === name);
         if (i) {
-            if (!i.cities) i.cities = { city1: '', city2: '', city3: '', city4: '', city5: '' };
-            i.cities['city' + cityNum] = parseFloat(val) || 0;
+            if (!i.prices) i.prices = {};
+            i.prices[field] = parseFloat(val) || 0;
             renderItems();
             if (document.getElementById('simulatorModal').classList.contains('active')) renderSimulator();
         }
@@ -547,16 +643,59 @@
     function deleteItem(name) { items = items.filter(i => i.name !== name); delete simulatorQuantities[name]; renderItems(); if (document.getElementById('simulatorModal').classList.contains('active')) renderSimulator(); }
     
     function addItem() {
-        const n = document.getElementById('newName').value.trim();
-        const b = parseFloat(document.getElementById('newBuy').value);
-        if (!n) { showToast('Nombre requerido'); return; }
-        if (isNaN(b) || b <= 0) { showToast('Precio de compra válido'); return; }
-        items.push({ name: n, buy: b, cities: { city1: '', city2: '', city3: '', city4: '', city5: '' } });
-        simulatorQuantities[n] = 0;
+        const name = document.getElementById('newName').value.trim();
+        
+        // Obtener precios de ciudades
+        const fortSterling = parseFloat(document.getElementById('priceFS').value) || 0;
+        const bridgewatch = parseFloat(document.getElementById('priceBW').value) || 0;
+        const lymhurst = parseFloat(document.getElementById('priceLH').value) || 0;
+        const martlock = parseFloat(document.getElementById('priceML').value) || 0;
+        const thetford = parseFloat(document.getElementById('priceTH').value) || 0;
+        const blackMarket = parseFloat(document.getElementById('blackMarketPrice').value) || 0;
+        
+        if (!name) { showToast('Nombre del objeto requerido'); return; }
+        
+        // Verificar que al menos haya un precio
+        const hasPrice = fortSterling > 0 || bridgewatch > 0 || lymhurst > 0 || martlock > 0 || thetford > 0 || blackMarket > 0;
+        if (!hasPrice) { showToast('Ingresa al menos un precio de venta'); return; }
+        
+        // El precio de compra es el promedio de las ciudades (sin black market)
+        let buySum = 0;
+        let buyCount = 0;
+        [fortSterling, bridgewatch, lymhurst, martlock, thetford].forEach(p => {
+            if (p > 0) { buySum += p; buyCount++; }
+        });
+        const buyPrice = buyCount > 0 ? buySum / buyCount : 0;
+        
+        if (buyPrice <= 0) { showToast('Ingresa al menos un precio de compra en alguna ciudad'); return; }
+        
+        const newItem = {
+            name: name,
+            buy: buyPrice,
+            prices: {
+                fortSterling: fortSterling,
+                bridgewatch: bridgewatch,
+                lymhurst: lymhurst,
+                martlock: martlock,
+                thetford: thetford,
+                blackMarket: blackMarket
+            }
+        };
+        
+        items.push(newItem);
+        simulatorQuantities[name] = 0;
+        
+        // Limpiar formulario
         document.getElementById('newName').value = '';
-        document.getElementById('newBuy').value = '';
+        document.getElementById('priceFS').value = '';
+        document.getElementById('priceBW').value = '';
+        document.getElementById('priceLH').value = '';
+        document.getElementById('priceML').value = '';
+        document.getElementById('priceTH').value = '';
+        document.getElementById('blackMarketPrice').value = '';
+        
         renderItems();
-        showToast(`${n} agregado`);
+        showToast(`${name} agregado`);
     }
 
     function initQuantities() { items.forEach(i => { if (simulatorQuantities[i.name] === undefined) simulatorQuantities[i.name] = 0; }); }
