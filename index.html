@@ -111,14 +111,48 @@
             font-family: 'Inter', monospace;
         }
         
-        /* Formulario de nuevo objeto */
-        .add-section, .data-management { background: var(--bg-input); border-radius: 20px; padding: 12px; margin-bottom: 16px; }
-        .section-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-        
+        /* Formulario plegable */
+        .add-section { 
+            background: var(--bg-input); 
+            border-radius: 20px; 
+            padding: 12px; 
+            margin-bottom: 16px;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 4px 0;
+        }
+        .section-title { 
+            font-size: 0.7rem; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            color: var(--accent); 
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .toggle-icon {
+            font-size: 1rem;
+            color: var(--accent);
+            transition: transform 0.3s;
+        }
+        .section-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .section-content.open {
+            max-height: 800px;
+            transition: max-height 0.3s ease-in;
+        }
         .form-grid {
             display: flex;
             flex-direction: column;
             gap: 12px;
+            margin-top: 12px;
         }
         .form-row {
             display: flex;
@@ -183,7 +217,6 @@
         .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
         .btn-outline:hover { background: var(--accent); color: white; }
         .data-buttons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-        .simulator-btn { background: linear-gradient(135deg, #2d2d2d, #1a1a1a); border: 1px solid var(--accent); width: 100%; margin-top: 12px; }
 
         /* Stats */
         .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
@@ -192,7 +225,7 @@
         .stat-card .value { font-size: 1rem; font-weight: bold; color: var(--accent); }
 
         /* Items */
-        .items-container { display: flex; flex-direction: column; gap: 12px; }
+        .items-container { display: flex; flex-direction: column; gap: 12px; margin-bottom: 80px; }
         .item-card { background: var(--bg-card); border-radius: 20px; padding: 12px; border: 1px solid var(--border); }
         .item-header { display: flex; justify-content: space-between; margin-bottom: 12px; }
         .item-name { font-family: 'Cinzel', serif; font-weight: bold; font-size: 1.1rem; color: var(--accent); }
@@ -271,6 +304,56 @@
             cursor: pointer;
         }
 
+        /* Botón flotante arrastrable */
+        .floating-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transition: transform 0.1s;
+            user-select: none;
+        }
+        .floating-btn:active { cursor: grabbing; }
+        .floating-btn i { font-size: 1.8rem; color: white; }
+        
+        /* Menú de opciones */
+        .floating-menu {
+            position: fixed;
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            z-index: 999;
+            display: none;
+            border: 1px solid var(--accent);
+            min-width: 180px;
+        }
+        .floating-menu.active { display: block; }
+        .floating-menu button {
+            width: 100%;
+            background: transparent;
+            border: none;
+            padding: 12px;
+            text-align: left;
+            color: var(--text-primary);
+            cursor: pointer;
+            border-radius: 14px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .floating-menu button:hover { background: var(--bg-input); }
+
         /* Modal */
         .modal {
             display: none;
@@ -280,7 +363,7 @@
             width: 100%;
             height: 100%;
             background: rgba(0,0,0,0.95);
-            z-index: 1000;
+            z-index: 1001;
             padding: 16px;
             overflow-y: auto;
         }
@@ -353,46 +436,52 @@
             </div>
         </div>
 
+        <!-- Formulario plegable -->
         <div class="add-section">
-            <div class="section-title"><i class="fas fa-plus-circle"></i> NUEVO OBJETO</div>
-            <div class="form-grid">
-                <div class="form-row">
-                    <label><i class="fas fa-tag"></i> NOMBRE DEL OBJETO</label>
-                    <input type="text" id="newName" placeholder="Ej: Bolsa T5, Calavera Ósea, etc.">
-                </div>
-                
-                <div class="form-row">
-                    <label><i class="fas fa-city"></i> PRECIOS DE COMPRA POR CIUDAD</label>
-                    <div class="cities-grid">
-                        <div class="city-input">
-                            <label>🏔️ Fort Sterling</label>
-                            <input type="number" id="priceFS" placeholder="Precio compra">
-                        </div>
-                        <div class="city-input">
-                            <label>🏜️ Bridgewatch</label>
-                            <input type="number" id="priceBW" placeholder="Precio compra">
-                        </div>
-                        <div class="city-input">
-                            <label>🌳 Lymhurst</label>
-                            <input type="number" id="priceLH" placeholder="Precio compra">
-                        </div>
-                        <div class="city-input">
-                            <label>⚙️ Martlock</label>
-                            <input type="number" id="priceML" placeholder="Precio compra">
-                        </div>
-                        <div class="city-input">
-                            <label>✨ Thetford</label>
-                            <input type="number" id="priceTH" placeholder="Precio compra">
+            <div class="section-header" onclick="toggleForm()">
+                <div class="section-title"><i class="fas fa-plus-circle"></i> NUEVO OBJETO</div>
+                <i class="fas fa-chevron-down toggle-icon" id="formToggleIcon"></i>
+            </div>
+            <div class="section-content" id="formContent">
+                <div class="form-grid">
+                    <div class="form-row">
+                        <label><i class="fas fa-tag"></i> NOMBRE DEL OBJETO</label>
+                        <input type="text" id="newName" placeholder="Ej: Bolsa T5, Calavera Ósea, etc.">
+                    </div>
+                    
+                    <div class="form-row">
+                        <label><i class="fas fa-city"></i> PRECIOS DE COMPRA POR CIUDAD</label>
+                        <div class="cities-grid">
+                            <div class="city-input">
+                                <label>🏔️ Fort Sterling</label>
+                                <input type="number" id="priceFS" placeholder="Precio compra">
+                            </div>
+                            <div class="city-input">
+                                <label>🏜️ Bridgewatch</label>
+                                <input type="number" id="priceBW" placeholder="Precio compra">
+                            </div>
+                            <div class="city-input">
+                                <label>🌳 Lymhurst</label>
+                                <input type="number" id="priceLH" placeholder="Precio compra">
+                            </div>
+                            <div class="city-input">
+                                <label>⚙️ Martlock</label>
+                                <input type="number" id="priceML" placeholder="Precio compra">
+                            </div>
+                            <div class="city-input">
+                                <label>✨ Thetford</label>
+                                <input type="number" id="priceTH" placeholder="Precio compra">
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="black-market-row">
-                    <label><i class="fas fa-skull"></i> PRECIO BLACK MARKET</label>
-                    <input type="number" id="blackMarketPrice" placeholder="Precio de venta en Black Market" style="width:100%; margin-top:8px; background:var(--bg-card); border:1px solid var(--border); padding:12px; border-radius:12px; color:var(--text-primary);">
-                </div>
+                    <div class="black-market-row">
+                        <label><i class="fas fa-skull"></i> PRECIO BLACK MARKET</label>
+                        <input type="number" id="blackMarketPrice" placeholder="Precio de venta en Black Market" style="width:100%; margin-top:8px; background:var(--bg-card); border:1px solid var(--border); padding:12px; border-radius:12px; color:var(--text-primary);">
+                    </div>
 
-                <button class="btn" onclick="addItem()"><i class="fas fa-skull"></i> AGREGAR OBJETO</button>
+                    <button class="btn" onclick="addItem()"><i class="fas fa-skull"></i> AGREGAR OBJETO</button>
+                </div>
             </div>
         </div>
 
@@ -406,8 +495,6 @@
             </div>
             <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(this)">
         </div>
-
-        <button class="btn simulator-btn" onclick="openSimulator()"><i class="fas fa-chart-line"></i> SIMULADOR DE VOLUMEN</button>
     </div>
 
     <div class="stats-grid" id="statsGrid"></div>
@@ -415,6 +502,17 @@
     <footer><i class="fas fa-anchor"></i> Precio promedio = (Suma de ciudades con datos + Black Market) / Cantidad · Datos guardados localmente</footer>
 </div>
 
+<!-- Botón flotante -->
+<div id="floatingBtn" class="floating-btn">
+    <i class="fas fa-skull"></i>
+</div>
+
+<!-- Menú flotante -->
+<div id="floatingMenu" class="floating-menu">
+    <button onclick="openSimulator()"><i class="fas fa-chart-line"></i> Simulador de volumen</button>
+</div>
+
+<!-- Modal Simulador -->
 <div id="simulatorModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -441,15 +539,126 @@
     let items = [];
     let simulatorQuantities = {};
 
+    // ========== BOTÓN FLOTANTE ARRASTRABLE ==========
+    const floatingBtn = document.getElementById('floatingBtn');
+    const floatingMenu = document.getElementById('floatingMenu');
+    let isDragging = false;
+    let dragStartX, dragStartY;
+    let btnStartX, btnStartY;
+    let clickTimeout;
+    
+    // Cargar posición guardada
+    function loadBtnPosition() {
+        const saved = localStorage.getItem('floatingBtnPosition');
+        if (saved) {
+            const pos = JSON.parse(saved);
+            floatingBtn.style.bottom = 'auto';
+            floatingBtn.style.right = 'auto';
+            floatingBtn.style.top = pos.top;
+            floatingBtn.style.left = pos.left;
+        }
+    }
+    
+    function saveBtnPosition() {
+        const rect = floatingBtn.getBoundingClientRect();
+        localStorage.setItem('floatingBtnPosition', JSON.stringify({
+            top: rect.top + 'px',
+            left: rect.left + 'px'
+        }));
+    }
+    
+    floatingBtn.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        dragStartX = e.clientX;
+        dragStartY = e.clientY;
+        const rect = floatingBtn.getBoundingClientRect();
+        btnStartX = rect.left;
+        btnStartY = rect.top;
+        floatingBtn.style.cursor = 'grabbing';
+        e.preventDefault();
+    });
+    
+    document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - dragStartX;
+        const dy = e.clientY - dragStartY;
+        let newLeft = btnStartX + dx;
+        let newTop = btnStartY + dy;
+        
+        // Limitar dentro de la pantalla
+        const maxX = window.innerWidth - floatingBtn.offsetWidth;
+        const maxY = window.innerHeight - floatingBtn.offsetHeight;
+        newLeft = Math.min(maxX, Math.max(0, newLeft));
+        newTop = Math.min(maxY, Math.max(0, newTop));
+        
+        floatingBtn.style.bottom = 'auto';
+        floatingBtn.style.right = 'auto';
+        floatingBtn.style.left = newLeft + 'px';
+        floatingBtn.style.top = newTop + 'px';
+    });
+    
+    document.addEventListener('mouseup', () => {
+        if (isDragging) {
+            isDragging = false;
+            floatingBtn.style.cursor = 'grab';
+            saveBtnPosition();
+        }
+    });
+    
+    // Menú al hacer clic (no arrastrar)
+    floatingBtn.addEventListener('click', (e) => {
+        if (!isDragging) {
+            // Cerrar menú si está abierto
+            if (floatingMenu.classList.contains('active')) {
+                floatingMenu.classList.remove('active');
+            } else {
+                // Posicionar menú cerca del botón
+                const rect = floatingBtn.getBoundingClientRect();
+                floatingMenu.style.bottom = 'auto';
+                floatingMenu.style.top = (rect.top - floatingMenu.offsetHeight - 10) + 'px';
+                floatingMenu.style.left = rect.left + 'px';
+                floatingMenu.style.right = 'auto';
+                floatingMenu.classList.add('active');
+                
+                // Cerrar menú después de 3 segundos
+                setTimeout(() => {
+                    floatingMenu.classList.remove('active');
+                }, 3000);
+            }
+        }
+    });
+    
+    // Cerrar menú al hacer clic fuera
+    document.addEventListener('click', (e) => {
+        if (!floatingBtn.contains(e.target) && !floatingMenu.contains(e.target)) {
+            floatingMenu.classList.remove('active');
+        }
+    });
+
+    // ========== FORMULARIO PLEGABLE ==========
+    let formOpen = false;
+    function toggleForm() {
+        const content = document.getElementById('formContent');
+        const icon = document.getElementById('formToggleIcon');
+        if (formOpen) {
+            content.classList.remove('open');
+            icon.classList.remove('fa-chevron-up');
+            icon.classList.add('fa-chevron-down');
+        } else {
+            content.classList.add('open');
+            icon.classList.remove('fa-chevron-down');
+            icon.classList.add('fa-chevron-up');
+        }
+        formOpen = !formOpen;
+    }
+
+    // ========== FUNCIONES PRINCIPALES ==========
     function getTaxRate() { return parseFloat(document.getElementById('taxRate').value) / 100; }
     function getLossRate() { return parseFloat(document.getElementById('lossRate').value) / 100; }
 
-    // Calcular precio promedio (ciudades + black market)
     function getAveragePrice(prices) {
         let sum = 0;
         let count = 0;
-        
-        // Ciudades
         const cities = ['fortSterling', 'bridgewatch', 'lymhurst', 'martlock', 'thetford'];
         cities.forEach(city => {
             let price = parseFloat(prices[city]);
@@ -458,14 +667,11 @@
                 count++;
             }
         });
-        
-        // Black Market
         let blackMarket = parseFloat(prices.blackMarket);
         if (!isNaN(blackMarket) && blackMarket > 0) {
             sum += blackMarket;
             count++;
         }
-        
         return count > 0 ? sum / count : 0;
     }
 
@@ -645,7 +851,6 @@
     function addItem() {
         const name = document.getElementById('newName').value.trim();
         
-        // Obtener precios de ciudades
         const fortSterling = parseFloat(document.getElementById('priceFS').value) || 0;
         const bridgewatch = parseFloat(document.getElementById('priceBW').value) || 0;
         const lymhurst = parseFloat(document.getElementById('priceLH').value) || 0;
@@ -655,11 +860,9 @@
         
         if (!name) { showToast('Nombre del objeto requerido'); return; }
         
-        // Verificar que al menos haya un precio
         const hasPrice = fortSterling > 0 || bridgewatch > 0 || lymhurst > 0 || martlock > 0 || thetford > 0 || blackMarket > 0;
         if (!hasPrice) { showToast('Ingresa al menos un precio de venta'); return; }
         
-        // El precio de compra es el promedio de las ciudades (sin black market)
         let buySum = 0;
         let buyCount = 0;
         [fortSterling, bridgewatch, lymhurst, martlock, thetford].forEach(p => {
@@ -685,7 +888,6 @@
         items.push(newItem);
         simulatorQuantities[name] = 0;
         
-        // Limpiar formulario
         document.getElementById('newName').value = '';
         document.getElementById('priceFS').value = '';
         document.getElementById('priceBW').value = '';
@@ -735,6 +937,7 @@
     toggle.onchange = () => { input.disabled = !toggle.checked; btn.disabled = !toggle.checked; };
 
     loadFromLocal();
+    loadBtnPosition();
 </script>
 </body>
 </html>
