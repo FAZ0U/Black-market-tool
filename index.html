@@ -11,11 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
             --bg-dark: #0a0a0a;
@@ -26,9 +22,7 @@
             --text-secondary: #9a9a9a;
             --accent: #b91c1c;
             --accent-hover: #7f1a1a;
-            --accent-glow: rgba(185, 28, 28, 0.4);
             --positive: #b91c1c;
-            --negative: #9a3412;
             --shadow: 0 4px 12px rgba(0,0,0,0.5);
         }
 
@@ -40,7 +34,6 @@
             --text-primary: #1a1a1a;
             --text-secondary: #4a4a4a;
             --accent: #b91c1c;
-            --accent-hover: #7f1a1a;
             --shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
@@ -52,12 +45,9 @@
             transition: background 0.3s, color 0.2s;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
+        .container { max-width: 800px; margin: 0 auto; }
 
-        /* Header pirata */
+        /* Header */
         .pirate-header {
             display: flex;
             align-items: center;
@@ -68,19 +58,8 @@
             border-bottom: 2px solid var(--accent);
             padding-bottom: 12px;
         }
-
-        .title-area {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .pirate-logo {
-            width: 50px;
-            height: 50px;
-            object-fit: contain;
-        }
-
+        .title-area { display: flex; align-items: center; gap: 12px; }
+        .pirate-logo { width: 50px; height: 50px; object-fit: contain; }
         h1 {
             font-family: 'Cinzel', serif;
             font-size: 1.6rem;
@@ -91,13 +70,7 @@
             background-clip: text;
             color: transparent;
         }
-
-        .sub {
-            font-size: 0.7rem;
-            color: var(--text-secondary);
-            letter-spacing: 1px;
-        }
-
+        .sub { font-size: 0.7rem; color: var(--text-secondary); letter-spacing: 1px; }
         .theme-toggle {
             background: var(--bg-card);
             border: 1px solid var(--border);
@@ -117,14 +90,7 @@
             border: 1px solid var(--border);
             box-shadow: var(--shadow);
         }
-
-        .percent-row {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
+        .percent-row { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
         .percent-card {
             flex: 1;
             background: var(--bg-input);
@@ -133,15 +99,7 @@
             text-align: center;
             border-left: 3px solid var(--accent);
         }
-
-        .percent-card label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            font-weight: 600;
-            color: var(--text-secondary);
-            letter-spacing: 1px;
-        }
-
+        .percent-card label { font-size: 0.7rem; text-transform: uppercase; font-weight: 600; color: var(--text-secondary); letter-spacing: 1px; }
         .percent-card input {
             background: transparent;
             border: none;
@@ -152,46 +110,11 @@
             text-align: center;
             font-family: 'Inter', monospace;
         }
-
-        .add-section, .data-management {
-            background: var(--bg-input);
-            border-radius: 20px;
-            padding: 12px;
-            margin-bottom: 16px;
-        }
-
-        .section-title {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--accent);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .add-fields {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .add-row {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .add-row input {
-            flex: 1;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            padding: 12px;
-            border-radius: 14px;
-            color: var(--text-primary);
-        }
-
+        .add-section, .data-management { background: var(--bg-input); border-radius: 20px; padding: 12px; margin-bottom: 16px; }
+        .section-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .add-fields { display: flex; flex-direction: column; gap: 10px; }
+        .add-row { display: flex; gap: 8px; flex-wrap: wrap; }
+        .add-row input { flex: 1; background: var(--bg-card); border: 1px solid var(--border); padding: 12px; border-radius: 14px; color: var(--text-primary); }
         .btn {
             background: var(--accent);
             border: none;
@@ -201,118 +124,77 @@
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s;
-            font-family: 'Inter', sans-serif;
         }
-
-        .btn:hover {
-            background: var(--accent-hover);
-            transform: translateY(-1px);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--accent);
-            color: var(--accent);
-        }
-
-        .btn-outline:hover {
-            background: var(--accent);
-            color: white;
-        }
-
-        .data-buttons {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-        }
-
-        .simulator-btn {
-            background: linear-gradient(135deg, #2d2d2d, #1a1a1a);
-            border: 1px solid var(--accent);
-            width: 100%;
-            margin-top: 8px;
-        }
+        .btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
+        .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
+        .btn-outline:hover { background: var(--accent); color: white; }
+        .data-buttons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        .simulator-btn { background: linear-gradient(135deg, #2d2d2d, #1a1a1a); border: 1px solid var(--accent); width: 100%; margin-top: 8px; }
 
         /* Stats */
-        .stats-grid {
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
+        .stat-card { background: var(--bg-card); border-radius: 20px; padding: 12px; text-align: center; border: 1px solid var(--border); }
+        .stat-card h4 { font-size: 0.65rem; color: var(--text-secondary); }
+        .stat-card .value { font-size: 1rem; font-weight: bold; color: var(--accent); }
+
+        /* Items - NUEVO DISEÑO CON 5 CIUDADES */
+        .items-container { display: flex; flex-direction: column; gap: 12px; }
+        .item-card { background: var(--bg-card); border-radius: 20px; padding: 12px; border: 1px solid var(--border); }
+        .item-header { display: flex; justify-content: space-between; margin-bottom: 12px; }
+        .item-name { font-family: 'Cinzel', serif; font-weight: bold; font-size: 1.1rem; color: var(--accent); }
+        
+        .city-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .stat-card {
-            background: var(--bg-card);
-            border-radius: 20px;
-            padding: 12px;
-            text-align: center;
-            border: 1px solid var(--border);
-        }
-
-        .stat-card h4 {
-            font-size: 0.65rem;
-            color: var(--text-secondary);
-        }
-
-        .stat-card .value {
-            font-size: 1rem;
-            font-weight: bold;
-            color: var(--accent);
-        }
-
-        /* Items */
-        .items-container {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .item-card {
-            background: var(--bg-card);
-            border-radius: 20px;
-            padding: 12px;
-            border: 1px solid var(--border);
-        }
-
-        .item-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 12px;
-        }
-
-        .item-name {
-            font-family: 'Cinzel', serif;
-            font-weight: bold;
-            font-size: 1.1rem;
-            color: var(--accent);
-        }
-
-        .item-fields {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
             gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .field {
+            margin: 12px 0;
             background: var(--bg-input);
-            padding: 8px;
-            border-radius: 14px;
+            padding: 10px;
+            border-radius: 16px;
         }
-
-        .field label {
+        .city-field {
+            background: var(--bg-card);
+            padding: 6px 8px;
+            border-radius: 12px;
+        }
+        .city-field label {
             font-size: 0.6rem;
             color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
-
-        .field input {
+        .city-field input {
             background: transparent;
             border: none;
             width: 100%;
             color: var(--text-primary);
             font-weight: bold;
+            font-size: 0.9rem;
+            padding: 4px 0;
         }
-
+        .precio-medio {
+            background: var(--accent);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 14px;
+            text-align: center;
+            margin: 8px 0;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        .precio-medio span { color: white; opacity: 0.9; margin-right: 8px; }
+        
+        .item-fields { margin-bottom: 8px; }
+        .field {
+            background: var(--bg-input);
+            padding: 8px;
+            border-radius: 14px;
+            margin-bottom: 12px;
+        }
+        .field label { font-size: 0.6rem; color: var(--text-secondary); display: block; margin-bottom: 4px; }
+        .field input { background: transparent; border: none; width: 100%; color: var(--text-primary); font-weight: bold; font-size: 1rem; }
+        
         .item-results {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -320,21 +202,11 @@
             background: var(--bg-input);
             padding: 8px;
             border-radius: 16px;
-            margin-top: 8px;
+            margin-top: 12px;
         }
-
-        .result .label {
-            font-size: 0.6rem;
-            color: var(--text-secondary);
-        }
-
-        .result .number {
-            font-size: 0.85rem;
-            font-weight: bold;
-        }
-
-        .positive { color: var(--positive); }
-        .negative { color: var(--negative); }
+        .result .label { font-size: 0.6rem; color: var(--text-secondary); }
+        .result .number { font-size: 0.85rem; font-weight: bold; }
+        .positive { color: var(--accent); }
 
         .delete-btn {
             background: rgba(185, 28, 28, 0.2);
@@ -369,11 +241,7 @@
             padding: 20px;
             border: 1px solid var(--accent);
         }
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 16px;
-        }
+        .modal-header { display: flex; justify-content: space-between; margin-bottom: 16px; }
         .global-qty-section {
             background: var(--bg-input);
             border-radius: 16px;
@@ -384,39 +252,11 @@
             flex-wrap: wrap;
             gap: 12px;
         }
-        .sim-item {
-            background: var(--bg-input);
-            border-radius: 16px;
-            padding: 12px;
-            margin-bottom: 12px;
-        }
-        .sim-item-header {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            margin-bottom: 8px;
-        }
-        .sim-item-control {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-        .sim-item-control input {
-            width: 70px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            padding: 6px;
-            border-radius: 10px;
-            text-align: center;
-            color: var(--text-primary);
-        }
-        .sim-total {
-            background: var(--bg-input);
-            border-radius: 16px;
-            padding: 16px;
-            text-align: center;
-            margin-top: 16px;
-        }
+        .sim-item { background: var(--bg-input); border-radius: 16px; padding: 12px; margin-bottom: 12px; }
+        .sim-item-header { display: flex; justify-content: space-between; flex-wrap: wrap; margin-bottom: 8px; }
+        .sim-item-control { display: flex; gap: 8px; align-items: center; }
+        .sim-item-control input { width: 70px; background: var(--bg-card); border: 1px solid var(--border); padding: 6px; border-radius: 10px; text-align: center; color: var(--text-primary); }
+        .sim-total { background: var(--bg-input); border-radius: 16px; padding: 16px; text-align: center; margin-top: 16px; }
         .toast {
             position: fixed;
             bottom: 20px;
@@ -430,31 +270,18 @@
             z-index: 2000;
             animation: fadeOut 2s forwards;
         }
-        @keyframes fadeOut {
-            0% { opacity: 1; }
-            70% { opacity: 1; }
-            100% { opacity: 0; visibility: hidden; }
-        }
-        footer {
-            text-align: center;
-            font-size: 0.6rem;
-            color: var(--text-secondary);
-            margin-top: 24px;
-        }
-        i.icon {
-            margin-right: 6px;
-        }
+        @keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
+        footer { text-align: center; font-size: 0.6rem; color: var(--text-secondary); margin-top: 24px; }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="pirate-header">
         <div class="title-area">
-            <!-- Imagen de calavera pirata subida por el usuario -->
             <img src="2011.jpg" alt="Pirate Logo" class="pirate-logo">
             <div>
                 <h1>BLACK MARKET TOOL</h1>
-                <div class="sub">Albion Online · Comercio oscuro</div>
+                <div class="sub">Albion Online · Comercio oscuro · 5 ciudades</div>
             </div>
         </div>
         <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
@@ -463,11 +290,11 @@
     <div class="panel">
         <div class="percent-row">
             <div class="percent-card">
-                <label><i class="fas fa-percent icon"></i>IMPUESTO</label>
+                <label><i class="fas fa-percent"></i> IMPUESTO</label>
                 <input type="number" id="taxRate" step="0.1" value="10.5">
             </div>
             <div class="percent-card">
-                <label><i class="fas fa-skull icon"></i>PÉRDIDA FIJA</label>
+                <label><i class="fas fa-skull"></i> PÉRDIDA FIJA</label>
                 <input type="number" id="lossRate" step="0.1" value="20.0">
             </div>
         </div>
@@ -476,9 +303,8 @@
             <div class="section-title"><i class="fas fa-plus-circle"></i> AGREGAR OBJETO</div>
             <div class="add-fields">
                 <div class="add-row">
-                    <input type="text" id="newName" placeholder="Nombre">
+                    <input type="text" id="newName" placeholder="Nombre del objeto">
                     <input type="number" id="newBuy" placeholder="Precio compra (silver)">
-                    <input type="number" id="newSell" placeholder="Precio venta (silver)">
                 </div>
                 <button class="btn" onclick="addItem()"><i class="fas fa-skull"></i> Agregar al cargamento</button>
             </div>
@@ -500,7 +326,7 @@
 
     <div class="stats-grid" id="statsGrid"></div>
     <div class="items-container" id="itemsContainer"></div>
-    <footer><i class="fas fa-anchor"></i> Datos guardados localmente · Sin conexión a internet · Modo pirata</footer>
+    <footer><i class="fas fa-anchor"></i> Precio medio calculado automáticamente entre 5 ciudades · Datos guardados localmente</footer>
 </div>
 
 <div id="simulatorModal" class="modal">
@@ -510,7 +336,6 @@
             <button class="btn-outline" onclick="closeSimulator()"><i class="fas fa-times"></i> Cerrar</button>
         </div>
         <div class="global-qty-section">
-            <!-- Eliminado el ícono de cadena como solicitaste -->
             <label><input type="checkbox" id="globalQtyToggle"> Aplicar misma cantidad a todos</label>
             <div>
                 <input type="number" id="globalQtyValue" value="50" disabled>
@@ -533,18 +358,33 @@
     function getTaxRate() { return parseFloat(document.getElementById('taxRate').value) / 100; }
     function getLossRate() { return parseFloat(document.getElementById('lossRate').value) / 100; }
 
+    // Calcular precio medio de las 5 ciudades
+    function getAveragePrice(cities) {
+        let sum = 0;
+        let count = 0;
+        for (let i = 1; i <= 5; i++) {
+            let price = parseFloat(cities['city' + i]);
+            if (!isNaN(price) && price > 0) {
+                sum += price;
+                count++;
+            }
+        }
+        return count > 0 ? sum / count : 0;
+    }
+
     function calculateItem(item) {
         const tax = getTaxRate();
         const loss = getLossRate();
+        const precioMedio = getAveragePrice(item.cities || {});
         const factor = 1 - tax;
-        const ingresoNeto = item.sell * factor;
+        const ingresoNeto = precioMedio * factor;
         const utilidadBruta = ingresoNeto - item.buy;
         const perdidaVarias = utilidadBruta * loss;
         const utilidadNeta = utilidadBruta - perdidaVarias;
-        const rentabilidad = (utilidadNeta / item.buy) * 100;
+        const rentabilidad = item.buy > 0 ? (utilidadNeta / item.buy) * 100 : 0;
         const precioMinimo = item.buy / factor;
-        const eficiencia = (utilidadNeta / item.buy) * 1000;
-        return { ingresoNeto, utilidadBruta, perdidaVarias, utilidadNeta, rentabilidad, precioMinimo, eficiencia };
+        const eficiencia = item.buy > 0 ? (utilidadNeta / item.buy) * 1000 : 0;
+        return { precioMedio, ingresoNeto, utilidadBruta, perdidaVarias, utilidadNeta, rentabilidad, precioMinimo, eficiencia };
     }
 
     function calculateAll() { return items.map(i => ({ ...i, ...calculateItem(i) })); }
@@ -575,7 +415,7 @@
     }
 
     function resetToDefault() {
-        if (confirm('¿Eliminar todos los objetos? Esta acción no se puede deshacer.')) {
+        if (confirm('¿Eliminar todos los objetos?')) {
             items = [];
             initQuantities();
             renderItems();
@@ -656,21 +496,32 @@
         }
         container.innerHTML = data.map((item, idx) => {
             let rank = idx === 0 ? '⚔️' : idx === 1 ? '🔪' : idx === 2 ? '🏴' : '';
+            const cities = item.cities || { city1: '', city2: '', city3: '', city4: '', city5: '' };
             return `
             <div class="item-card">
                 <div class="item-header">
                     <span class="item-name">${rank} ${item.name}</span>
                     <button class="delete-btn" onclick="deleteItem('${item.name}')"><i class="fas fa-trash"></i></button>
                 </div>
-                <div class="item-fields">
-                    <div class="field"><label><i class="fas fa-shopping-cart"></i> Compra</label><input type="number" value="${item.buy}" onchange="updateItem('${item.name}','buy',this.value)"></div>
-                    <div class="field"><label><i class="fas fa-hand-holding-usd"></i> Venta</label><input type="number" value="${item.sell}" onchange="updateItem('${item.name}','sell',this.value)"></div>
+                <div class="field">
+                    <label><i class="fas fa-shopping-cart"></i> PRECIO COMPRA (silver)</label>
+                    <input type="number" value="${item.buy}" onchange="updateItem('${item.name}', 'buy', this.value)">
+                </div>
+                <div class="city-grid">
+                    <div class="city-field"><label><i class="fas fa-city"></i> Ciudad A</label><input type="number" value="${cities.city1 || ''}" onchange="updateCity('${item.name}', 1, this.value)" placeholder="0"></div>
+                    <div class="city-field"><label><i class="fas fa-city"></i> Ciudad B</label><input type="number" value="${cities.city2 || ''}" onchange="updateCity('${item.name}', 2, this.value)" placeholder="0"></div>
+                    <div class="city-field"><label><i class="fas fa-city"></i> Ciudad C</label><input type="number" value="${cities.city3 || ''}" onchange="updateCity('${item.name}', 3, this.value)" placeholder="0"></div>
+                    <div class="city-field"><label><i class="fas fa-city"></i> Ciudad D</label><input type="number" value="${cities.city4 || ''}" onchange="updateCity('${item.name}', 4, this.value)" placeholder="0"></div>
+                    <div class="city-field"><label><i class="fas fa-city"></i> Ciudad E</label><input type="number" value="${cities.city5 || ''}" onchange="updateCity('${item.name}', 5, this.value)" placeholder="0"></div>
+                </div>
+                <div class="precio-medio">
+                    <span><i class="fas fa-chart-line"></i> PRECIO MEDIO:</span> ${Math.round(item.precioMedio).toLocaleString()} silver
                 </div>
                 <div class="item-results">
-                    <div class="result"><div class="label">Neto</div><div class="number">${Math.round(item.ingresoNeto).toLocaleString()}</div></div>
-                    <div class="result"><div class="label">Ganancia</div><div class="number positive">${Math.round(item.utilidadNeta).toLocaleString()}</div></div>
-                    <div class="result"><div class="label">Rentab.</div><div class="number positive">${item.rentabilidad.toFixed(1)}%</div></div>
-                    <div class="result"><div class="label">Precio mín</div><div class="number">${Math.round(item.precioMinimo).toLocaleString()}</div></div>
+                    <div class="result"><div class="label">Neto (impuesto)</div><div class="number">${Math.round(item.ingresoNeto).toLocaleString()}</div></div>
+                    <div class="result"><div class="label">Ganancia neta</div><div class="number positive">${Math.round(item.utilidadNeta).toLocaleString()}</div></div>
+                    <div class="result"><div class="label">Rentabilidad</div><div class="number positive">${item.rentabilidad.toFixed(1)}%</div></div>
+                    <div class="result"><div class="label">Precio mínimo</div><div class="number">${Math.round(item.precioMinimo).toLocaleString()}</div></div>
                 </div>
             </div>`;
         }).join('');
@@ -680,21 +531,30 @@
 
     function updateItem(name, field, val) {
         const i = items.find(x => x.name === name);
-        if (i) { i[field] = parseFloat(val); renderItems(); if (document.getElementById('simulatorModal').classList.contains('active')) renderSimulator(); }
+        if (i) { i[field] = parseFloat(val) || 0; renderItems(); if (document.getElementById('simulatorModal').classList.contains('active')) renderSimulator(); }
     }
+
+    function updateCity(name, cityNum, val) {
+        const i = items.find(x => x.name === name);
+        if (i) {
+            if (!i.cities) i.cities = { city1: '', city2: '', city3: '', city4: '', city5: '' };
+            i.cities['city' + cityNum] = parseFloat(val) || 0;
+            renderItems();
+            if (document.getElementById('simulatorModal').classList.contains('active')) renderSimulator();
+        }
+    }
+
     function deleteItem(name) { items = items.filter(i => i.name !== name); delete simulatorQuantities[name]; renderItems(); if (document.getElementById('simulatorModal').classList.contains('active')) renderSimulator(); }
+    
     function addItem() {
         const n = document.getElementById('newName').value.trim();
         const b = parseFloat(document.getElementById('newBuy').value);
-        const s = parseFloat(document.getElementById('newSell').value);
         if (!n) { showToast('Nombre requerido'); return; }
-        if (isNaN(b) || b <= 0) { showToast('Precio de compra inválido'); return; }
-        if (isNaN(s) || s <= 0) { showToast('Precio de venta inválido'); return; }
-        items.push({ name: n, buy: b, sell: s });
+        if (isNaN(b) || b <= 0) { showToast('Precio de compra válido'); return; }
+        items.push({ name: n, buy: b, cities: { city1: '', city2: '', city3: '', city4: '', city5: '' } });
         simulatorQuantities[n] = 0;
         document.getElementById('newName').value = '';
         document.getElementById('newBuy').value = '';
-        document.getElementById('newSell').value = '';
         renderItems();
         showToast(`${n} agregado`);
     }
