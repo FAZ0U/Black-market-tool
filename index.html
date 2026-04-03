@@ -8,9 +8,7 @@
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192.png">
     <title>Black Market Tool - Albion Online</title>
-    <!-- Font Awesome 6 (gratis, sin emojis) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Google Fonts: Cinzel e Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -491,7 +489,7 @@
                 <button class="btn-outline" onclick="saveToLocal()"><i class="fas fa-save"></i> Guardar</button>
                 <button class="btn-outline" onclick="exportData()"><i class="fas fa-file-export"></i> Exportar</button>
                 <button class="btn-outline" onclick="document.getElementById('importFile').click()"><i class="fas fa-file-import"></i> Importar</button>
-                <button class="btn-outline" onclick="resetToDefault()"><i class="fas fa-trash-alt"></i> Restaurar</button>
+                <button class="btn-outline" onclick="resetToDefault()"><i class="fas fa-trash-alt"></i> Limpiar todo</button>
             </div>
             <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(this)">
         </div>
@@ -527,20 +525,9 @@
 </div>
 
 <script>
-    // Datos por defecto (ejemplos del mercado negro)
-    const defaultItems = [
-        { name: "Calavera T5", buy: 10148, sell: 17726 },
-        { name: "Garrote T5.1", buy: 21076, sell: 28941 },
-        { name: "Pólvora T6.1", buy: 78588, sell: 104829 },
-        { name: "Catalejo T5.0", buy: 37119, sell: 48730 },
-        { name: "Ancla T6.1", buy: 75780, sell: 98981 },
-        { name: "Mapa T4.0", buy: 28014, sell: 36507 }
-    ];
-
     let items = [];
     let simulatorQuantities = {};
 
-    // Funciones de cálculo
     function getTaxRate() { return parseFloat(document.getElementById('taxRate').value) / 100; }
     function getLossRate() { return parseFloat(document.getElementById('lossRate').value) / 100; }
 
@@ -560,40 +547,38 @@
 
     function calculateAll() { return items.map(i => ({ ...i, ...calculateItem(i) })); }
 
-    // Guardado local
     function saveToLocal() {
         localStorage.setItem('blackMarketData', JSON.stringify({
-            items, taxRate: parseFloat(document.getElementById('taxRate').value),
+            items, 
+            taxRate: parseFloat(document.getElementById('taxRate').value),
             lossRate: parseFloat(document.getElementById('lossRate').value),
             theme: document.body.classList.contains('light') ? 'light' : 'dark'
         }));
-        showToast('Datos guardados en el mercado negro');
+        showToast('Datos guardados');
     }
 
     function loadFromLocal() {
         const saved = localStorage.getItem('blackMarketData');
         if (saved) {
             const data = JSON.parse(saved);
-            items = data.items;
-            document.getElementById('taxRate').value = data.taxRate;
-            document.getElementById('lossRate').value = data.lossRate;
+            items = data.items || [];
+            document.getElementById('taxRate').value = data.taxRate || 10.5;
+            document.getElementById('lossRate').value = data.lossRate || 20.0;
             if (data.theme === 'light') document.body.classList.add('light');
         } else {
-            items = JSON.parse(JSON.stringify(defaultItems));
+            items = [];
         }
         initQuantities();
         renderItems();
     }
 
     function resetToDefault() {
-        if (confirm('¿Restaurar objetos originales? Perderás cambios.')) {
-            items = JSON.parse(JSON.stringify(defaultItems));
-            document.getElementById('taxRate').value = 10.5;
-            document.getElementById('lossRate').value = 20.0;
+        if (confirm('¿Eliminar todos los objetos? Esta acción no se puede deshacer.')) {
+            items = [];
             initQuantities();
             renderItems();
             saveToLocal();
-            showToast('Cofre restaurado');
+            showToast('Todos los objetos eliminados');
         }
     }
 
@@ -605,7 +590,7 @@
         a.download = `black_market_${Date.now()}.json`;
         a.click();
         URL.revokeObjectURL(a.href);
-        showToast('Mapa del tesoro exportado');
+        showToast('Datos exportados');
     }
 
     function importData(input) {
@@ -613,15 +598,21 @@
         if (!file) return;
         const reader = new FileReader();
         reader.onload = e => {
-            const data = JSON.parse(e.target.result);
-            if (data.items) {
-                items = data.items;
-                if (data.taxRate) document.getElementById('taxRate').value = data.taxRate;
-                if (data.lossRate) document.getElementById('lossRate').value = data.lossRate;
-                initQuantities();
-                renderItems();
-                saveToLocal();
-                showToast('Tesoro importado');
+            try {
+                const data = JSON.parse(e.target.result);
+                if (data.items !== undefined) {
+                    items = data.items || [];
+                    if (data.taxRate) document.getElementById('taxRate').value = data.taxRate;
+                    if (data.lossRate) document.getElementById('lossRate').value = data.lossRate;
+                    initQuantities();
+                    renderItems();
+                    saveToLocal();
+                    showToast('Datos importados');
+                } else {
+                    showToast('Archivo inválido');
+                }
+            } catch(err) {
+                showToast('Error al leer archivo');
             }
         };
         reader.readAsText(file);
@@ -629,32 +620,40 @@
     }
 
     function showToast(msg) {
-        const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = `<i class="fas fa-skull"></i> ${msg}`;
+        const t = document.createElement('div'); 
+        t.className = 'toast'; 
+        t.innerHTML = `<i class="fas fa-skull"></i> ${msg}`;
         document.body.appendChild(t);
         setTimeout(() => t.remove(), 2000);
     }
 
-    // Renderizado
     function renderStats(data) {
-        if (!data.length) { document.getElementById('statsGrid').innerHTML = '<div class="stat-card"><h4>Sin botín</h4><div class="value">Agrega objetos</div></div>'; return; }
+        if (!data.length) { 
+            document.getElementById('statsGrid').innerHTML = '<div class="stat-card"><h4>SIN BOTÍN</h4><div class="value">Agrega objetos</div></div>'; 
+            return; 
+        }
         const bestRent = data.reduce((a,b) => a.rentabilidad > b.rentabilidad ? a : b);
         const bestUtil = data.reduce((a,b) => a.utilidadNeta > b.utilidadNeta ? a : b);
         const bestEfi = data.reduce((a,b) => a.eficiencia > b.eficiencia ? a : b);
         const total = data.reduce((s,i) => s + i.utilidadNeta, 0);
         document.getElementById('statsGrid').innerHTML = `
-            <div class="stat-card"><h4><i class="fas fa-trophy"></i> Mejor rentabilidad</h4><div class="value">${bestRent.name}</div><div>${bestRent.rentabilidad.toFixed(2)}%</div></div>
-            <div class="stat-card"><h4><i class="fas fa-coins"></i> Mayor ganancia</h4><div class="value">${bestUtil.name}</div><div>${Math.round(bestUtil.utilidadNeta).toLocaleString()}</div></div>
-            <div class="stat-card"><h4><i class="fas fa-chart-line"></i> Eficiencia (1k)</h4><div class="value">${bestEfi.name}</div><div>${Math.round(bestEfi.eficiencia)} silver</div></div>
-            <div class="stat-card"><h4><i class="fas fa-ship"></i> Ganancia total</h4><div class="value">${Math.round(total).toLocaleString()}</div><div>silver/unidad</div></div>
+            <div class="stat-card"><h4><i class="fas fa-trophy"></i> MEJOR RENTABILIDAD</h4><div class="value">${bestRent.name}</div><div>${bestRent.rentabilidad.toFixed(2)}%</div></div>
+            <div class="stat-card"><h4><i class="fas fa-coins"></i> MAYOR GANANCIA</h4><div class="value">${bestUtil.name}</div><div>${Math.round(bestUtil.utilidadNeta).toLocaleString()}</div></div>
+            <div class="stat-card"><h4><i class="fas fa-chart-line"></i> EFICIENCIA (1K)</h4><div class="value">${bestEfi.name}</div><div>${Math.round(bestEfi.eficiencia)} silver</div></div>
+            <div class="stat-card"><h4><i class="fas fa-ship"></i> GANANCIA TOTAL</h4><div class="value">${Math.round(total).toLocaleString()}</div><div>silver/unidad</div></div>
         `;
     }
 
     function renderItems() {
         const data = calculateAll().sort((a,b) => b.rentabilidad - a.rentabilidad);
         const container = document.getElementById('itemsContainer');
-        if (!data.length) { container.innerHTML = '<div class="item-card" style="text-align:center">Lanza un objeto al mercado</div>'; renderStats([]); return; }
+        if (!data.length) { 
+            container.innerHTML = '<div class="item-card" style="text-align:center"><i class="fas fa-skull"></i> No hay objetos. Agrega uno arriba.</div>'; 
+            renderStats([]); 
+            return; 
+        }
         container.innerHTML = data.map((item, idx) => {
-            let rank = idx === 0 ? '🏆' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : '';
+            let rank = idx === 0 ? '⚔️' : idx === 1 ? '🔪' : idx === 2 ? '🏴' : '';
             return `
             <div class="item-card">
                 <div class="item-header">
@@ -686,7 +685,7 @@
         const n = document.getElementById('newName').value.trim();
         const b = parseFloat(document.getElementById('newBuy').value);
         const s = parseFloat(document.getElementById('newSell').value);
-        if (!n) { showToast('Nombre del botín requerido'); return; }
+        if (!n) { showToast('Nombre requerido'); return; }
         if (isNaN(b) || b <= 0) { showToast('Precio de compra inválido'); return; }
         if (isNaN(s) || s <= 0) { showToast('Precio de venta inválido'); return; }
         items.push({ name: n, buy: b, sell: s });
@@ -695,15 +694,15 @@
         document.getElementById('newBuy').value = '';
         document.getElementById('newSell').value = '';
         renderItems();
-        showToast(`${n} añadido al botín`);
+        showToast(`${n} agregado`);
     }
 
-    // Simulador
     function initQuantities() { items.forEach(i => { if (simulatorQuantities[i.name] === undefined) simulatorQuantities[i.name] = 0; }); }
+    
     function renderSimulator() {
         const data = calculateAll();
         const container = document.getElementById('simulatorItems');
-        if (!data.length) { container.innerHTML = '<div class="sim-item">Sin objetos</div>'; return; }
+        if (!data.length) { container.innerHTML = '<div class="sim-item" style="text-align:center">Sin objetos para simular</div>'; return; }
         data.forEach(i => { if (simulatorQuantities[i.name] === undefined) simulatorQuantities[i.name] = 0; });
         container.innerHTML = data.map(i => {
             const q = simulatorQuantities[i.name] || 0;
@@ -712,23 +711,25 @@
         }).join('');
         updateSimTotal(data);
     }
+    
     function updateSimTotal(data) {
         let g = 0, inv = 0;
         data.forEach(i => { const q = simulatorQuantities[i.name] || 0; g += i.utilidadNeta * q; inv += i.buy * q; });
         document.getElementById('totalGanancia').innerHTML = `${Math.round(g).toLocaleString()} silver <i class="fas fa-skull"></i>`;
         document.getElementById('totalInversion').innerHTML = `Inversión: ${Math.round(inv).toLocaleString()} silver | Rentabilidad global: ${inv > 0 ? ((g/inv)*100).toFixed(2) : 0}%`;
     }
+    
     function changeQuantity(n, d) { simulatorQuantities[n] = Math.max(0, (simulatorQuantities[n] || 0) + d); renderSimulator(); }
     function setQuantity(n, v) { let q = parseInt(v); if (isNaN(q) || q < 0) q = 0; simulatorQuantities[n] = q; renderSimulator(); }
     function resetQuantities() { Object.keys(simulatorQuantities).forEach(k => simulatorQuantities[k] = 0); renderSimulator(); showToast('Cantidades reiniciadas'); }
-    function applyGlobalQuantity() { const toggle = document.getElementById('globalQtyToggle'); if (!toggle.checked) return; const qty = parseInt(document.getElementById('globalQtyValue').value); if (isNaN(qty) || qty < 0) return; Object.keys(simulatorQuantities).forEach(k => simulatorQuantities[k] = qty); renderSimulator(); showToast(`Volumen ${qty} aplicado a todos`); }
+    function applyGlobalQuantity() { const toggle = document.getElementById('globalQtyToggle'); if (!toggle.checked) return; const qty = parseInt(document.getElementById('globalQtyValue').value); if (isNaN(qty) || qty < 0) return; Object.keys(simulatorQuantities).forEach(k => simulatorQuantities[k] = qty); renderSimulator(); showToast(`Volumen ${qty} aplicado`); }
     function openSimulator() { initQuantities(); renderSimulator(); document.getElementById('simulatorModal').classList.add('active'); }
     function closeSimulator() { document.getElementById('simulatorModal').classList.remove('active'); }
     function toggleTheme() { document.body.classList.toggle('light'); saveToLocal(); }
 
-    // Listeners
     document.getElementById('taxRate').addEventListener('input', () => { renderItems(); if (document.getElementById('simulatorModal').classList.contains('active')) renderSimulator(); });
     document.getElementById('lossRate').addEventListener('input', () => { renderItems(); if (document.getElementById('simulatorModal').classList.contains('active')) renderSimulator(); });
+    
     const toggle = document.getElementById('globalQtyToggle'), input = document.getElementById('globalQtyValue'), btn = document.getElementById('applyGlobalQty');
     toggle.onchange = () => { input.disabled = !toggle.checked; btn.disabled = !toggle.checked; };
 
