@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="theme-color" content="#0a0a0a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <title>Black Market Tool - Albion Online</title>
+    <!-- Font Awesome 6 (gratis, sin emojis) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts: Cinzel e Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-card: #111111;
+            --bg-input: #1a1a1a;
+            --border: #2a2a2a;
+            --text-primary: #e0e0e0;
+            --text-secondary: #9a9a9a;
+            --accent: #b91c1c;
+            --accent-hover: #7f1a1a;
+            --accent-glow: rgba(185, 28, 28, 0.4);
+            --positive: #b91c1c;
+            --negative: #9a3412;
+            --shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+
+        body.light {
+            --bg-dark: #e8e8e8;
+            --bg-card: #f5f5f5;
+            --bg-input: #ffffff;
+            --border: #cccccc;
+            --text-primary: #1a1a1a;
+            --text-secondary: #4a4a4a;
+            --accent: #b91c1c;
+            --accent-hover: #7f1a1a;
+            --shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            padding: 16px;
+            transition: background 0.3s, color 0.2s;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Header pirata */
+        .pirate-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 12px;
+        }
+
+        .title-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .pirate-icon {
+            font-size: 2.5rem;
+            color: var(--accent);
+            text-shadow: 0 0 6px var(--accent-glow);
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.6rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #e0e0e0, #b91c1c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .sub {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+        }
+
+        .theme-toggle {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 40px;
+            padding: 8px 12px;
+            cursor: pointer;
+            color: var(--text-primary);
+            font-size: 1.2rem;
+        }
+
+        /* Paneles */
+        .panel {
+            background: var(--bg-card);
+            border-radius: 24px;
+            padding: 16px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+
+        .percent-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .percent-card {
+            flex: 1;
+            background: var(--bg-input);
+            border-radius: 20px;
+            padding: 12px;
+            text-align: center;
+            border-left: 3px solid var(--accent);
+        }
+
+        .percent-card label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+        }
+
+        .percent-card input {
+            background: transparent;
+            border: none;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--accent);
+            width: 100%;
+            text-align: center;
+            font-family: 'Inter', monospace;
+        }
+
+        .add-section, .data-management {
+            background: var(--bg-input);
+            border-radius: 20px;
+            padding: 12px;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .add-fields {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .add-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .add-row input {
+            flex: 1;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 12px;
+            border-radius: 14px;
+            color: var(--text-primary);
+        }
+
+        .btn {
+            background: var(--accent);
+            border: none;
+            padding: 12px;
+            border-radius: 14px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-outline:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .data-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .simulator-btn {
+            background: linear-gradient(135deg, #2d2d2d, #1a1a1a);
+            border: 1px solid var(--accent);
+            width: 100%;
+            margin-top: 8px;
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 12px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .stat-card h4 {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+        }
+
+        .stat-card .value {
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        /* Items */
+        .items-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .item-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .item-name {
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--accent);
+        }
+
+        .item-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .field {
+            background: var(--bg-input);
+            padding: 8px;
+            border-radius: 14px;
+        }
+
+        .field label {
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+        }
+
+        .field input {
+            background: transparent;
+            border: none;
+            width: 100%;
+            color: var(--text-primary);
+            font-weight: bold;
+        }
+
+        .item-results {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            background: var(--bg-input);
+            padding: 8px;
+            border-radius: 16px;
+            margin-top: 8px;
+        }
+
+        .result .label {
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+        }
+
+        .result .number {
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .positive { color: var(--positive); }
+        .negative { color: var(--negative); }
+
+        .delete-btn {
+            background: rgba(185, 28, 28, 0.2);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 30px;
+            color: var(--accent);
+            cursor: pointer;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            padding: 16px;
+            overflow-y: auto;
+        }
+        .modal.active { display: flex; align-items: center; justify-content: center; }
+        .modal-content {
+            background: var(--bg-card);
+            border-radius: 28px;
+            max-width: 650px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 20px;
+            border: 1px solid var(--accent);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        .global-qty-section {
+            background: var(--bg-input);
+            border-radius: 16px;
+            padding: 12px;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .sim-item {
+            background: var(--bg-input);
+            border-radius: 16px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+        .sim-item-header {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+        .sim-item-control {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .sim-item-control input {
+            width: 70px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 6px;
+            border-radius: 10px;
+            text-align: center;
+            color: var(--text-primary);
+        }
+        .sim-total {
+            background: var(--bg-input);
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            margin-top: 16px;
+        }
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            z-index: 2000;
+            animation: fadeOut 2s forwards;
+        }
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            70% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+        footer {
+            text-align: center;
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+            margin-top: 24px;
+        }
+        i.icon {
+            margin-right: 6px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="pirate-header">
+        <div class="title-area">
+            <i class="fas fa-skull-crossbones pirate-icon"></i>
+            <div>
+                <h1>BLACK MARKET TOOL</h1>
+                <div class="sub">Albion Online · Comercio oscuro</div>
+            </div>
+        </div>
+        <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
+    </div>
+
+    <div class="panel">
+        <div class="percent-row">
+            <div class="percent-card">
+                <label><i class="fas fa-percent icon"></i>IMPUESTO</label>
+                <input type="number" id="taxRate" step="0.1" value="10.5">
+            </div>
+            <div class="percent-card">
+                <label><i class="fas fa-skull icon"></i>PÉRDIDA FIJA</label>
+                <input type="number" id="lossRate" step="0.1" value="20.0">
+            </div>
+        </div>
+
+        <div class="add-section">
+            <div class="section-title"><i class="fas fa-plus-circle"></i> AGREGAR OBJETO</div>
+            <div class="add-fields">
+                <div class="add-row">
+                    <input type="text" id="newName" placeholder="Nombre">
+                    <input type="number" id="newBuy" placeholder="Precio compra (silver)">
+                    <input type="number" id="newSell" placeholder="Precio venta (silver)">
+                </div>
+                <button class="btn" onclick="addItem()"><i class="fas fa-skull"></i> Agregar al cargamento</button>
+            </div>
+        </div>
+
+        <div class="data-management">
+            <div class="section-title"><i class="fas fa-database"></i> GESTIÓN DE DATOS</div>
+            <div class="data-buttons">
+                <button class="btn-outline" onclick="saveToLocal()"><i class="fas fa-save"></i> Guardar</button>
+                <button class="btn-outline" onclick="exportData()"><i class="fas fa-file-export"></i> Exportar</button>
+                <button class="btn-outline" onclick="document.getElementById('importFile').click()"><i class="fas fa-file-import"></i> Importar</button>
+                <button class="btn-outline" onclick="resetToDefault()"><i class="fas fa-trash-alt"></i> Restaurar</button>
+            </div>
+            <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(this)">
+        </div>
+
+        <button class="btn simulator-btn" onclick="openSimulator()"><i class="fas fa-chart-line"></i> SIMULADOR DE VOLUMEN</button>
+    </div>
+
+    <div class="stats-grid" id="statsGrid"></div>
+    <div class="items-container" id="itemsContainer"></div>
+    <footer><i class="fas fa-anchor"></i> Datos guardados localmente · Sin conexión a internet · Modo pirata</footer>
+</div>
+
+<div id="simulatorModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2><i class="fas fa-chart-simple"></i> Simulador de volumen</h2>
+            <button class="btn-outline" onclick="closeSimulator()"><i class="fas fa-times"></i> Cerrar</button>
+        </div>
+        <div class="global-qty-section">
+            <label><input type="checkbox" id="globalQtyToggle"> <i class="fas fa-link"></i> Aplicar misma cantidad a todos</label>
+            <div>
+                <input type="number" id="globalQtyValue" value="50" disabled>
+                <button class="btn-outline" id="applyGlobalQty" onclick="applyGlobalQuantity()" disabled>Aplicar</button>
+            </div>
+        </div>
+        <div id="simulatorItems"></div>
+        <div class="sim-total">
+            <h3 id="totalGanancia">0 silver</h3>
+            <p id="totalInversion"></p>
+            <button class="btn-outline" onclick="resetQuantities()"><i class="fas fa-undo-alt"></i> Resetear cantidades</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Datos por defecto (ejemplos del mercado negro)
+    const defaultItems = [
+        { name: "Calavera T5", buy: 10148, sell: 17726 },
+        { name: "Garrote T5.1", buy: 21076, sell: 28941 },
+        { name: "Pólvora T6.1", buy: 78588, sell: 104829 },
+        { name: "Catalejo T5.0", buy: 37119, sell: 48730 },
+        { name: "Ancla T6.1", buy: 75780, sell: 98981 },
+        { name: "Mapa T4.0", buy: 28014, sell: 36507 }
+    ];
+
+    let items = [];
+    let simulatorQuantities = {};
+
+    // Funciones de cálculo
+    function getTaxRate() { return parseFloat(document.getElementById('taxRate').value) / 100; }
+    function getLossRate() { return parseFloat(document.getElementById('lossRate').value) / 100; }
+
+    function calculateItem(item) {
+        const tax = getTaxRate();
+        const loss = getLossRate();
+        const factor = 1 - tax;
+        const ingresoNeto = item.sell * factor;
+        const utilidadBruta = ingresoNeto - item.buy;
+        const perdidaVarias = utilidadBruta * loss;
+        const utilidadNeta = utilidadBruta - perdidaVarias;
+        const rentabilidad = (utilidadNeta / item.buy) * 100;
+        const precioMinimo = item.buy / factor;
+        const eficiencia = (utilidadNeta / item.buy) * 1000;
+        return { ingresoNeto, utilidadBruta, perdidaVarias, utilidadNeta, rentabilidad, precioMinimo, eficiencia };
+    }
+
+    function calculateAll() { return items.map(i => ({ ...i, ...calculateItem(i) })); }
+
+    // Guardado local
+    function saveToLocal() {
+        localStorage.setItem('blackMarketData', JSON.stringify({
+            items, taxRate: parseFloat(document.getElementById('taxRate').value),
+            lossRate: parseFloat(document.getElementById('lossRate').value),
+            theme: document.body.classList.contains('light') ? 'light' : 'dark'
+        }));
+        showToast('Datos guardados en el mercado negro');
+    }
+
+    function loadFromLocal() {
+        const saved = localStorage.getItem('blackMarketData');
+        if (saved) {
+            const data = JSON.parse(saved);
+            items = data.items;
+            document.getElementById('taxRate').value = data.taxRate;
+            document.getElementById('lossRate').value = data.lossRate;
+            if (data.theme === 'light') document.body.classList.add('light');
+        } else {
+            items = JSON.parse(JSON.stringify(defaultItems));
+        }
+        initQuantities();
+        renderItems();
+    }
+
+    function resetToDefault() {
+        if (confirm('¿Restaurar objetos originales? Perderás cambios.')) {
+            items = JSON.parse(JSON.stringify(defaultItems));
+            document.getElementById('taxRate').value = 10.5;
+            document.getElementById('lossRate').value = 20.0;
+            initQuantities();
+            renderItems();
+            saveToLocal();
+            showToast('Cofre restaurado');
+        }
+    }
+
+    function exportData() {
+        const dataStr = JSON.stringify({ items, taxRate: getTaxRate()*100, lossRate: getLossRate()*100 }, null, 2);
+        const blob = new Blob([dataStr], {type: 'application/json'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `black_market_${Date.now()}.json`;
+        a.click();
+        URL.revokeObjectURL(a.href);
+        showToast('Mapa del tesoro exportado');
+    }
+
+    function importData(input) {
+        const file = input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = e => {
+            const data = JSON.parse(e.target.result);
+            if (data.items) {
+                items = data.items;
+                if (data.taxRate) document.getElementById('taxRate').value = data.taxRate;
+                if (data.lossRate) document.getElementById('lossRate').value = data.lossRate;
+                initQuantities();
+                renderItems();
+                saveToLocal();
+                showToast('Tesoro importado');
+            }
+        };
+        reader.readAsText(file);
+        input.value = '';
+    }
+
+    function showToast(msg) {
+        const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = `<i class="fas fa-skull"></i> ${msg}`;
+        document.body.appendChild(t);
+        setTimeout(() => t.remove(), 2000);
+    }
+
+    // Renderizado
+    function renderStats(data) {
+        if (!data.length) { document.getElementById('statsGrid').innerHTML = '<div class="stat-card"><h4>Sin botín</h4><div class="value">Agrega objetos</div></div>'; return; }
+        const bestRent = data.reduce((a,b) => a.rentabilidad > b.rentabilidad ? a : b);
+        const bestUtil = data.reduce((a,b) => a.utilidadNeta > b.utilidadNeta ? a : b);
+        const bestEfi = data.reduce((a,b) => a.eficiencia > b.eficiencia ? a : b);
+        const total = data.reduce((s,i) => s + i.utilidadNeta, 0);
+        document.getElementById('statsGrid').innerHTML = `
+            <div class="stat-card"><h4><i class="fas fa-trophy"></i> Mejor rentabilidad</h4><div class="value">${bestRent.name}</div><div>${bestRent.rentabilidad.toFixed(2)}%</div></div>
+            <div class="stat-card"><h4><i class="fas fa-coins"></i> Mayor ganancia</h4><div class="value">${bestUtil.name}</div><div>${Math.round(bestUtil.utilidadNeta).toLocaleString()}</div></div>
+            <div class="stat-card"><h4><i class="fas fa-chart-line"></i> Eficiencia (1k)</h4><div class="value">${bestEfi.name}</div><div>${Math.round(bestEfi.eficiencia)} silver</div></div>
+            <div class="stat-card"><h4><i class="fas fa-ship"></i> Ganancia total</h4><div class="value">${Math.round(total).toLocaleString()}</div><div>silver/unidad</div></div>
+        `;
+    }
+
+    function renderItems() {
+        const data = calculateAll().sort((a,b) => b.rentabilidad - a.rentabilidad);
+        const container = document.getElementById('itemsContainer');
+        if (!data.length) { container.innerHTML = '<div class="item-card" style="text-align:center">Lanza un objeto al mercado</div>'; renderStats([]); return; }
+        container.innerHTML = data.map((item, idx) => {
+            let rank = idx === 0 ? '🏆' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : '';
+            return `
+            <div class="item-card">
+                <div class="item-header">
+                    <span class="item-name">${rank} ${item.name}</span>
+                    <button class="delete-btn" onclick="deleteItem('${item.name}')"><i class="fas fa-trash"></i></button>
+                </div>
+                <div class="item-fields">
+                    <div class="field"><label><i class="fas fa-shopping-cart"></i> Compra</label><input type="number" value="${item.buy}" onchange="updateItem('${item.name}','buy',this.value)"></div>
+                    <div class="field"><label><i class="fas fa-hand-holding-usd"></i> Venta</label><input type="number" value="${item.sell}" onchange="updateItem('${item.name}','sell',this.value)"></div>
+                </div>
+                <div class="item-results">
+                    <div class="result"><div class="label">Neto</div><div class="number">${Math.round(item.ingresoNeto).toLocaleString()}</div></div>
+                    <div class="result"><div class="label">Ganancia</div><div class="number positive">${Math.round(item.utilidadNeta).toLocaleString()}</div></div>
+                    <div class="result"><div class="label">Rentab.</div><div class="number positive">${item.rentabilidad.toFixed(1)}%</div></div>
+                    <div class="result"><div class="label">Precio mín</div><div class="number">${Math.round(item.precioMinimo).toLocaleString()}</div></div>
+                </div>
+            </div>`;
+        }).join('');
+        renderStats(calculateAll());
+        saveToLocal();
+    }
+
+    function updateItem(name, field, val) {
+        const i = items.find(x => x.name === name);
+        if (i) { i[field] = parseFloat(val); renderItems(); if (document.getElementById('simulatorModal').classList.contains('active')) renderSimulator(); }
+    }
+    function deleteItem(name) { items = items.filter(i => i.name !== name); delete simulatorQuantities[name]; renderItems(); if (document.getElementById('simulatorModal').classList.contains('active')) renderSimulator(); }
+    function addItem() {
+        const n = document.getElementById('newName').value.trim();
+        const b = parseFloat(document.getElementById('newBuy').value);
+        const s = parseFloat(document.getElementById('newSell').value);
+        if (!n) { showToast('Nombre del botín requerido'); return; }
+        if (isNaN(b) || b <= 0) { showToast('Precio de compra inválido'); return; }
+        if (isNaN(s) || s <= 0) { showToast('Precio de venta inválido'); return; }
+        items.push({ name: n, buy: b, sell: s });
+        simulatorQuantities[n] = 0;
+        document.getElementById('newName').value = '';
+        document.getElementById('newBuy').value = '';
+        document.getElementById('newSell').value = '';
+        renderItems();
+        showToast(`${n} añadido al botín`);
+    }
+
+    // Simulador
+    function initQuantities() { items.forEach(i => { if (simulatorQuantities[i.name] === undefined) simulatorQuantities[i.name] = 0; }); }
+    function renderSimulator() {
+        const data = calculateAll();
+        const container = document.getElementById('simulatorItems');
+        if (!data.length) { container.innerHTML = '<div class="sim-item">Sin objetos</div>'; return; }
+        data.forEach(i => { if (simulatorQuantities[i.name] === undefined) simulatorQuantities[i.name] = 0; });
+        container.innerHTML = data.map(i => {
+            const q = simulatorQuantities[i.name] || 0;
+            return `<div class="sim-item"><div class="sim-item-header"><span><i class="fas fa-gem"></i> ${i.name}</span><div class="sim-item-control"><button onclick="changeQuantity('${i.name}',-1)">-</button><input type="number" value="${q}" onchange="setQuantity('${i.name}',this.value)" min="0"><button onclick="changeQuantity('${i.name}',1)">+</button></div></div>
+            <div><i class="fas fa-chart-simple"></i> Ganancia/unidad: ${Math.round(i.utilidadNeta).toLocaleString()} silver<br><i class="fas fa-coins"></i> Total: ${Math.round(i.utilidadNeta*q).toLocaleString()} silver</div></div>`;
+        }).join('');
+        updateSimTotal(data);
+    }
+    function updateSimTotal(data) {
+        let g = 0, inv = 0;
+        data.forEach(i => { const q = simulatorQuantities[i.name] || 0; g += i.utilidadNeta * q; inv += i.buy * q; });
+        document.getElementById('totalGanancia').innerHTML = `${Math.round(g).toLocaleString()} silver <i class="fas fa-skull"></i>`;
+        document.getElementById('totalInversion').innerHTML = `Inversión: ${Math.round(inv).toLocaleString()} silver | Rentabilidad global: ${inv > 0 ? ((g/inv)*100).toFixed(2) : 0}%`;
+    }
+    function changeQuantity(n, d) { simulatorQuantities[n] = Math.max(0, (simulatorQuantities[n] || 0) + d); renderSimulator(); }
+    function setQuantity(n, v) { let q = parseInt(v); if (isNaN(q) || q < 0) q = 0; simulatorQuantities[n] = q; renderSimulator(); }
+    function resetQuantities() { Object.keys(simulatorQuantities).forEach(k => simulatorQuantities[k] = 0); renderSimulator(); showToast('Cantidades reiniciadas'); }
+    function applyGlobalQuantity() { const toggle = document.getElementById('globalQtyToggle'); if (!toggle.checked) return; const qty = parseInt(document.getElementById('globalQtyValue').value); if (isNaN(qty) || qty < 0) return; Object.keys(simulatorQuantities).forEach(k => simulatorQuantities[k] = qty); renderSimulator(); showToast(`Volumen ${qty} aplicado a todos`); }
+    function openSimulator() { initQuantities(); renderSimulator(); document.getElementById('simulatorModal').classList.add('active'); }
+    function closeSimulator() { document.getElementById('simulatorModal').classList.remove('active'); }
+    function toggleTheme() { document.body.classList.toggle('light'); saveToLocal(); }
+
+    // Listeners
+    document.getElementById('taxRate').addEventListener('input', () => { renderItems(); if (document.getElementById('simulatorModal').classList.contains('active')) renderSimulator(); });
+    document.getElementById('lossRate').addEventListener('input', () => { renderItems(); if (document.getElementById('simulatorModal').classList.contains('active')) renderSimulator(); });
+    const toggle = document.getElementById('globalQtyToggle'), input = document.getElementById('globalQtyValue'), btn = document.getElementById('applyGlobalQty');
+    toggle.onchange = () => { input.disabled = !toggle.checked; btn.disabled = !toggle.checked; };
+
+    loadFromLocal();
+</script>
+</body>
+</html>
