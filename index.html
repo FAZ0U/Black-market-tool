@@ -57,7 +57,7 @@
             margin: 0 auto;
         }
 
-        /* Header pirata - Logo línea blanca */
+        /* Header pirata */
         .pirate-header {
             display: flex;
             align-items: center;
@@ -78,6 +78,7 @@
         .pirate-logo {
             width: 50px;
             height: 50px;
+            object-fit: contain;
         }
 
         h1 {
@@ -443,29 +444,14 @@
         i.icon {
             margin-right: 6px;
         }
-
-        /* Iconos en línea blanca */
-        .white-icon {
-            color: var(--text-primary);
-        }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="pirate-header">
         <div class="title-area">
-            <!-- Logo calavera en líneas blancas -->
-            <svg class="pirate-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M50 15C32 15 18 28 18 45C18 55 23 64 30 69L27 82L36 76C41 78 45 80 50 80C55 80 59 78 64 76L73 82L70 69C77 64 82 55 82 45C82 28 68 15 50 15Z" stroke="white" stroke-width="2" fill="none"/>
-                <circle cx="35" cy="45" r="4" stroke="white" stroke-width="2" fill="none"/>
-                <circle cx="65" cy="45" r="4" stroke="white" stroke-width="2" fill="none"/>
-                <path d="M42 58 Q50 67 58 58" stroke="white" stroke-width="2" fill="none"/>
-                <rect x="45" y="30" width="10" height="14" stroke="white" stroke-width="2" fill="none" rx="2"/>
-                <line x1="50" y1="20" x2="50" y2="28" stroke="white" stroke-width="2"/>
-                <line x1="32" y1="25" x2="36" y2="32" stroke="white" stroke-width="2"/>
-                <line x1="68" y1="25" x2="64" y2="32" stroke="white" stroke-width="2"/>
-                <text x="50" y="93" text-anchor="middle" fill="white" font-size="8" font-family="Cinzel" font-weight="bold">BMT</text>
-            </svg>
+            <!-- Imagen de calavera pirata subida por el usuario -->
+            <img src="2011.jpg" alt="Pirate Logo" class="pirate-logo">
             <div>
                 <h1>BLACK MARKET TOOL</h1>
                 <div class="sub">Albion Online · Comercio oscuro</div>
@@ -524,7 +510,8 @@
             <button class="btn-outline" onclick="closeSimulator()"><i class="fas fa-times"></i> Cerrar</button>
         </div>
         <div class="global-qty-section">
-            <label><input type="checkbox" id="globalQtyToggle"> <i class="fas fa-link"></i> Aplicar misma cantidad a todos</label>
+            <!-- Eliminado el ícono de cadena como solicitaste -->
+            <label><input type="checkbox" id="globalQtyToggle"> Aplicar misma cantidad a todos</label>
             <div>
                 <input type="number" id="globalQtyValue" value="50" disabled>
                 <button class="btn-outline" id="applyGlobalQty" onclick="applyGlobalQuantity()" disabled>Aplicar</button>
@@ -676,8 +663,8 @@
                     <button class="delete-btn" onclick="deleteItem('${item.name}')"><i class="fas fa-trash"></i></button>
                 </div>
                 <div class="item-fields">
-                    <div class="field"><label><i class="fas fa-shopping-cart white-icon"></i> Compra</label><input type="number" value="${item.buy}" onchange="updateItem('${item.name}','buy',this.value)"></div>
-                    <div class="field"><label><i class="fas fa-hand-holding-usd white-icon"></i> Venta</label><input type="number" value="${item.sell}" onchange="updateItem('${item.name}','sell',this.value)"></div>
+                    <div class="field"><label><i class="fas fa-shopping-cart"></i> Compra</label><input type="number" value="${item.buy}" onchange="updateItem('${item.name}','buy',this.value)"></div>
+                    <div class="field"><label><i class="fas fa-hand-holding-usd"></i> Venta</label><input type="number" value="${item.sell}" onchange="updateItem('${item.name}','sell',this.value)"></div>
                 </div>
                 <div class="item-results">
                     <div class="result"><div class="label">Neto</div><div class="number">${Math.round(item.ingresoNeto).toLocaleString()}</div></div>
@@ -721,8 +708,8 @@
         data.forEach(i => { if (simulatorQuantities[i.name] === undefined) simulatorQuantities[i.name] = 0; });
         container.innerHTML = data.map(i => {
             const q = simulatorQuantities[i.name] || 0;
-            return `<div class="sim-item"><div class="sim-item-header"><span><i class="fas fa-gem white-icon"></i> ${i.name}</span><div class="sim-item-control"><button onclick="changeQuantity('${i.name}',-1)">-</button><input type="number" value="${q}" onchange="setQuantity('${i.name}',this.value)" min="0"><button onclick="changeQuantity('${i.name}',1)">+</button></div></div>
-            <div><i class="fas fa-chart-simple white-icon"></i> Ganancia/unidad: ${Math.round(i.utilidadNeta).toLocaleString()} silver<br><i class="fas fa-coins white-icon"></i> Total: ${Math.round(i.utilidadNeta*q).toLocaleString()} silver</div></div>`;
+            return `<div class="sim-item"><div class="sim-item-header"><span><i class="fas fa-gem"></i> ${i.name}</span><div class="sim-item-control"><button onclick="changeQuantity('${i.name}',-1)">-</button><input type="number" value="${q}" onchange="setQuantity('${i.name}',this.value)" min="0"><button onclick="changeQuantity('${i.name}',1)">+</button></div></div>
+            <div><i class="fas fa-chart-simple"></i> Ganancia/unidad: ${Math.round(i.utilidadNeta).toLocaleString()} silver<br><i class="fas fa-coins"></i> Total: ${Math.round(i.utilidadNeta*q).toLocaleString()} silver</div></div>`;
         }).join('');
         updateSimTotal(data);
     }
@@ -730,7 +717,7 @@
     function updateSimTotal(data) {
         let g = 0, inv = 0;
         data.forEach(i => { const q = simulatorQuantities[i.name] || 0; g += i.utilidadNeta * q; inv += i.buy * q; });
-        document.getElementById('totalGanancia').innerHTML = `${Math.round(g).toLocaleString()} silver <i class="fas fa-skull white-icon"></i>`;
+        document.getElementById('totalGanancia').innerHTML = `${Math.round(g).toLocaleString()} silver <i class="fas fa-skull"></i>`;
         document.getElementById('totalInversion').innerHTML = `Inversión: ${Math.round(inv).toLocaleString()} silver | Rentabilidad global: ${inv > 0 ? ((g/inv)*100).toFixed(2) : 0}%`;
     }
     
