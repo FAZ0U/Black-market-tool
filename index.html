@@ -11,31 +11,40 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        /* Modo oscuro (por defecto) */
         :root {
             --bg: #0a0a0a;
-            --card: #111;
+            --card: #111111;
             --input: #1a1a1a;
             --border: #2a2a2a;
             --text: #e0e0e0;
             --text-sec: #9a9a9a;
             --accent: #b91c1c;
             --accent-hover: #7f1a1a;
+            --accent-light: #ff4444;
         }
+        
+        /* Modo claro */
         body.light {
             --bg: #e8e8e8;
-            --card: #f5f5f5;
-            --input: #fff;
-            --border: #ccc;
+            --card: #ffffff;
+            --input: #f0f0f0;
+            --border: #cccccc;
             --text: #1a1a1a;
-            --text-sec: #666;
+            --text-sec: #666666;
+            --accent: #b91c1c;
+            --accent-hover: #7f1a1a;
         }
+        
         body {
             font-family: 'Inter', sans-serif;
             background: var(--bg);
             color: var(--text);
             padding: 16px;
-            transition: 0.3s;
+            transition: all 0.3s ease;
         }
+        
         .container { max-width: 700px; margin: 0 auto; }
         
         /* Header */
@@ -46,72 +55,105 @@
             margin-bottom: 20px;
             border-bottom: 2px solid var(--accent);
             padding-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         .logo-area { display: flex; align-items: center; gap: 12px; }
         .logo { width: 45px; height: 45px; object-fit: contain; }
         h1 { font-family: 'Cinzel', serif; font-size: 1.4rem; background: linear-gradient(135deg, #fff, var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent; }
         .sub { font-size: 0.65rem; color: var(--text-sec); }
-        .theme-btn { background: var(--card); border: 1px solid var(--border); border-radius: 30px; padding: 6px 12px; cursor: pointer; }
+        .theme-btn { background: var(--card); border: 1px solid var(--border); border-radius: 30px; padding: 6px 12px; cursor: pointer; color: var(--text); }
         
         /* Tarjetas */
-        .card { background: var(--card); border-radius: 20px; padding: 16px; margin-bottom: 16px; border: 1px solid var(--border); }
+        .card { background: var(--card); border-radius: 20px; padding: 16px; margin-bottom: 16px; border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
         .row-2 { display: flex; gap: 12px; flex-wrap: wrap; }
         .row-2 > div { flex: 1; background: var(--input); border-radius: 16px; padding: 10px; text-align: center; border-left: 3px solid var(--accent); }
-        .row-2 label { font-size: 0.7rem; color: var(--text-sec); }
-        .row-2 input { background: transparent; border: none; font-size: 1.3rem; font-weight: bold; color: var(--accent); width: 100%; text-align: center; }
+        .row-2 label { font-size: 0.7rem; color: var(--text-sec); display: block; margin-bottom: 5px; }
+        .row-2 input { background: transparent; border: none; font-size: 1.3rem; font-weight: bold; color: var(--accent); width: 100%; text-align: center; outline: none; }
         
         /* Formulario */
         .form-group { margin-bottom: 12px; }
         .form-group label { font-size: 0.7rem; color: var(--text-sec); display: block; margin-bottom: 4px; }
-        .form-group input, .city-input input { width: 100%; background: var(--input); border: 1px solid var(--border); padding: 10px; border-radius: 12px; color: var(--text); }
+        .form-group input, .city-input input { width: 100%; background: var(--input); border: 1px solid var(--border); padding: 10px; border-radius: 12px; color: var(--text); outline: none; }
+        .form-group input:focus, .city-input input:focus { border-color: var(--accent); }
         .cities-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; margin: 10px 0; }
-        .city-input label { font-size: 0.6rem; display: block; margin-bottom: 2px; }
-        .black-market-box { background: rgba(185,28,28,0.1); padding: 12px; border-radius: 14px; margin: 12px 0; border-left: 3px solid var(--accent); }
+        .city-input label { font-size: 0.6rem; display: block; margin-bottom: 2px; color: var(--text-sec); }
+        .black-market-box { background: rgba(185,28,28,0.15); padding: 12px; border-radius: 14px; margin: 12px 0; border-left: 3px solid var(--accent); }
+        .black-market-box label { color: var(--accent); font-weight: bold; font-size: 0.7rem; }
         
-        .btn { background: var(--accent); border: none; padding: 14px; border-radius: 14px; color: white; font-weight: bold; cursor: pointer; width: 100%; margin: 8px 0; }
-        .btn:hover { background: var(--accent-hover); }
-        .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
+        .btn { background: var(--accent); border: none; padding: 14px; border-radius: 14px; color: white; font-weight: bold; cursor: pointer; width: 100%; margin: 8px 0; transition: all 0.2s; }
+        .btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
+        .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 10px; border-radius: 12px; cursor: pointer; transition: all 0.2s; }
+        .btn-outline:hover { background: var(--accent); color: white; }
         
         .data-buttons { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; margin-top: 12px; }
         
         /* Stats */
         .stats { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; margin: 20px 0; }
-        .stat-card { background: var(--card); border-radius: 16px; padding: 12px; text-align: center; }
-        .stat-card h4 { font-size: 0.65rem; color: var(--text-sec); }
+        .stat-card { background: var(--card); border-radius: 16px; padding: 12px; text-align: center; border: 1px solid var(--border); }
+        .stat-card h4 { font-size: 0.65rem; color: var(--text-sec); margin-bottom: 5px; }
         .stat-card .value { font-size: 1rem; font-weight: bold; color: var(--accent); }
         
         /* Items */
         .item { background: var(--card); border-radius: 20px; padding: 14px; margin-bottom: 12px; border: 1px solid var(--border); }
-        .item-header { display: flex; justify-content: space-between; margin-bottom: 12px; }
-        .item-name { font-family: 'Cinzel', serif; font-size: 1.1rem; color: var(--accent); }
-        .delete-btn { background: rgba(185,28,28,0.2); border: none; padding: 4px 10px; border-radius: 20px; color: var(--accent); cursor: pointer; }
+        .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+        .item-name { font-family: 'Cinzel', serif; font-size: 1.1rem; color: var(--accent); font-weight: bold; }
+        .delete-btn { background: rgba(185,28,28,0.2); border: none; padding: 4px 12px; border-radius: 20px; color: var(--accent); cursor: pointer; transition: all 0.2s; }
+        .delete-btn:hover { background: rgba(185,28,28,0.4); }
         .city-prices { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; background: var(--input); padding: 10px; border-radius: 14px; margin: 10px 0; }
         .city-prices div { background: var(--card); padding: 6px; border-radius: 10px; }
-        .city-prices label { font-size: 0.55rem; display: block; }
-        .city-prices input { background: transparent; border: none; width: 100%; font-weight: bold; }
+        .city-prices label { font-size: 0.55rem; display: block; color: var(--text-sec); }
+        .city-prices input { background: transparent; border: none; width: 100%; font-weight: bold; color: var(--text); outline: none; }
         .black-sell { text-align: center; background: var(--input); padding: 8px; border-radius: 12px; margin: 10px 0; }
+        .black-sell label { color: var(--accent); font-size: 0.7rem; }
+        .black-sell input { background: transparent; border: none; font-size: 1rem; font-weight: bold; width: 100%; text-align: center; color: var(--accent); outline: none; }
         .profit-line { background: var(--accent); color: white; padding: 8px; border-radius: 12px; text-align: center; margin: 10px 0; font-weight: bold; }
         .results { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; background: var(--input); padding: 8px; border-radius: 14px; margin-top: 10px; text-align: center; }
+        .results div .sub { font-size: 0.6rem; color: var(--text-sec); margin-bottom: 3px; }
         
-        /* Modal */
+        /* Modal Simulador */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; padding: 20px; overflow: auto; }
         .modal.active { display: flex; align-items: center; justify-content: center; }
-        .modal-content { background: var(--card); border-radius: 28px; max-width: 650px; width: 100%; padding: 20px; border: 1px solid var(--accent); }
-        .modal-header { display: flex; justify-content: space-between; margin-bottom: 16px; }
+        .modal-content { background: var(--card); border-radius: 28px; max-width: 650px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 20px; border: 1px solid var(--accent); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
         .sim-item { background: var(--input); border-radius: 14px; padding: 10px; margin-bottom: 10px; }
-        .sim-item-header { display: flex; justify-content: space-between; flex-wrap: wrap; margin-bottom: 6px; }
+        .sim-item-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
         .sim-control { display: flex; gap: 8px; align-items: center; }
-        .sim-control input { width: 60px; background: var(--card); border: 1px solid var(--border); padding: 5px; border-radius: 8px; text-align: center; }
-        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--accent); color: white; padding: 8px 16px; border-radius: 40px; font-size: 0.8rem; z-index: 2000; animation: fadeOut 2s forwards; }
+        .sim-control input { width: 60px; background: var(--card); border: 1px solid var(--border); padding: 5px; border-radius: 8px; text-align: center; color: var(--text); }
+        .sim-control button { background: var(--accent); border: none; width: 28px; height: 28px; border-radius: 8px; color: white; cursor: pointer; font-weight: bold; }
+        .sim-total { text-align: center; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+        .sim-total h3 { color: var(--accent); font-size: 1.3rem; }
+        
+        /* Botón flotante y menú */
+        .floating-container { position: fixed; bottom: 20px; right: 20px; z-index: 100; }
+        .floating-btn { width: 56px; height: 56px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.2s; }
+        .floating-btn:hover { transform: scale(1.05); background: var(--accent-hover); }
+        .floating-btn i { font-size: 1.8rem; color: white; }
+        .floating-menu { position: absolute; bottom: 70px; right: 0; background: var(--card); border-radius: 16px; padding: 8px; display: none; border: 1px solid var(--accent); box-shadow: 0 4px 20px rgba(0,0,0,0.3); min-width: 180px; }
+        .floating-menu.active { display: block; }
+        .floating-menu button { background: transparent; border: none; padding: 12px; width: 100%; text-align: left; color: var(--text); cursor: pointer; border-radius: 10px; display: flex; align-items: center; gap: 10px; transition: all 0.2s; }
+        .floating-menu button:hover { background: var(--input); color: var(--accent); }
+        
+        /* Utilidades */
+        .toggle-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 4px 0; }
+        .toggle-header span { font-weight: bold; color: var(--accent); }
+        .form-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+        .form-content.open { max-height: 800px; transition: max-height 0.3s ease-in; }
+        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--accent); color: white; padding: 8px 20px; border-radius: 40px; font-size: 0.85rem; z-index: 2000; animation: fadeOut 2s forwards; }
         @keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
-        footer { text-align: center; font-size: 0.6rem; color: var(--text-sec); margin-top: 20px; }
-        .floating-btn { position: fixed; bottom: 70px; right: 20px; width: 50px; height: 50px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-        .floating-menu { position: fixed; background: var(--card); border-radius: 16px; padding: 8px; display: none; border: 1px solid var(--accent); z-index: 99; }
-        .floating-menu button { background: transparent; border: none; padding: 10px; width: 100%; text-align: left; color: var(--text); cursor: pointer; border-radius: 10px; }
-        .floating-menu button:hover { background: var(--input); }
-        .toggle-icon { cursor: pointer; float: right; }
-        .form-content { max-height: 0; overflow: hidden; transition: 0.3s; }
-        .form-content.open { max-height: 800px; }
+        footer { text-align: center; font-size: 0.6rem; color: var(--text-sec); margin-top: 20px; padding: 16px; }
+        
+        /* Responsive */
+        @media (max-width: 550px) {
+            body { padding: 10px; }
+            .cities-grid { grid-template-columns: 1fr; }
+            .city-prices { grid-template-columns: 1fr; }
+            .stats { grid-template-columns: 1fr; }
+            .data-buttons { grid-template-columns: 1fr; }
+            .row-2 { flex-direction: column; }
+            h1 { font-size: 1.1rem; }
+            .logo { width: 35px; height: 35px; }
+        }
     </style>
 </head>
 <body>
@@ -132,54 +174,74 @@
     </div>
 
     <div class="card">
-        <div style="display: flex; justify-content: space-between; cursor: pointer;" onclick="toggleForm()">
+        <div class="toggle-header" onclick="toggleForm()">
             <span><i class="fas fa-plus-circle"></i> NUEVO OBJETO</span>
             <i class="fas fa-chevron-down" id="formIcon"></i>
         </div>
         <div id="formContent" class="form-content">
-            <div class="form-group"><label>NOMBRE</label><input type="text" id="newName" placeholder="Ej: Bolsa T5"></div>
-            <label>PRECIO DE COMPRA POR CIUDAD</label>
+            <div class="form-group"><label>NOMBRE DEL OBJETO</label><input type="text" id="newName" placeholder="Ej: Bolsa T5, Calavera Ósea"></div>
+            <label>PRECIO DE COMPRA POR CIUDAD (lo que pagas)</label>
             <div class="cities-grid">
-                <div class="city-input"><label>🏔️ Fort Sterling</label><input type="number" id="buyFS"></div>
-                <div class="city-input"><label>🏜️ Bridgewatch</label><input type="number" id="buyBW"></div>
-                <div class="city-input"><label>🌳 Lymhurst</label><input type="number" id="buyLH"></div>
-                <div class="city-input"><label>⚙️ Martlock</label><input type="number" id="buyML"></div>
-                <div class="city-input"><label>✨ Thetford</label><input type="number" id="buyTH"></div>
+                <div class="city-input"><label>🏔️ Fort Sterling</label><input type="number" id="buyFS" placeholder="Precio compra"></div>
+                <div class="city-input"><label>🏜️ Bridgewatch</label><input type="number" id="buyBW" placeholder="Precio compra"></div>
+                <div class="city-input"><label>🌳 Lymhurst</label><input type="number" id="buyLH" placeholder="Precio compra"></div>
+                <div class="city-input"><label>⚙️ Martlock</label><input type="number" id="buyML" placeholder="Precio compra"></div>
+                <div class="city-input"><label>✨ Thetford</label><input type="number" id="buyTH" placeholder="Precio compra"></div>
             </div>
             <div class="black-market-box">
-                <label>🏴‍☠️ PRECIO VENTA BLACK MARKET</label>
-                <input type="number" id="blackSell" placeholder="Precio único de venta" style="width:100%; margin-top:6px;">
+                <label>🏴‍☠️ PRECIO VENTA BLACK MARKET (único)</label>
+                <input type="number" id="blackSell" placeholder="Precio al que vendes" style="width:100%; margin-top:8px;">
             </div>
-            <button class="btn" onclick="addItem()">AGREGAR OBJETO</button>
+            <button class="btn" onclick="addItem()"><i class="fas fa-skull"></i> AGREGAR OBJETO</button>
         </div>
     </div>
 
     <div class="card">
-        <div style="margin-bottom: 8px;">💾 GESTIÓN DE DATOS</div>
+        <div style="margin-bottom: 8px;"><i class="fas fa-database"></i> GESTIÓN DE DATOS</div>
         <div class="data-buttons">
-            <button class="btn-outline" onclick="saveData()">Guardar</button>
-            <button class="btn-outline" onclick="exportData()">Exportar</button>
-            <button class="btn-outline" onclick="importTrigger()">Importar</button>
-            <button class="btn-outline" onclick="clearAll()">Limpiar todo</button>
+            <button class="btn-outline" onclick="saveData()"><i class="fas fa-save"></i> Guardar</button>
+            <button class="btn-outline" onclick="exportData()"><i class="fas fa-download"></i> Exportar</button>
+            <button class="btn-outline" onclick="importTrigger()"><i class="fas fa-upload"></i> Importar</button>
+            <button class="btn-outline" onclick="clearAll()"><i class="fas fa-trash"></i> Limpiar</button>
         </div>
         <input type="file" id="importFile" style="display:none" onchange="importData(this)">
     </div>
 
     <div class="stats" id="statsArea"></div>
     <div id="itemsList"></div>
-    <footer>Ganancia = (BlackMarket - PrecioCompra) - Impuestos - PérdidaFija · Promedio entre ciudades</footer>
+    <footer><i class="fas fa-anchor"></i> Ganancia = (BlackMarket - PrecioCompra) - Impuestos - Pérdida · Promedio entre ciudades con datos</footer>
 </div>
 
-<div class="floating-btn" id="floatBtn"><i class="fas fa-skull"></i></div>
-<div id="floatMenu" class="floating-menu"><button onclick="openSimulator()"><i class="fas fa-chart-line"></i> Simulador de volumen</button></div>
+<!-- Botón flotante con menú -->
+<div class="floating-container">
+    <div class="floating-menu" id="floatMenu">
+        <button onclick="openSimulator()"><i class="fas fa-chart-line"></i> Simulador de volumen</button>
+    </div>
+    <div class="floating-btn" id="floatBtn">
+        <i class="fas fa-skull"></i>
+    </div>
+</div>
 
+<!-- Modal Simulador -->
 <div id="simModal" class="modal">
     <div class="modal-content">
-        <div class="modal-header"><h2>Simulador de volumen</h2><button class="btn-outline" onclick="closeSimulator()">Cerrar</button></div>
-        <div><label><input type="checkbox" id="globalQtyToggle"> Aplicar misma cantidad a todos</label>
-        <div style="margin-top:8px"><input type="number" id="globalQtyVal" value="50" disabled> <button class="btn-outline" id="applyGlobalBtn" disabled onclick="applyGlobalQty()">Aplicar</button></div></div>
+        <div class="modal-header">
+            <h2><i class="fas fa-chart-line"></i> Simulador de volumen</h2>
+            <button class="btn-outline" onclick="closeSimulator()"><i class="fas fa-times"></i> Cerrar</button>
+        </div>
+        <div style="margin-bottom: 16px;">
+            <label><input type="checkbox" id="globalQtyToggle"> Aplicar misma cantidad a todos</label>
+            <div style="margin-top: 8px; display: flex; gap: 8px; align-items: center;">
+                <input type="number" id="globalQtyVal" value="50" disabled style="flex:1; padding:8px; border-radius:10px; background:var(--input); border:1px solid var(--border); color:var(--text);">
+                <button class="btn-outline" id="applyGlobalBtn" disabled onclick="applyGlobalQty()">Aplicar</button>
+            </div>
+        </div>
         <div id="simItems"></div>
-        <div class="sim-total" style="margin-top:16px;text-align:center"><h3 id="simTotalProfit">0 silver</h3><p id="simTotalInv"></p><button class="btn-outline" onclick="resetSimQtys()">Resetear cantidades</button></div>
+        <div class="sim-total">
+            <h3 id="simTotalProfit">0 silver</h3>
+            <p id="simTotalInv"></p>
+            <button class="btn-outline" onclick="resetSimQtys()"><i class="fas fa-undo-alt"></i> Resetear cantidades</button>
+        </div>
     </div>
 </div>
 
@@ -216,7 +278,7 @@
             const buy = item.buyPrices[city];
             if (buy > 0 && item.blackSell > 0) {
                 const profit = calcProfit(buy, item.blackSell);
-                results.push({ city, buy, profit: profit.final, rent: profit.rent });
+                results.push({ city: cityNames[city], buy, profit: profit.final, rent: profit.rent });
                 totalProfit += profit.final;
                 validCount++;
             }
@@ -268,7 +330,7 @@
             <div class="item">
                 <div class="item-header">
                     <span class="item-name">${rank} ${item.name}</span>
-                    <button class="delete-btn" onclick="deleteItem('${item.name}')">🗑️</button>
+                    <button class="delete-btn" onclick="deleteItem('${item.name}')"><i class="fas fa-trash"></i> Eliminar</button>
                 </div>
                 <div class="black-sell">
                     <label>🏴‍☠️ PRECIO VENTA BLACK MARKET</label>
@@ -318,10 +380,10 @@
             thetford: parseFloat(document.getElementById('buyTH').value) || 0
         };
         
-        if (!name) { toast('Nombre requerido'); return; }
-        if (!blackSell || blackSell <= 0) { toast('Precio Black Market requerido'); return; }
-        if (Object.values(buyPrices).every(v => v === 0)) { toast('Al menos un precio de compra'); return; }
-        if (items.some(i => i.name.toLowerCase() === name.toLowerCase())) { toast('Ya existe ese objeto'); return; }
+        if (!name) { toast('❌ Nombre requerido'); return; }
+        if (!blackSell || blackSell <= 0) { toast('❌ Precio Black Market requerido'); return; }
+        if (Object.values(buyPrices).every(v => v === 0)) { toast('❌ Al menos un precio de compra'); return; }
+        if (items.some(i => i.name.toLowerCase() === name.toLowerCase())) { toast('❌ Ya existe ese objeto'); return; }
         
         items.push({ name, blackSell, buyPrices });
         simQtys[name] = 0;
@@ -331,7 +393,7 @@
         ['buyFS','buyBW','buyLH','buyML','buyTH'].forEach(id => document.getElementById(id).value = '');
         
         renderItems();
-        toast(`${name} agregado`);
+        toast(`✅ ${name} agregado`);
     }
 
     // ========== PERSISTENCIA ==========
@@ -347,51 +409,78 @@
         simQtys = {};
         renderItems();
     }
-    function saveData() { saveToLocal(); toast('Datos guardados'); }
-    function clearAll() { if(confirm('¿Eliminar todos los objetos?')) { items = []; simQtys = {}; renderItems(); saveToLocal(); toast('Todo limpiado'); } }
-    function exportData() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(items)])); a.download = `bm_${Date.now()}.json`; a.click(); toast('Exportado'); }
+    function saveData() { saveToLocal(); toast('💾 Datos guardados'); }
+    function clearAll() { if(confirm('¿Eliminar todos los objetos?')) { items = []; simQtys = {}; renderItems(); saveToLocal(); toast('🗑️ Todo limpiado'); } }
+    function exportData() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(items)])); a.download = `bm_${Date.now()}.json`; a.click(); toast('📤 Exportado'); }
     function importTrigger() { document.getElementById('importFile').click(); }
-    function importData(input) { const file = input.files[0]; if(!file) return; const r = new FileReader(); r.onload = e => { try { items = JSON.parse(e.target.result); simQtys = {}; renderItems(); saveToLocal(); toast('Importado'); } catch(err) { toast('Error'); } }; r.readAsText(file); input.value = ''; }
+    function importData(input) { const file = input.files[0]; if(!file) return; const r = new FileReader(); r.onload = e => { try { items = JSON.parse(e.target.result); simQtys = {}; renderItems(); saveToLocal(); toast('📥 Importado'); } catch(err) { toast('Error'); } }; r.readAsText(file); input.value = ''; }
 
     // ========== SIMULADOR ==========
     function getAvgProfit(item) { return processItem(item).avgProfit; }
     function renderSimulator() {
         const container = document.getElementById('simItems');
-        if (items.length === 0) { container.innerHTML = '<div>Sin objetos</div>'; return; }
+        if (items.length === 0) { container.innerHTML = '<div style="text-align:center">Sin objetos para simular</div>'; return; }
         const data = items.map(i => ({ name: i.name, profit: getAvgProfit(i) }));
         data.forEach(d => { if (simQtys[d.name] === undefined) simQtys[d.name] = 0; });
         container.innerHTML = data.map(d => {
             const q = simQtys[d.name] || 0;
-            return `<div class="sim-item"><div class="sim-item-header"><span>${d.name}</span><div class="sim-control"><button onclick="changeQty('${d.name}',-1)">-</button><input type="number" value="${q}" onchange="setQty('${d.name}',this.value)" min="0"><button onclick="changeQty('${d.name}',1)">+</button></div></div><div>Ganancia/unidad: ${Math.round(d.profit).toLocaleString()} silver · Total: ${Math.round(d.profit*q).toLocaleString()}</div></div>`;
+            return `<div class="sim-item"><div class="sim-item-header"><span><i class="fas fa-box"></i> ${d.name}</span><div class="sim-control"><button onclick="changeQty('${d.name}',-1)">-</button><input type="number" value="${q}" onchange="setQty('${d.name}',this.value)" min="0"><button onclick="changeQty('${d.name}',1)">+</button></div></div><div><i class="fas fa-chart-line"></i> Ganancia/unidad: ${Math.round(d.profit).toLocaleString()} silver · <i class="fas fa-coins"></i> Total: ${Math.round(d.profit*q).toLocaleString()}</div></div>`;
         }).join('');
         updateSimTotal(data);
     }
     function updateSimTotal(data) {
-        let total = 0, inv = 0;
+        let total = 0;
         data.forEach(d => { const q = simQtys[d.name] || 0; total += d.profit * q; });
-        document.getElementById('simTotalProfit').innerHTML = `${Math.round(total).toLocaleString()} silver`;
-        document.getElementById('simTotalInv').innerHTML = `Inversión estimada: calculable por ciudad`;
+        document.getElementById('simTotalProfit').innerHTML = `${Math.round(total).toLocaleString()} silver <i class="fas fa-skull"></i>`;
+        document.getElementById('simTotalInv').innerHTML = `Inversión calculada por ciudad individualmente`;
     }
     function changeQty(n, d) { simQtys[n] = Math.max(0, (simQtys[n] || 0) + d); renderSimulator(); }
     function setQty(n, v) { let q = parseInt(v); if (isNaN(q) || q < 0) q = 0; simQtys[n] = q; renderSimulator(); }
-    function resetSimQtys() { Object.keys(simQtys).forEach(k => simQtys[k] = 0); renderSimulator(); toast('Cantidades reiniciadas'); }
-    function applyGlobalQty() { const toggle = document.getElementById('globalQtyToggle'); if (!toggle.checked) return; const val = parseInt(document.getElementById('globalQtyVal').value); if (isNaN(val) || val < 0) return; Object.keys(simQtys).forEach(k => simQtys[k] = val); renderSimulator(); toast(`Volumen ${val} aplicado`); }
+    function resetSimQtys() { Object.keys(simQtys).forEach(k => simQtys[k] = 0); renderSimulator(); toast('🔄 Cantidades reiniciadas'); }
+    function applyGlobalQty() { const toggle = document.getElementById('globalQtyToggle'); if (!toggle.checked) return; const val = parseInt(document.getElementById('globalQtyVal').value); if (isNaN(val) || val < 0) return; Object.keys(simQtys).forEach(k => simQtys[k] = val); renderSimulator(); toast(`🔢 Volumen ${val} aplicado a todos`); }
     function openSimulator() { renderSimulator(); document.getElementById('simModal').classList.add('active'); }
     function closeSimulator() { document.getElementById('simModal').classList.remove('active'); }
 
     // ========== UI ==========
-    function toast(msg) { const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = `<i class="fas fa-skull"></i> ${msg}`; document.body.appendChild(t); setTimeout(() => t.remove(), 2000); }
+    function toast(msg) { const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2000); }
     function toggleTheme() { document.body.classList.toggle('light'); saveToLocal(); }
+    
     let formOpen = false;
     function toggleForm() { const c = document.getElementById('formContent'); const i = document.getElementById('formIcon'); if (formOpen) { c.classList.remove('open'); i.classList.remove('fa-chevron-up'); i.classList.add('fa-chevron-down'); } else { c.classList.add('open'); i.classList.remove('fa-chevron-down'); i.classList.add('fa-chevron-up'); } formOpen = !formOpen; }
     
     // ========== BOTÓN FLOTANTE ==========
-    const floatBtn = document.getElementById('floatBtn'), floatMenu = document.getElementById('floatMenu');
-    floatBtn.onclick = () => { floatMenu.style.display = floatMenu.style.display === 'block' ? 'none' : 'block'; setTimeout(() => { floatMenu.style.display = 'none'; }, 3000); };
-    document.addEventListener('click', (e) => { if (!floatBtn.contains(e.target) && !floatMenu.contains(e.target)) floatMenu.style.display = 'none'; });
+    const floatBtn = document.getElementById('floatBtn');
+    const floatMenu = document.getElementById('floatMenu');
+    let menuTimeout;
+    
+    floatBtn.onclick = (e) => {
+        e.stopPropagation();
+        if (floatMenu.classList.contains('active')) {
+            floatMenu.classList.remove('active');
+            if (menuTimeout) clearTimeout(menuTimeout);
+        } else {
+            floatMenu.classList.add('active');
+            if (menuTimeout) clearTimeout(menuTimeout);
+            menuTimeout = setTimeout(() => {
+                floatMenu.classList.remove('active');
+            }, 4000);
+        }
+    };
+    
+    document.addEventListener('click', (e) => {
+        if (!floatBtn.contains(e.target) && !floatMenu.contains(e.target)) {
+            floatMenu.classList.remove('active');
+            if (menuTimeout) clearTimeout(menuTimeout);
+        }
+    });
     
     // ========== GLOBAL QTY LISTENERS ==========
-    document.getElementById('globalQtyToggle').onchange = () => { const d = document.getElementById('globalQtyVal'); const b = document.getElementById('applyGlobalBtn'); d.disabled = !document.getElementById('globalQtyToggle').checked; b.disabled = !document.getElementById('globalQtyToggle').checked; };
+    document.getElementById('globalQtyToggle').onchange = () => { 
+        const d = document.getElementById('globalQtyVal'); 
+        const b = document.getElementById('applyGlobalBtn'); 
+        d.disabled = !document.getElementById('globalQtyToggle').checked; 
+        b.disabled = !document.getElementById('globalQtyToggle').checked; 
+    };
     document.getElementById('taxRate').oninput = () => { renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); };
     document.getElementById('lossRate').oninput = () => { renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); };
     
