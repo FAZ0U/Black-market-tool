@@ -23,6 +23,7 @@
             --accent: #b91c1c;
             --accent-hover: #7f1a1a;
             --positive: #b91c1c;
+            --negative: #9a3412;
             --shadow: 0 4px 12px rgba(0,0,0,0.5);
         }
 
@@ -230,15 +231,16 @@
         .item-header { display: flex; justify-content: space-between; margin-bottom: 12px; }
         .item-name { font-family: 'Cinzel', serif; font-weight: bold; font-size: 1.1rem; color: var(--accent); }
         
-        .buy-price {
+        .black-market-sell {
             background: var(--bg-input);
             padding: 10px;
             border-radius: 14px;
             margin-bottom: 12px;
             text-align: center;
+            border: 1px solid var(--accent);
         }
-        .buy-price label { font-size: 0.65rem; color: var(--text-secondary); display: block; margin-bottom: 4px; }
-        .buy-price input {
+        .black-market-sell label { font-size: 0.7rem; color: var(--accent); display: block; margin-bottom: 4px; }
+        .black-market-sell input {
             background: transparent;
             border: none;
             width: 100%;
@@ -248,7 +250,7 @@
             color: var(--text-primary);
         }
         
-        .city-grid {
+        .city-buy-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 8px;
@@ -257,19 +259,19 @@
             padding: 10px;
             border-radius: 16px;
         }
-        .city-field {
+        .city-buy-field {
             background: var(--bg-card);
             padding: 6px 8px;
             border-radius: 12px;
         }
-        .city-field label {
+        .city-buy-field label {
             font-size: 0.6rem;
             color: var(--text-secondary);
             display: flex;
             align-items: center;
             gap: 4px;
         }
-        .city-field input {
+        .city-buy-field input {
             background: transparent;
             border: none;
             width: 100%;
@@ -278,17 +280,26 @@
             font-size: 0.9rem;
             padding: 4px 0;
         }
-        .precio-medio {
+        
+        .city-result {
+            margin-top: 8px;
+            padding: 8px;
+            background: var(--bg-input);
+            border-radius: 12px;
+            font-size: 0.75rem;
+        }
+        .city-result span { color: var(--accent); font-weight: bold; }
+        
+        .precio-promedio {
             background: var(--accent);
             color: white;
             padding: 8px 12px;
             border-radius: 14px;
             text-align: center;
-            margin: 8px 0;
+            margin: 12px 0;
             font-weight: bold;
             font-size: 0.9rem;
         }
-        .precio-medio span { color: white; opacity: 0.9; margin-right: 8px; }
         
         .item-results {
             display: grid;
@@ -424,7 +435,7 @@
             <img src="2011.jpg" alt="Pirate Logo" class="pirate-logo">
             <div>
                 <h1>BLACK MARKET TOOL</h1>
-                <div class="sub">Albion Online · 5 ciudades + Black Market</div>
+                <div class="sub">Albion Online · Compra en ciudades · Venta en Black Market</div>
             </div>
         </div>
         <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
@@ -442,7 +453,7 @@
             </div>
         </div>
 
-        <!-- Formulario plegable corregido -->
+        <!-- Formulario plegable -->
         <div class="add-section">
             <div class="section-header" onclick="toggleForm()">
                 <div class="section-title"><i class="fas fa-plus-circle"></i> NUEVO OBJETO</div>
@@ -456,39 +467,34 @@
                     </div>
                     
                     <div class="form-row">
-                        <label><i class="fas fa-shopping-cart"></i> PRECIO DE COMPRA (único)</label>
-                        <input type="number" id="buyPrice" placeholder="Precio al que compras el objeto">
-                    </div>
-                    
-                    <div class="form-row">
-                        <label><i class="fas fa-city"></i> PRECIOS DE VENTA POR CIUDAD</label>
+                        <label><i class="fas fa-city"></i> PRECIO DE COMPRA EN CADA CIUDAD (lo que pagas tú)</label>
                         <div class="cities-grid">
                             <div class="city-input">
                                 <label>🏔️ Fort Sterling</label>
-                                <input type="number" id="priceFS" placeholder="Precio venta">
+                                <input type="number" id="buyFS" placeholder="Precio compra">
                             </div>
                             <div class="city-input">
                                 <label>🏜️ Bridgewatch</label>
-                                <input type="number" id="priceBW" placeholder="Precio venta">
+                                <input type="number" id="buyBW" placeholder="Precio compra">
                             </div>
                             <div class="city-input">
                                 <label>🌳 Lymhurst</label>
-                                <input type="number" id="priceLH" placeholder="Precio venta">
+                                <input type="number" id="buyLH" placeholder="Precio compra">
                             </div>
                             <div class="city-input">
                                 <label>⚙️ Martlock</label>
-                                <input type="number" id="priceML" placeholder="Precio venta">
+                                <input type="number" id="buyML" placeholder="Precio compra">
                             </div>
                             <div class="city-input">
                                 <label>✨ Thetford</label>
-                                <input type="number" id="priceTH" placeholder="Precio venta">
+                                <input type="number" id="buyTH" placeholder="Precio compra">
                             </div>
                         </div>
                     </div>
 
                     <div class="black-market-row">
-                        <label><i class="fas fa-skull"></i> PRECIO DE VENTA EN BLACK MARKET</label>
-                        <input type="number" id="blackMarketPrice" placeholder="Precio venta en Black Market" style="width:100%; margin-top:8px; background:var(--bg-card); border:1px solid var(--border); padding:12px; border-radius:12px; color:var(--text-primary);">
+                        <label><i class="fas fa-skull"></i> PRECIO DE VENTA EN BLACK MARKET (único)</label>
+                        <input type="number" id="blackMarketSell" placeholder="Precio al que vendes en Black Market" style="width:100%; margin-top:8px; background:var(--bg-card); border:1px solid var(--border); padding:12px; border-radius:12px; color:var(--text-primary);">
                     </div>
 
                     <button class="btn" onclick="addItem()"><i class="fas fa-skull"></i> AGREGAR OBJETO</button>
@@ -510,7 +516,7 @@
 
     <div class="stats-grid" id="statsGrid"></div>
     <div class="items-container" id="itemsContainer"></div>
-    <footer><i class="fas fa-anchor"></i> Precio promedio de venta = (Suma de ciudades + Black Market) / Cantidad · Datos guardados localmente</footer>
+    <footer><i class="fas fa-anchor"></i> Ganancia = (Black Market - PrecioCompraCiudad) - Impuestos - Pérdidas · Promedio entre ciudades con datos</footer>
 </div>
 
 <!-- Botón flotante -->
@@ -618,7 +624,6 @@
                 floatingMenu.style.bottom = 'auto';
                 floatingMenu.style.top = (rect.top - floatingMenu.offsetHeight - 10) + 'px';
                 floatingMenu.style.left = rect.left + 'px';
-                floatingMenu.style.right = 'auto';
                 floatingMenu.classList.add('active');
                 setTimeout(() => floatingMenu.classList.remove('active'), 3000);
             }
@@ -652,42 +657,44 @@
     function getTaxRate() { return parseFloat(document.getElementById('taxRate').value) / 100; }
     function getLossRate() { return parseFloat(document.getElementById('lossRate').value) / 100; }
 
-    // Calcular precio promedio de venta (ciudades + black market)
-    function getAverageSellPrice(prices) {
-        let sum = 0;
-        let count = 0;
-        const cities = ['fortSterling', 'bridgewatch', 'lymhurst', 'martlock', 'thetford'];
-        cities.forEach(city => {
-            let price = parseFloat(prices[city]);
-            if (!isNaN(price) && price > 0) {
-                sum += price;
-                count++;
-            }
-        });
-        let blackMarket = parseFloat(prices.blackMarket);
-        if (!isNaN(blackMarket) && blackMarket > 0) {
-            sum += blackMarket;
-            count++;
-        }
-        return count > 0 ? sum / count : 0;
-    }
-
-    function calculateItem(item) {
+    function calculateProfit(buyPrice, sellPrice) {
         const tax = getTaxRate();
         const loss = getLossRate();
-        const precioVentaPromedio = getAverageSellPrice(item.prices || {});
         const factor = 1 - tax;
-        const ingresoNeto = precioVentaPromedio * factor;
-        const utilidadBruta = ingresoNeto - item.buy;
+        const ingresoNeto = sellPrice * factor;
+        const utilidadBruta = ingresoNeto - buyPrice;
         const perdidaVarias = utilidadBruta * loss;
         const utilidadNeta = utilidadBruta - perdidaVarias;
-        const rentabilidad = item.buy > 0 ? (utilidadNeta / item.buy) * 100 : 0;
-        const precioMinimo = item.buy / factor;
-        const eficiencia = item.buy > 0 ? (utilidadNeta / item.buy) * 1000 : 0;
-        return { precioVentaPromedio, ingresoNeto, utilidadBruta, perdidaVarias, utilidadNeta, rentabilidad, precioMinimo, eficiencia };
+        const rentabilidad = buyPrice > 0 ? (utilidadNeta / buyPrice) * 100 : 0;
+        return { ingresoNeto, utilidadBruta, perdidaVarias, utilidadNeta, rentabilidad };
     }
 
-    function calculateAll() { return items.map(i => ({ ...i, ...calculateItem(i) })); }
+    function calculateAllForItem(item) {
+        const sellPrice = item.blackMarketSell;
+        const cities = ['fortSterling', 'bridgewatch', 'lymhurst', 'martlock', 'thetford'];
+        const cityResults = [];
+        let totalProfit = 0;
+        let validCities = 0;
+        
+        cities.forEach(city => {
+            const buyPrice = item.buyPrices[city];
+            if (buyPrice > 0 && sellPrice > 0) {
+                const profit = calculateProfit(buyPrice, sellPrice);
+                cityResults.push({
+                    city: city,
+                    buyPrice: buyPrice,
+                    ...profit
+                });
+                totalProfit += profit.utilidadNeta;
+                validCities++;
+            }
+        });
+        
+        const avgProfit = validCities > 0 ? totalProfit / validCities : 0;
+        const avgRentabilidad = validCities > 0 ? cityResults.reduce((sum, c) => sum + c.rentabilidad, 0) / validCities : 0;
+        
+        return { cityResults, avgProfit, avgRentabilidad, validCities, sellPrice };
+    }
 
     function saveToLocal() {
         localStorage.setItem('blackMarketData', JSON.stringify({
@@ -774,29 +781,51 @@
             document.getElementById('statsGrid').innerHTML = '<div class="stat-card"><h4>SIN BOTÍN</h4><div class="value">Agrega objetos</div></div>'; 
             return; 
         }
-        const bestRent = data.reduce((a,b) => a.rentabilidad > b.rentabilidad ? a : b);
-        const bestUtil = data.reduce((a,b) => a.utilidadNeta > b.utilidadNeta ? a : b);
-        const bestEfi = data.reduce((a,b) => a.eficiencia > b.eficiencia ? a : b);
-        const total = data.reduce((s,i) => s + i.utilidadNeta, 0);
+        const bestItem = data.reduce((a,b) => (a.avgProfit || 0) > (b.avgProfit || 0) ? a : b);
+        const bestRentItem = data.reduce((a,b) => (a.avgRentabilidad || 0) > (b.avgRentabilidad || 0) ? a : b);
+        const totalAvgProfit = data.reduce((sum, i) => sum + (i.avgProfit || 0), 0);
         document.getElementById('statsGrid').innerHTML = `
-            <div class="stat-card"><h4><i class="fas fa-trophy"></i> MEJOR RENTABILIDAD</h4><div class="value">${bestRent.name}</div><div>${bestRent.rentabilidad.toFixed(2)}%</div></div>
-            <div class="stat-card"><h4><i class="fas fa-coins"></i> MAYOR GANANCIA</h4><div class="value">${bestUtil.name}</div><div>${Math.round(bestUtil.utilidadNeta).toLocaleString()}</div></div>
-            <div class="stat-card"><h4><i class="fas fa-chart-line"></i> EFICIENCIA (1K)</h4><div class="value">${bestEfi.name}</div><div>${Math.round(bestEfi.eficiencia)} silver</div></div>
-            <div class="stat-card"><h4><i class="fas fa-ship"></i> GANANCIA TOTAL</h4><div class="value">${Math.round(total).toLocaleString()}</div><div>silver/unidad</div></div>
+            <div class="stat-card"><h4><i class="fas fa-trophy"></i> MAYOR GANANCIA PROMEDIO</h4><div class="value">${bestItem.name}</div><div>${Math.round(bestItem.avgProfit || 0).toLocaleString()} silver</div></div>
+            <div class="stat-card"><h4><i class="fas fa-chart-line"></i> MEJOR RENTABILIDAD</h4><div class="value">${bestRentItem.name}</div><div>${(bestRentItem.avgRentabilidad || 0).toFixed(1)}%</div></div>
+            <div class="stat-card"><h4><i class="fas fa-coins"></i> GANANCIA TOTAL (promedio)</h4><div class="value">${Math.round(totalAvgProfit).toLocaleString()}</div><div>silver/unidad</div></div>
+            <div class="stat-card"><h4><i class="fas fa-city"></i> CIUDADES CON DATOS</h4><div class="value">${data.reduce((sum, i) => sum + (i.validCities || 0), 0)}</div><div>en total</div></div>
         `;
     }
 
     function renderItems() {
-        const data = calculateAll().sort((a,b) => b.rentabilidad - a.rentabilidad);
         const container = document.getElementById('itemsContainer');
-        if (!data.length) { 
+        if (!items.length) { 
             container.innerHTML = '<div class="item-card" style="text-align:center"><i class="fas fa-skull"></i> No hay objetos. Agrega uno arriba.</div>'; 
             renderStats([]); 
             return; 
         }
-        container.innerHTML = data.map((item, idx) => {
+        
+        const itemsWithData = items.map(item => {
+            const analysis = calculateAllForItem(item);
+            return { ...item, ...analysis };
+        }).sort((a,b) => (b.avgProfit || 0) - (a.avgProfit || 0));
+        
+        container.innerHTML = itemsWithData.map((item, idx) => {
             let rank = idx === 0 ? '⚔️' : idx === 1 ? '🔪' : idx === 2 ? '🏴' : '';
-            const prices = item.prices || {};
+            const cityNames = {
+                fortSterling: '🏔️ Fort Sterling',
+                bridgewatch: '🏜️ Bridgewatch',
+                lymhurst: '🌳 Lymhurst',
+                martlock: '⚙️ Martlock',
+                thetford: '✨ Thetford'
+            };
+            
+            const cityRows = item.cityResults.map(cityResult => {
+                const cityName = cityNames[cityResult.city] || cityResult.city;
+                return `
+                    <div class="city-result">
+                        ${cityName}: Compra ${Math.round(cityResult.buyPrice).toLocaleString()} → 
+                        Ganancia <span>${Math.round(cityResult.utilidadNeta).toLocaleString()} silver</span> 
+                        (${cityResult.rentabilidad.toFixed(1)}%)
+                    </div>
+                `;
+            }).join('');
+            
             return `
             <div class="item-card">
                 <div class="item-header">
@@ -804,127 +833,162 @@
                     <button class="delete-btn" onclick="deleteItem('${item.name}')"><i class="fas fa-trash"></i></button>
                 </div>
                 
-                <div class="buy-price">
-                    <label><i class="fas fa-shopping-cart"></i> PRECIO DE COMPRA</label>
-                    <input type="number" value="${item.buy}" onchange="updateBuyPrice('${item.name}', this.value)">
+                <div class="black-market-sell">
+                    <label><i class="fas fa-skull"></i> PRECIO VENTA BLACK MARKET</label>
+                    <input type="number" value="${item.blackMarketSell}" onchange="updateBlackMarketSell('${item.name}', this.value)">
                 </div>
                 
-                <div class="city-grid">
-                    <div class="city-field"><label>🏔️ Fort Sterling</label><input type="number" value="${prices.fortSterling || ''}" onchange="updateSellPrice('${item.name}', 'fortSterling', this.value)"></div>
-                    <div class="city-field"><label>🏜️ Bridgewatch</label><input type="number" value="${prices.bridgewatch || ''}" onchange="updateSellPrice('${item.name}', 'bridgewatch', this.value)"></div>
-                    <div class="city-field"><label>🌳 Lymhurst</label><input type="number" value="${prices.lymhurst || ''}" onchange="updateSellPrice('${item.name}', 'lymhurst', this.value)"></div>
-                    <div class="city-field"><label>⚙️ Martlock</label><input type="number" value="${prices.martlock || ''}" onchange="updateSellPrice('${item.name}', 'martlock', this.value)"></div>
-                    <div class="city-field"><label>✨ Thetford</label><input type="number" value="${prices.thetford || ''}" onchange="updateSellPrice('${item.name}', 'thetford', this.value)"></div>
+                <div class="city-buy-grid">
+                    <div class="city-buy-field"><label>🏔️ Fort Sterling</label><input type="number" value="${item.buyPrices.fortSterling || ''}" onchange="updateBuyPrice('${item.name}', 'fortSterling', this.value)"></div>
+                    <div class="city-buy-field"><label>🏜️ Bridgewatch</label><input type="number" value="${item.buyPrices.bridgewatch || ''}" onchange="updateBuyPrice('${item.name}', 'bridgewatch', this.value)"></div>
+                    <div class="city-buy-field"><label>🌳 Lymhurst</label><input type="number" value="${item.buyPrices.lymhurst || ''}" onchange="updateBuyPrice('${item.name}', 'lymhurst', this.value)"></div>
+                    <div class="city-buy-field"><label>⚙️ Martlock</label><input type="number" value="${item.buyPrices.martlock || ''}" onchange="updateBuyPrice('${item.name}', 'martlock', this.value)"></div>
+                    <div class="city-buy-field"><label>✨ Thetford</label><input type="number" value="${item.buyPrices.thetford || ''}" onchange="updateBuyPrice('${item.name}', 'thetford', this.value)"></div>
                 </div>
                 
-                <div class="field">
-                    <label><i class="fas fa-skull"></i> BLACK MARKET</label>
-                    <input type="number" value="${prices.blackMarket || ''}" onchange="updateSellPrice('${item.name}', 'blackMarket', this.value)">
-                </div>
+                ${cityRows}
                 
-                <div class="precio-medio">
-                    <span><i class="fas fa-chart-line"></i> PRECIO PROMEDIO DE VENTA:</span> ${Math.round(item.precioVentaPromedio).toLocaleString()} silver
+                <div class="precio-promedio">
+                    📊 GANANCIA PROMEDIO: ${Math.round(item.avgProfit).toLocaleString()} silver (${item.avgRentabilidad.toFixed(1)}% rentabilidad)
                 </div>
                 
                 <div class="item-results">
-                    <div class="result"><div class="label">Neto (impuesto)</div><div class="number">${Math.round(item.ingresoNeto).toLocaleString()}</div></div>
-                    <div class="result"><div class="label">Ganancia neta</div><div class="number positive">${Math.round(item.utilidadNeta).toLocaleString()}</div></div>
-                    <div class="result"><div class="label">Rentabilidad</div><div class="number positive">${item.rentabilidad.toFixed(1)}%</div></div>
-                    <div class="result"><div class="label">Precio mínimo</div><div class="number">${Math.round(item.precioMinimo).toLocaleString()}</div></div>
+                    <div class="result"><div class="label">Ciudades con datos</div><div class="number">${item.validCities} / 5</div></div>
+                    <div class="result"><div class="label">Impuesto</div><div class="number">${(getTaxRate()*100).toFixed(1)}%</div></div>
+                    <div class="result"><div class="label">Pérdida fija</div><div class="number">${(getLossRate()*100).toFixed(1)}%</div></div>
+                    <div class="result"><div class="label">Margen total</div><div class="number">${((getTaxRate()+getLossRate())*100).toFixed(1)}%</div></div>
                 </div>
             </div>`;
         }).join('');
-        renderStats(calculateAll());
+        
+        renderStats(itemsWithData);
         saveToLocal();
     }
 
-    function updateBuyPrice(name, val) {
+    function updateBuyPrice(name, city, val) {
         const i = items.find(x => x.name === name);
         if (i) {
-            i.buy = parseFloat(val) || 0;
+            i.buyPrices[city] = parseFloat(val) || 0;
             renderItems();
             if (document.getElementById('simulatorModal').classList.contains('active')) renderSimulator();
         }
     }
 
-    function updateSellPrice(name, field, val) {
+    function updateBlackMarketSell(name, val) {
         const i = items.find(x => x.name === name);
         if (i) {
-            if (!i.prices) i.prices = {};
-            i.prices[field] = parseFloat(val) || 0;
+            i.blackMarketSell = parseFloat(val) || 0;
             renderItems();
             if (document.getElementById('simulatorModal').classList.contains('active')) renderSimulator();
         }
     }
 
-    function deleteItem(name) { items = items.filter(i => i.name !== name); delete simulatorQuantities[name]; renderItems(); if (document.getElementById('simulatorModal').classList.contains('active')) renderSimulator(); }
+    function deleteItem(name) { 
+        items = items.filter(i => i.name !== name); 
+        delete simulatorQuantities[name]; 
+        renderItems(); 
+        if (document.getElementById('simulatorModal').classList.contains('active')) renderSimulator(); 
+    }
     
     function addItem() {
         const name = document.getElementById('newName').value.trim();
-        const buyPrice = parseFloat(document.getElementById('buyPrice').value);
+        const blackMarketSell = parseFloat(document.getElementById('blackMarketSell').value);
         
-        const fortSterling = parseFloat(document.getElementById('priceFS').value) || 0;
-        const bridgewatch = parseFloat(document.getElementById('priceBW').value) || 0;
-        const lymhurst = parseFloat(document.getElementById('priceLH').value) || 0;
-        const martlock = parseFloat(document.getElementById('priceML').value) || 0;
-        const thetford = parseFloat(document.getElementById('priceTH').value) || 0;
-        const blackMarket = parseFloat(document.getElementById('blackMarketPrice').value) || 0;
+        const buyPrices = {
+            fortSterling: parseFloat(document.getElementById('buyFS').value) || 0,
+            bridgewatch: parseFloat(document.getElementById('buyBW').value) || 0,
+            lymhurst: parseFloat(document.getElementById('buyLH').value) || 0,
+            martlock: parseFloat(document.getElementById('buyML').value) || 0,
+            thetford: parseFloat(document.getElementById('buyTH').value) || 0
+        };
         
         if (!name) { showToast('Nombre del objeto requerido'); return; }
-        if (isNaN(buyPrice) || buyPrice <= 0) { showToast('Precio de compra válido requerido'); return; }
+        if (isNaN(blackMarketSell) || blackMarketSell <= 0) { showToast('Precio de venta en Black Market requerido'); return; }
         
-        const hasSellPrice = fortSterling > 0 || bridgewatch > 0 || lymhurst > 0 || martlock > 0 || thetford > 0 || blackMarket > 0;
-        if (!hasSellPrice) { showToast('Ingresa al menos un precio de venta'); return; }
+        const hasBuyPrice = Object.values(buyPrices).some(p => p > 0);
+        if (!hasBuyPrice) { showToast('Ingresa al menos un precio de compra en alguna ciudad'); return; }
         
         const newItem = {
             name: name,
-            buy: buyPrice,
-            prices: {
-                fortSterling: fortSterling,
-                bridgewatch: bridgewatch,
-                lymhurst: lymhurst,
-                martlock: martlock,
-                thetford: thetford,
-                blackMarket: blackMarket
-            }
+            blackMarketSell: blackMarketSell,
+            buyPrices: buyPrices
         };
         
         items.push(newItem);
         simulatorQuantities[name] = 0;
         
         document.getElementById('newName').value = '';
-        document.getElementById('buyPrice').value = '';
-        document.getElementById('priceFS').value = '';
-        document.getElementById('priceBW').value = '';
-        document.getElementById('priceLH').value = '';
-        document.getElementById('priceML').value = '';
-        document.getElementById('priceTH').value = '';
-        document.getElementById('blackMarketPrice').value = '';
+        document.getElementById('blackMarketSell').value = '';
+        document.getElementById('buyFS').value = '';
+        document.getElementById('buyBW').value = '';
+        document.getElementById('buyLH').value = '';
+        document.getElementById('buyML').value = '';
+        document.getElementById('buyTH').value = '';
         
         renderItems();
         showToast(`${name} agregado`);
     }
 
-    function initQuantities() { items.forEach(i => { if (simulatorQuantities[i.name] === undefined) simulatorQuantities[i.name] = 0; }); }
-    
-    function renderSimulator() {
-        const data = calculateAll();
-        const container = document.getElementById('simulatorItems');
-        if (!data.length) { container.innerHTML = '<div class="sim-item" style="text-align:center">Sin objetos para simular</div>'; return; }
-        data.forEach(i => { if (simulatorQuantities[i.name] === undefined) simulatorQuantities[i.name] = 0; });
-        container.innerHTML = data.map(i => {
-            const q = simulatorQuantities[i.name] || 0;
-            return `<div class="sim-item"><div class="sim-item-header"><span><i class="fas fa-gem"></i> ${i.name}</span><div class="sim-item-control"><button onclick="changeQuantity('${i.name}',-1)">-</button><input type="number" value="${q}" onchange="setQuantity('${i.name}',this.value)" min="0"><button onclick="changeQuantity('${i.name}',1)">+</button></div></div>
-            <div><i class="fas fa-chart-simple"></i> Ganancia/unidad: ${Math.round(i.utilidadNeta).toLocaleString()} silver<br><i class="fas fa-coins"></i> Total: ${Math.round(i.utilidadNeta*q).toLocaleString()} silver</div></div>`;
-        }).join('');
-        updateSimTotal(data);
+    function initQuantities() { 
+        items.forEach(i => { 
+            if (simulatorQuantities[i.name] === undefined) simulatorQuantities[i.name] = 0; 
+        }); 
     }
     
-    function updateSimTotal(data) {
-        let g = 0, inv = 0;
-        data.forEach(i => { const q = simulatorQuantities[i.name] || 0; g += i.utilidadNeta * q; inv += i.buy * q; });
-        document.getElementById('totalGanancia').innerHTML = `${Math.round(g).toLocaleString()} silver <i class="fas fa-skull"></i>`;
-        document.getElementById('totalInversion').innerHTML = `Inversión: ${Math.round(inv).toLocaleString()} silver | Rentabilidad global: ${inv > 0 ? ((g/inv)*100).toFixed(2) : 0}%`;
+    function getAverageProfitForSimulator(item) {
+        const analysis = calculateAllForItem(item);
+        return analysis.avgProfit;
+    }
+    
+    function renderSimulator() {
+        const container = document.getElementById('simulatorItems');
+        if (!items.length) { 
+            container.innerHTML = '<div class="sim-item" style="text-align:center">Sin objetos para simular</div>'; 
+            return; 
+        }
+        
+        const itemsWithProfit = items.map(item => {
+            const avgProfit = getAverageProfitForSimulator(item);
+            return { ...item, avgProfit };
+        });
+        
+        itemsWithProfit.forEach(i => { 
+            if (simulatorQuantities[i.name] === undefined) simulatorQuantities[i.name] = 0; 
+        });
+        
+        container.innerHTML = itemsWithProfit.map(i => {
+            const q = simulatorQuantities[i.name] || 0;
+            const totalProfit = i.avgProfit * q;
+            const totalInvestment = i.buyPrices ? 
+                Object.values(i.buyPrices).filter(p => p > 0).reduce((a,b) => a + b, 0) / Object.values(i.buyPrices).filter(p => p > 0).length * q : 0;
+            return `<div class="sim-item">
+                <div class="sim-item-header">
+                    <span><i class="fas fa-gem"></i> ${i.name}</span>
+                    <div class="sim-item-control">
+                        <button onclick="changeQuantity('${i.name}',-1)">-</button>
+                        <input type="number" value="${q}" onchange="setQuantity('${i.name}',this.value)" min="0">
+                        <button onclick="changeQuantity('${i.name}',1)">+</button>
+                    </div>
+                </div>
+                <div><i class="fas fa-chart-simple"></i> Ganancia promedio/unidad: ${Math.round(i.avgProfit).toLocaleString()} silver<br>
+                <i class="fas fa-coins"></i> Ganancia total: ${Math.round(totalProfit).toLocaleString()} silver</div>
+            </div>`;
+        }).join('');
+        
+        updateSimTotal(itemsWithProfit);
+    }
+    
+    function updateSimTotal(itemsWithProfit) {
+        let totalProfit = 0;
+        let totalInvestment = 0;
+        itemsWithProfit.forEach(i => { 
+            const q = simulatorQuantities[i.name] || 0;
+            totalProfit += i.avgProfit * q;
+            const avgBuyPrice = Object.values(i.buyPrices).filter(p => p > 0).reduce((a,b) => a + b, 0) / Object.values(i.buyPrices).filter(p => p > 0).length;
+            totalInvestment += avgBuyPrice * q;
+        });
+        document.getElementById('totalGanancia').innerHTML = `${Math.round(totalProfit).toLocaleString()} silver <i class="fas fa-skull"></i>`;
+        document.getElementById('totalInversion').innerHTML = `Inversión estimada: ${Math.round(totalInvestment).toLocaleString()} silver | Rentabilidad global: ${totalInvestment > 0 ? ((totalProfit/totalInvestment)*100).toFixed(2) : 0}%`;
     }
     
     function changeQuantity(n, d) { simulatorQuantities[n] = Math.max(0, (simulatorQuantities[n] || 0) + d); renderSimulator(); }
