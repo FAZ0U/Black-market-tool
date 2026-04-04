@@ -504,7 +504,7 @@
             </div>
         </div>
         
-        <!-- Botón de guardar SIEMPRE VISIBLE fuera del plegable -->
+        <!-- Botón de guardar SIEMPRE VISIBLE -->
         <button class="save-object-btn" onclick="addItem()"><i class="fas fa-skull"></i> AGREGAR OBJETO</button>
 
         <div class="data-management" style="margin-top: 16px;">
@@ -896,6 +896,7 @@
     }
     
     function addItem() {
+        // Obtener valores del formulario
         const name = document.getElementById('newName').value.trim();
         const blackMarketSell = parseFloat(document.getElementById('blackMarketSell').value);
         
@@ -907,12 +908,30 @@
             thetford: parseFloat(document.getElementById('buyTH').value) || 0
         };
         
-        if (!name) { showToast('Nombre del objeto requerido'); return; }
-        if (isNaN(blackMarketSell) || blackMarketSell <= 0) { showToast('Precio de venta en Black Market requerido'); return; }
+        // Validaciones
+        if (!name) { 
+            showToast('❌ Nombre del objeto requerido'); 
+            return; 
+        }
+        
+        if (isNaN(blackMarketSell) || blackMarketSell <= 0) { 
+            showToast('❌ Precio de venta en Black Market requerido'); 
+            return; 
+        }
         
         const hasBuyPrice = Object.values(buyPrices).some(p => p > 0);
-        if (!hasBuyPrice) { showToast('Ingresa al menos un precio de compra en alguna ciudad'); return; }
+        if (!hasBuyPrice) { 
+            showToast('❌ Ingresa al menos un precio de compra en alguna ciudad'); 
+            return; 
+        }
         
+        // Verificar si ya existe un objeto con el mismo nombre
+        if (items.some(item => item.name.toLowerCase() === name.toLowerCase())) {
+            showToast(`❌ Ya existe un objeto llamado "${name}"`);
+            return;
+        }
+        
+        // Crear nuevo objeto
         const newItem = {
             name: name,
             blackMarketSell: blackMarketSell,
@@ -931,13 +950,14 @@
         document.getElementById('buyML').value = '';
         document.getElementById('buyTH').value = '';
         
+        // Actualizar vista
         renderItems();
-        showToast(`${name} agregado`);
+        showToast(`✅ ${name} agregado correctamente`);
         
-        // Opcional: cerrar el formulario después de agregar
-        if (formOpen) {
-            toggleForm();
-        }
+        // Opcional: cerrar el formulario después de agregar (opcional)
+        // if (formOpen) {
+        //     toggleForm();
+        // }
     }
 
     function initQuantities() { 
