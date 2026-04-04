@@ -2,904 +2,314 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <meta name="theme-color" content="#0a0a0a">
-    <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192.png">
-    <title>Black Market Tool - Albion Online</title>
+    <title>Black Market Tool</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         :root {
-            --bg-dark: #0a0a0a;
-            --bg-card: #111111;
-            --bg-input: #1a1a1a;
+            --bg: #0a0a0a;
+            --card: #111;
+            --input: #1a1a1a;
             --border: #2a2a2a;
-            --text-primary: #e0e0e0;
-            --text-secondary: #9a9a9a;
+            --text: #e0e0e0;
+            --text-sec: #9a9a9a;
             --accent: #b91c1c;
             --accent-hover: #7f1a1a;
-            --positive: #b91c1c;
-            --shadow: 0 4px 12px rgba(0,0,0,0.5);
         }
-
         body.light {
-            --bg-dark: #e8e8e8;
-            --bg-card: #f5f5f5;
-            --bg-input: #ffffff;
-            --border: #cccccc;
-            --text-primary: #1a1a1a;
-            --text-secondary: #4a4a4a;
-            --accent: #b91c1c;
-            --shadow: 0 4px 12px rgba(0,0,0,0.1);
+            --bg: #e8e8e8;
+            --card: #f5f5f5;
+            --input: #fff;
+            --border: #ccc;
+            --text: #1a1a1a;
+            --text-sec: #666;
         }
-
         body {
             font-family: 'Inter', sans-serif;
-            background: var(--bg-dark);
-            color: var(--text-primary);
+            background: var(--bg);
+            color: var(--text);
             padding: 16px;
-            transition: background 0.3s, color 0.2s;
+            transition: 0.3s;
         }
-
-        .container { max-width: 800px; margin: 0 auto; }
-
+        .container { max-width: 700px; margin: 0 auto; }
+        
         /* Header */
-        .pirate-header {
+        .header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-            gap: 12px;
+            align-items: center;
+            margin-bottom: 20px;
             border-bottom: 2px solid var(--accent);
             padding-bottom: 12px;
         }
-        .title-area { display: flex; align-items: center; gap: 12px; }
-        .pirate-logo { width: 50px; height: 50px; object-fit: contain; }
-        h1 {
-            font-family: 'Cinzel', serif;
-            font-size: 1.6rem;
-            font-weight: 900;
-            letter-spacing: 2px;
-            background: linear-gradient(135deg, #e0e0e0, #b91c1c);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        .sub { font-size: 0.7rem; color: var(--text-secondary); letter-spacing: 1px; }
-        .theme-toggle {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 40px;
-            padding: 8px 12px;
-            cursor: pointer;
-            color: var(--text-primary);
-            font-size: 1.2rem;
-        }
-
-        /* Paneles */
-        .panel {
-            background: var(--bg-card);
-            border-radius: 24px;
-            padding: 16px;
-            margin-bottom: 20px;
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-        }
-        .percent-row { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
-        .percent-card {
-            flex: 1;
-            background: var(--bg-input);
-            border-radius: 20px;
-            padding: 12px;
-            text-align: center;
-            border-left: 3px solid var(--accent);
-        }
-        .percent-card label { font-size: 0.7rem; text-transform: uppercase; font-weight: 600; color: var(--text-secondary); letter-spacing: 1px; }
-        .percent-card input {
-            background: transparent;
-            border: none;
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: var(--accent);
-            width: 100%;
-            text-align: center;
-            font-family: 'Inter', monospace;
-        }
+        .logo-area { display: flex; align-items: center; gap: 12px; }
+        .logo { width: 45px; height: 45px; object-fit: contain; }
+        h1 { font-family: 'Cinzel', serif; font-size: 1.4rem; background: linear-gradient(135deg, #fff, var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .sub { font-size: 0.65rem; color: var(--text-sec); }
+        .theme-btn { background: var(--card); border: 1px solid var(--border); border-radius: 30px; padding: 6px 12px; cursor: pointer; }
         
-        /* Formulario plegable */
-        .add-section { 
-            background: var(--bg-input); 
-            border-radius: 20px; 
-            padding: 12px; 
-            margin-bottom: 16px;
-        }
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            padding: 4px 0;
-        }
-        .section-title { 
-            font-size: 0.7rem; 
-            text-transform: uppercase; 
-            letter-spacing: 2px; 
-            color: var(--accent); 
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .toggle-icon {
-            font-size: 1rem;
-            color: var(--accent);
-            transition: transform 0.3s;
-        }
-        .section-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-        }
-        .section-content.open {
-            max-height: 800px;
-            transition: max-height 0.3s ease-in;
-        }
-        .form-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 12px;
-        }
-        .form-row {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        .form-row label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            letter-spacing: 0.5px;
-        }
-        .form-row input {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            padding: 12px;
-            border-radius: 14px;
-            color: var(--text-primary);
-            font-size: 1rem;
-        }
-        .cities-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin: 8px 0;
-        }
-        .city-input {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-        .city-input label {
-            font-size: 0.65rem;
-            color: var(--text-secondary);
-        }
-        .city-input input {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            padding: 10px;
-            border-radius: 12px;
-            color: var(--text-primary);
-        }
-        .black-market-row {
-            margin: 12px 0;
-            padding: 12px;
-            background: rgba(185, 28, 28, 0.1);
-            border-radius: 14px;
-            border-left: 3px solid var(--accent);
-        }
+        /* Tarjetas */
+        .card { background: var(--card); border-radius: 20px; padding: 16px; margin-bottom: 16px; border: 1px solid var(--border); }
+        .row-2 { display: flex; gap: 12px; flex-wrap: wrap; }
+        .row-2 > div { flex: 1; background: var(--input); border-radius: 16px; padding: 10px; text-align: center; border-left: 3px solid var(--accent); }
+        .row-2 label { font-size: 0.7rem; color: var(--text-sec); }
+        .row-2 input { background: transparent; border: none; font-size: 1.3rem; font-weight: bold; color: var(--accent); width: 100%; text-align: center; }
         
-        /* Botón de guardar - SIEMPRE VISIBLE */
-        .save-object-btn {
-            background: var(--accent);
-            border: none;
-            padding: 14px;
-            border-radius: 14px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s;
-            width: 100%;
-            margin-top: 12px;
-            font-size: 1rem;
-        }
-        .save-object-btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
+        /* Formulario */
+        .form-group { margin-bottom: 12px; }
+        .form-group label { font-size: 0.7rem; color: var(--text-sec); display: block; margin-bottom: 4px; }
+        .form-group input, .city-input input { width: 100%; background: var(--input); border: 1px solid var(--border); padding: 10px; border-radius: 12px; color: var(--text); }
+        .cities-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; margin: 10px 0; }
+        .city-input label { font-size: 0.6rem; display: block; margin-bottom: 2px; }
+        .black-market-box { background: rgba(185,28,28,0.1); padding: 12px; border-radius: 14px; margin: 12px 0; border-left: 3px solid var(--accent); }
         
+        .btn { background: var(--accent); border: none; padding: 14px; border-radius: 14px; color: white; font-weight: bold; cursor: pointer; width: 100%; margin: 8px 0; }
+        .btn:hover { background: var(--accent-hover); }
         .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
-        .btn-outline:hover { background: var(--accent); color: white; }
-        .data-buttons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-
+        
+        .data-buttons { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; margin-top: 12px; }
+        
         /* Stats */
-        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
-        .stat-card { background: var(--bg-card); border-radius: 20px; padding: 12px; text-align: center; border: 1px solid var(--border); }
-        .stat-card h4 { font-size: 0.65rem; color: var(--text-secondary); }
+        .stats { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; margin: 20px 0; }
+        .stat-card { background: var(--card); border-radius: 16px; padding: 12px; text-align: center; }
+        .stat-card h4 { font-size: 0.65rem; color: var(--text-sec); }
         .stat-card .value { font-size: 1rem; font-weight: bold; color: var(--accent); }
-
+        
         /* Items */
-        .items-container { display: flex; flex-direction: column; gap: 12px; margin-bottom: 80px; }
-        .item-card { background: var(--bg-card); border-radius: 20px; padding: 12px; border: 1px solid var(--border); }
+        .item { background: var(--card); border-radius: 20px; padding: 14px; margin-bottom: 12px; border: 1px solid var(--border); }
         .item-header { display: flex; justify-content: space-between; margin-bottom: 12px; }
-        .item-name { font-family: 'Cinzel', serif; font-weight: bold; font-size: 1.1rem; color: var(--accent); }
+        .item-name { font-family: 'Cinzel', serif; font-size: 1.1rem; color: var(--accent); }
+        .delete-btn { background: rgba(185,28,28,0.2); border: none; padding: 4px 10px; border-radius: 20px; color: var(--accent); cursor: pointer; }
+        .city-prices { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; background: var(--input); padding: 10px; border-radius: 14px; margin: 10px 0; }
+        .city-prices div { background: var(--card); padding: 6px; border-radius: 10px; }
+        .city-prices label { font-size: 0.55rem; display: block; }
+        .city-prices input { background: transparent; border: none; width: 100%; font-weight: bold; }
+        .black-sell { text-align: center; background: var(--input); padding: 8px; border-radius: 12px; margin: 10px 0; }
+        .profit-line { background: var(--accent); color: white; padding: 8px; border-radius: 12px; text-align: center; margin: 10px 0; font-weight: bold; }
+        .results { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; background: var(--input); padding: 8px; border-radius: 14px; margin-top: 10px; text-align: center; }
         
-        .black-market-sell {
-            background: var(--bg-input);
-            padding: 10px;
-            border-radius: 14px;
-            margin-bottom: 12px;
-            text-align: center;
-            border: 1px solid var(--accent);
-        }
-        .black-market-sell label { font-size: 0.7rem; color: var(--accent); display: block; margin-bottom: 4px; }
-        .black-market-sell input {
-            background: transparent;
-            border: none;
-            width: 100%;
-            text-align: center;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--text-primary);
-        }
-        
-        .city-buy-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            margin: 12px 0;
-            background: var(--bg-input);
-            padding: 10px;
-            border-radius: 16px;
-        }
-        .city-buy-field {
-            background: var(--bg-card);
-            padding: 6px 8px;
-            border-radius: 12px;
-        }
-        .city-buy-field label {
-            font-size: 0.6rem;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .city-buy-field input {
-            background: transparent;
-            border: none;
-            width: 100%;
-            color: var(--text-primary);
-            font-weight: bold;
-            font-size: 0.9rem;
-            padding: 4px 0;
-        }
-        
-        .city-result {
-            margin-top: 8px;
-            padding: 8px;
-            background: var(--bg-input);
-            border-radius: 12px;
-            font-size: 0.75rem;
-        }
-        .city-result span { color: var(--accent); font-weight: bold; }
-        
-        .precio-promedio {
-            background: var(--accent);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 14px;
-            text-align: center;
-            margin: 12px 0;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
-        
-        .item-results {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            background: var(--bg-input);
-            padding: 8px;
-            border-radius: 16px;
-            margin-top: 12px;
-        }
-        .result .label { font-size: 0.6rem; color: var(--text-secondary); }
-        .result .number { font-size: 0.85rem; font-weight: bold; }
-        .positive { color: var(--accent); }
-
-        .delete-btn {
-            background: rgba(185, 28, 28, 0.2);
-            border: none;
-            padding: 6px 12px;
-            border-radius: 30px;
-            color: var(--accent);
-            cursor: pointer;
-        }
-
-        /* Botón flotante */
-        .floating-btn {
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-            width: 56px;
-            height: 56px;
-            background: var(--accent);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: grab;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            z-index: 1000;
-            transition: transform 0.1s;
-            user-select: none;
-        }
-        .floating-btn:active { cursor: grabbing; }
-        .floating-btn i { font-size: 1.8rem; color: white; }
-        
-        .floating-menu {
-            position: fixed;
-            background: var(--bg-card);
-            border-radius: 20px;
-            padding: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-            z-index: 999;
-            display: none;
-            border: 1px solid var(--accent);
-            min-width: 180px;
-        }
-        .floating-menu.active { display: block; }
-        .floating-menu button {
-            width: 100%;
-            background: transparent;
-            border: none;
-            padding: 12px;
-            text-align: left;
-            color: var(--text-primary);
-            cursor: pointer;
-            border-radius: 14px;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .floating-menu button:hover { background: var(--bg-input); }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 1001;
-            padding: 16px;
-            overflow-y: auto;
-        }
+        /* Modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; padding: 20px; overflow: auto; }
         .modal.active { display: flex; align-items: center; justify-content: center; }
-        .modal-content {
-            background: var(--bg-card);
-            border-radius: 28px;
-            max-width: 650px;
-            width: 100%;
-            max-height: 85vh;
-            overflow-y: auto;
-            padding: 20px;
-            border: 1px solid var(--accent);
-        }
+        .modal-content { background: var(--card); border-radius: 28px; max-width: 650px; width: 100%; padding: 20px; border: 1px solid var(--accent); }
         .modal-header { display: flex; justify-content: space-between; margin-bottom: 16px; }
-        .global-qty-section {
-            background: var(--bg-input);
-            border-radius: 16px;
-            padding: 12px;
-            margin-bottom: 16px;
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        .sim-item { background: var(--bg-input); border-radius: 16px; padding: 12px; margin-bottom: 12px; }
-        .sim-item-header { display: flex; justify-content: space-between; flex-wrap: wrap; margin-bottom: 8px; }
-        .sim-item-control { display: flex; gap: 8px; align-items: center; }
-        .sim-item-control input { width: 70px; background: var(--bg-card); border: 1px solid var(--border); padding: 6px; border-radius: 10px; text-align: center; color: var(--text-primary); }
-        .sim-total { background: var(--bg-input); border-radius: 16px; padding: 16px; text-align: center; margin-top: 16px; }
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--accent);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            z-index: 2000;
-            animation: fadeOut 2s forwards;
-        }
+        .sim-item { background: var(--input); border-radius: 14px; padding: 10px; margin-bottom: 10px; }
+        .sim-item-header { display: flex; justify-content: space-between; flex-wrap: wrap; margin-bottom: 6px; }
+        .sim-control { display: flex; gap: 8px; align-items: center; }
+        .sim-control input { width: 60px; background: var(--card); border: 1px solid var(--border); padding: 5px; border-radius: 8px; text-align: center; }
+        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--accent); color: white; padding: 8px 16px; border-radius: 40px; font-size: 0.8rem; z-index: 2000; animation: fadeOut 2s forwards; }
         @keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
-        footer { text-align: center; font-size: 0.6rem; color: var(--text-secondary); margin-top: 24px; }
+        footer { text-align: center; font-size: 0.6rem; color: var(--text-sec); margin-top: 20px; }
+        .floating-btn { position: fixed; bottom: 70px; right: 20px; width: 50px; height: 50px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        .floating-menu { position: fixed; background: var(--card); border-radius: 16px; padding: 8px; display: none; border: 1px solid var(--accent); z-index: 99; }
+        .floating-menu button { background: transparent; border: none; padding: 10px; width: 100%; text-align: left; color: var(--text); cursor: pointer; border-radius: 10px; }
+        .floating-menu button:hover { background: var(--input); }
+        .toggle-icon { cursor: pointer; float: right; }
+        .form-content { max-height: 0; overflow: hidden; transition: 0.3s; }
+        .form-content.open { max-height: 800px; }
     </style>
 </head>
 <body>
 <div class="container">
-    <div class="pirate-header">
-        <div class="title-area">
-            <img src="2011.jpg" alt="Pirate Logo" class="pirate-logo">
-            <div>
-                <h1>BLACK MARKET TOOL</h1>
-                <div class="sub">Compra en ciudades · Venta en Black Market</div>
-            </div>
+    <div class="header">
+        <div class="logo-area">
+            <img src="2011.jpg" class="logo" alt="logo">
+            <div><h1>BLACK MARKET TOOL</h1><div class="sub">Compra en ciudades · Venta en Black Market</div></div>
         </div>
-        <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
+        <button class="theme-btn" onclick="toggleTheme()">🌓</button>
     </div>
 
-    <div class="panel">
-        <div class="percent-row">
-            <div class="percent-card">
-                <label><i class="fas fa-percent"></i> IMPUESTO</label>
-                <input type="number" id="taxRate" step="0.1" value="10.5">
-            </div>
-            <div class="percent-card">
-                <label><i class="fas fa-skull"></i> PÉRDIDA FIJA</label>
-                <input type="number" id="lossRate" step="0.1" value="20.0">
-            </div>
-        </div>
-
-        <!-- Formulario plegable -->
-        <div class="add-section">
-            <div class="section-header" onclick="toggleForm()">
-                <div class="section-title"><i class="fas fa-plus-circle"></i> NUEVO OBJETO</div>
-                <i class="fas fa-chevron-down toggle-icon" id="formToggleIcon"></i>
-            </div>
-            <div class="section-content" id="formContent">
-                <div class="form-grid">
-                    <div class="form-row">
-                        <label><i class="fas fa-tag"></i> NOMBRE DEL OBJETO</label>
-                        <input type="text" id="newName" placeholder="Ej: Bolsa T5, Calavera Ósea">
-                    </div>
-                    
-                    <div class="form-row">
-                        <label><i class="fas fa-city"></i> PRECIO DE COMPRA EN CADA CIUDAD (lo que pagas tú)</label>
-                        <div class="cities-grid">
-                            <div class="city-input">
-                                <label>🏔️ Fort Sterling</label>
-                                <input type="number" id="buyFS" placeholder="Precio compra">
-                            </div>
-                            <div class="city-input">
-                                <label>🏜️ Bridgewatch</label>
-                                <input type="number" id="buyBW" placeholder="Precio compra">
-                            </div>
-                            <div class="city-input">
-                                <label>🌳 Lymhurst</label>
-                                <input type="number" id="buyLH" placeholder="Precio compra">
-                            </div>
-                            <div class="city-input">
-                                <label>⚙️ Martlock</label>
-                                <input type="number" id="buyML" placeholder="Precio compra">
-                            </div>
-                            <div class="city-input">
-                                <label>✨ Thetford</label>
-                                <input type="number" id="buyTH" placeholder="Precio compra">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="black-market-row">
-                        <label><i class="fas fa-skull"></i> PRECIO DE VENTA EN BLACK MARKET (único)</label>
-                        <input type="number" id="blackMarketSell" placeholder="Precio al que vendes en Black Market" style="width:100%; margin-top:8px; background:var(--bg-card); border:1px solid var(--border); padding:12px; border-radius:12px; color:var(--text-primary);">
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Botón de guardar SIEMPRE VISIBLE -->
-        <button class="save-object-btn" onclick="addItem()"><i class="fas fa-skull"></i> AGREGAR OBJETO</button>
-
-        <div class="data-management" style="margin-top: 16px;">
-            <div class="section-title"><i class="fas fa-database"></i> GESTIÓN DE DATOS</div>
-            <div class="data-buttons">
-                <button class="btn-outline" onclick="saveToLocal()"><i class="fas fa-save"></i> Guardar</button>
-                <button class="btn-outline" onclick="exportData()"><i class="fas fa-file-export"></i> Exportar</button>
-                <button class="btn-outline" onclick="document.getElementById('importFile').click()"><i class="fas fa-file-import"></i> Importar</button>
-                <button class="btn-outline" onclick="resetToDefault()"><i class="fas fa-trash-alt"></i> Limpiar todo</button>
-            </div>
-            <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(this)">
+    <div class="card">
+        <div class="row-2">
+            <div><label>💰 IMPUESTO</label><input type="number" id="taxRate" step="0.1" value="10.5"></div>
+            <div><label>⚠️ PÉRDIDA FIJA</label><input type="number" id="lossRate" step="0.1" value="20.0"></div>
         </div>
     </div>
 
-    <div class="stats-grid" id="statsGrid"></div>
-    <div class="items-container" id="itemsContainer"></div>
-    <footer><i class="fas fa-anchor"></i> Ganancia = (Black Market - PrecioCompraCiudad) - Impuestos - Pérdidas · Promedio entre ciudades con datos</footer>
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; cursor: pointer;" onclick="toggleForm()">
+            <span><i class="fas fa-plus-circle"></i> NUEVO OBJETO</span>
+            <i class="fas fa-chevron-down" id="formIcon"></i>
+        </div>
+        <div id="formContent" class="form-content">
+            <div class="form-group"><label>NOMBRE</label><input type="text" id="newName" placeholder="Ej: Bolsa T5"></div>
+            <label>PRECIO DE COMPRA POR CIUDAD</label>
+            <div class="cities-grid">
+                <div class="city-input"><label>🏔️ Fort Sterling</label><input type="number" id="buyFS"></div>
+                <div class="city-input"><label>🏜️ Bridgewatch</label><input type="number" id="buyBW"></div>
+                <div class="city-input"><label>🌳 Lymhurst</label><input type="number" id="buyLH"></div>
+                <div class="city-input"><label>⚙️ Martlock</label><input type="number" id="buyML"></div>
+                <div class="city-input"><label>✨ Thetford</label><input type="number" id="buyTH"></div>
+            </div>
+            <div class="black-market-box">
+                <label>🏴‍☠️ PRECIO VENTA BLACK MARKET</label>
+                <input type="number" id="blackSell" placeholder="Precio único de venta" style="width:100%; margin-top:6px;">
+            </div>
+            <button class="btn" onclick="addItem()">AGREGAR OBJETO</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div style="margin-bottom: 8px;">💾 GESTIÓN DE DATOS</div>
+        <div class="data-buttons">
+            <button class="btn-outline" onclick="saveData()">Guardar</button>
+            <button class="btn-outline" onclick="exportData()">Exportar</button>
+            <button class="btn-outline" onclick="importTrigger()">Importar</button>
+            <button class="btn-outline" onclick="clearAll()">Limpiar todo</button>
+        </div>
+        <input type="file" id="importFile" style="display:none" onchange="importData(this)">
+    </div>
+
+    <div class="stats" id="statsArea"></div>
+    <div id="itemsList"></div>
+    <footer>Ganancia = (BlackMarket - PrecioCompra) - Impuestos - PérdidaFija · Promedio entre ciudades</footer>
 </div>
 
-<!-- Botón flotante -->
-<div id="floatingBtn" class="floating-btn">
-    <i class="fas fa-skull"></i>
-</div>
+<div class="floating-btn" id="floatBtn"><i class="fas fa-skull"></i></div>
+<div id="floatMenu" class="floating-menu"><button onclick="openSimulator()"><i class="fas fa-chart-line"></i> Simulador de volumen</button></div>
 
-<div id="floatingMenu" class="floating-menu">
-    <button onclick="openSimulator()"><i class="fas fa-chart-line"></i> Simulador de volumen</button>
-</div>
-
-<div id="simulatorModal" class="modal">
+<div id="simModal" class="modal">
     <div class="modal-content">
-        <div class="modal-header">
-            <h2><i class="fas fa-chart-simple"></i> Simulador de volumen</h2>
-            <button class="btn-outline" onclick="closeSimulator()"><i class="fas fa-times"></i> Cerrar</button>
-        </div>
-        <div class="global-qty-section">
-            <label><input type="checkbox" id="globalQtyToggle"> Aplicar misma cantidad a todos</label>
-            <div>
-                <input type="number" id="globalQtyValue" value="50" disabled>
-                <button class="btn-outline" id="applyGlobalQty" onclick="applyGlobalQuantity()" disabled>Aplicar</button>
-            </div>
-        </div>
-        <div id="simulatorItems"></div>
-        <div class="sim-total">
-            <h3 id="totalGanancia">0 silver</h3>
-            <p id="totalInversion"></p>
-            <button class="btn-outline" onclick="resetQuantities()"><i class="fas fa-undo-alt"></i> Resetear cantidades</button>
-        </div>
+        <div class="modal-header"><h2>Simulador de volumen</h2><button class="btn-outline" onclick="closeSimulator()">Cerrar</button></div>
+        <div><label><input type="checkbox" id="globalQtyToggle"> Aplicar misma cantidad a todos</label>
+        <div style="margin-top:8px"><input type="number" id="globalQtyVal" value="50" disabled> <button class="btn-outline" id="applyGlobalBtn" disabled onclick="applyGlobalQty()">Aplicar</button></div></div>
+        <div id="simItems"></div>
+        <div class="sim-total" style="margin-top:16px;text-align:center"><h3 id="simTotalProfit">0 silver</h3><p id="simTotalInv"></p><button class="btn-outline" onclick="resetSimQtys()">Resetear cantidades</button></div>
     </div>
 </div>
 
 <script>
+    // ========== DATOS ==========
     let items = [];
-    let simulatorQuantities = {};
+    let simQtys = {};
 
-    // ========== BOTÓN FLOTANTE ==========
-    const floatingBtn = document.getElementById('floatingBtn');
-    const floatingMenu = document.getElementById('floatingMenu');
-    let isDragging = false;
-    let dragStartX, dragStartY;
-    let btnStartX, btnStartY;
-    
-    function loadBtnPosition() {
-        const saved = localStorage.getItem('floatingBtnPosition');
-        if (saved) {
-            const pos = JSON.parse(saved);
-            floatingBtn.style.bottom = 'auto';
-            floatingBtn.style.right = 'auto';
-            floatingBtn.style.top = pos.top;
-            floatingBtn.style.left = pos.left;
-        }
-    }
-    
-    function saveBtnPosition() {
-        const rect = floatingBtn.getBoundingClientRect();
-        localStorage.setItem('floatingBtnPosition', JSON.stringify({
-            top: rect.top + 'px',
-            left: rect.left + 'px'
-        }));
-    }
-    
-    floatingBtn.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        dragStartX = e.clientX;
-        dragStartY = e.clientY;
-        const rect = floatingBtn.getBoundingClientRect();
-        btnStartX = rect.left;
-        btnStartY = rect.top;
-        floatingBtn.style.cursor = 'grabbing';
-        e.preventDefault();
-    });
-    
-    document.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        const dx = e.clientX - dragStartX;
-        const dy = e.clientY - dragStartY;
-        let newLeft = btnStartX + dx;
-        let newTop = btnStartY + dy;
-        const maxX = window.innerWidth - floatingBtn.offsetWidth;
-        const maxY = window.innerHeight - floatingBtn.offsetHeight;
-        newLeft = Math.min(maxX, Math.max(0, newLeft));
-        newTop = Math.min(maxY, Math.max(0, newTop));
-        floatingBtn.style.bottom = 'auto';
-        floatingBtn.style.right = 'auto';
-        floatingBtn.style.left = newLeft + 'px';
-        floatingBtn.style.top = newTop + 'px';
-    });
-    
-    document.addEventListener('mouseup', () => {
-        if (isDragging) {
-            isDragging = false;
-            floatingBtn.style.cursor = 'grab';
-            saveBtnPosition();
-        }
-    });
-    
-    floatingBtn.addEventListener('click', (e) => {
-        if (!isDragging) {
-            if (floatingMenu.classList.contains('active')) {
-                floatingMenu.classList.remove('active');
-            } else {
-                const rect = floatingBtn.getBoundingClientRect();
-                floatingMenu.style.bottom = 'auto';
-                floatingMenu.style.top = (rect.top - floatingMenu.offsetHeight - 10) + 'px';
-                floatingMenu.style.left = rect.left + 'px';
-                floatingMenu.classList.add('active');
-                setTimeout(() => floatingMenu.classList.remove('active'), 3000);
-            }
-        }
-    });
-    
-    document.addEventListener('click', (e) => {
-        if (!floatingBtn.contains(e.target) && !floatingMenu.contains(e.target)) {
-            floatingMenu.classList.remove('active');
-        }
-    });
+    // ========== IMPUESTOS ==========
+    function getTax() { return parseFloat(document.getElementById('taxRate').value) / 100; }
+    function getLoss() { return parseFloat(document.getElementById('lossRate').value) / 100; }
 
-    // ========== FORMULARIO PLEGABLE ==========
-    let formOpen = false;
-    function toggleForm() {
-        const content = document.getElementById('formContent');
-        const icon = document.getElementById('formToggleIcon');
-        if (formOpen) {
-            content.classList.remove('open');
-            icon.classList.remove('fa-chevron-up');
-            icon.classList.add('fa-chevron-down');
-        } else {
-            content.classList.add('open');
-            icon.classList.remove('fa-chevron-down');
-            icon.classList.add('fa-chevron-up');
-        }
-        formOpen = !formOpen;
+    // ========== CÁLCULO POR CIUDAD ==========
+    function calcProfit(buy, sell) {
+        const tax = getTax();
+        const loss = getLoss();
+        const net = sell * (1 - tax);
+        const gross = net - buy;
+        const lossAmount = gross * loss;
+        const final = gross - lossAmount;
+        const rent = buy > 0 ? (final / buy) * 100 : 0;
+        return { final, rent };
     }
 
-    // ========== FUNCIONES PRINCIPALES ==========
-    function getTaxRate() { return parseFloat(document.getElementById('taxRate').value) / 100; }
-    function getLossRate() { return parseFloat(document.getElementById('lossRate').value) / 100; }
-
-    function calculateProfit(buyPrice, sellPrice) {
-        const tax = getTaxRate();
-        const loss = getLossRate();
-        const factor = 1 - tax;
-        const ingresoNeto = sellPrice * factor;
-        const utilidadBruta = ingresoNeto - buyPrice;
-        const perdidaVarias = utilidadBruta * loss;
-        const utilidadNeta = utilidadBruta - perdidaVarias;
-        const rentabilidad = buyPrice > 0 ? (utilidadNeta / buyPrice) * 100 : 0;
-        return { ingresoNeto, utilidadBruta, perdidaVarias, utilidadNeta, rentabilidad };
-    }
-
-    function calculateAllForItem(item) {
-        const sellPrice = item.blackMarketSell;
+    // ========== PROCESAR UN ITEM ==========
+    function processItem(item) {
         const cities = ['fortSterling', 'bridgewatch', 'lymhurst', 'martlock', 'thetford'];
-        const cityResults = [];
+        const cityNames = { fortSterling:'🏔️ Fort Sterling', bridgewatch:'🏜️ Bridgewatch', lymhurst:'🌳 Lymhurst', martlock:'⚙️ Martlock', thetford:'✨ Thetford' };
+        const results = [];
         let totalProfit = 0;
-        let validCities = 0;
+        let validCount = 0;
         
         cities.forEach(city => {
-            const buyPrice = item.buyPrices[city];
-            if (buyPrice > 0 && sellPrice > 0) {
-                const profit = calculateProfit(buyPrice, sellPrice);
-                cityResults.push({
-                    city: city,
-                    buyPrice: buyPrice,
-                    ...profit
-                });
-                totalProfit += profit.utilidadNeta;
-                validCities++;
+            const buy = item.buyPrices[city];
+            if (buy > 0 && item.blackSell > 0) {
+                const profit = calcProfit(buy, item.blackSell);
+                results.push({ city, buy, profit: profit.final, rent: profit.rent });
+                totalProfit += profit.final;
+                validCount++;
             }
         });
         
-        const avgProfit = validCities > 0 ? totalProfit / validCities : 0;
-        const avgRentabilidad = validCities > 0 ? cityResults.reduce((sum, c) => sum + c.rentabilidad, 0) / validCities : 0;
-        
-        return { cityResults, avgProfit, avgRentabilidad, validCities, sellPrice };
+        const avgProfit = validCount > 0 ? totalProfit / validCount : 0;
+        const avgRent = validCount > 0 ? results.reduce((s,r) => s + r.rent, 0) / validCount : 0;
+        return { results, avgProfit, avgRent, validCount };
     }
 
-    function saveToLocal() {
-        localStorage.setItem('blackMarketData', JSON.stringify({
-            items, 
-            taxRate: parseFloat(document.getElementById('taxRate').value),
-            lossRate: parseFloat(document.getElementById('lossRate').value),
-            theme: document.body.classList.contains('light') ? 'light' : 'dark'
-        }));
-        showToast('Datos guardados');
-    }
-
-    function loadFromLocal() {
-        const saved = localStorage.getItem('blackMarketData');
-        if (saved) {
-            const data = JSON.parse(saved);
-            items = data.items || [];
-            document.getElementById('taxRate').value = data.taxRate || 10.5;
-            document.getElementById('lossRate').value = data.lossRate || 20.0;
-            if (data.theme === 'light') document.body.classList.add('light');
-        } else {
-            items = [];
+    // ========== RENDER ESTADÍSTICAS ==========
+    function renderStats() {
+        const statsDiv = document.getElementById('statsArea');
+        if (items.length === 0) {
+            statsDiv.innerHTML = '<div class="stat-card"><h4>SIN DATOS</h4><div class="value">Agrega objetos</div></div>';
+            return;
         }
-        initQuantities();
-        renderItems();
-    }
-
-    function resetToDefault() {
-        if (confirm('¿Eliminar todos los objetos?')) {
-            items = [];
-            initQuantities();
-            renderItems();
-            saveToLocal();
-            showToast('Todos los objetos eliminados');
-        }
-    }
-
-    function exportData() {
-        const dataStr = JSON.stringify({ items, taxRate: getTaxRate()*100, lossRate: getLossRate()*100 }, null, 2);
-        const blob = new Blob([dataStr], {type: 'application/json'});
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `black_market_${Date.now()}.json`;
-        a.click();
-        URL.revokeObjectURL(a.href);
-        showToast('Datos exportados');
-    }
-
-    function importData(input) {
-        const file = input.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = e => {
-            try {
-                const data = JSON.parse(e.target.result);
-                if (data.items !== undefined) {
-                    items = data.items || [];
-                    if (data.taxRate) document.getElementById('taxRate').value = data.taxRate;
-                    if (data.lossRate) document.getElementById('lossRate').value = data.lossRate;
-                    initQuantities();
-                    renderItems();
-                    saveToLocal();
-                    showToast('Datos importados');
-                } else {
-                    showToast('Archivo inválido');
-                }
-            } catch(err) {
-                showToast('Error al leer archivo');
-            }
-        };
-        reader.readAsText(file);
-        input.value = '';
-    }
-
-    function showToast(msg) {
-        const t = document.createElement('div'); 
-        t.className = 'toast'; 
-        t.innerHTML = `<i class="fas fa-skull"></i> ${msg}`;
-        document.body.appendChild(t);
-        setTimeout(() => t.remove(), 2000);
-    }
-
-    function renderStats(data) {
-        if (!data.length) { 
-            document.getElementById('statsGrid').innerHTML = '<div class="stat-card"><h4>SIN BOTÍN</h4><div class="value">Agrega objetos</div></div>'; 
-            return; 
-        }
-        const bestItem = data.reduce((a,b) => (a.avgProfit || 0) > (b.avgProfit || 0) ? a : b);
-        const bestRentItem = data.reduce((a,b) => (a.avgRentabilidad || 0) > (b.avgRentabilidad || 0) ? a : b);
-        const totalAvgProfit = data.reduce((sum, i) => sum + (i.avgProfit || 0), 0);
-        document.getElementById('statsGrid').innerHTML = `
-            <div class="stat-card"><h4><i class="fas fa-trophy"></i> MAYOR GANANCIA PROMEDIO</h4><div class="value">${bestItem.name}</div><div>${Math.round(bestItem.avgProfit || 0).toLocaleString()} silver</div></div>
-            <div class="stat-card"><h4><i class="fas fa-chart-line"></i> MEJOR RENTABILIDAD</h4><div class="value">${bestRentItem.name}</div><div>${(bestRentItem.avgRentabilidad || 0).toFixed(1)}%</div></div>
-            <div class="stat-card"><h4><i class="fas fa-coins"></i> GANANCIA TOTAL (promedio)</h4><div class="value">${Math.round(totalAvgProfit).toLocaleString()}</div><div>silver/unidad</div></div>
-            <div class="stat-card"><h4><i class="fas fa-city"></i> CIUDADES CON DATOS</h4><div class="value">${data.reduce((sum, i) => sum + (i.validCities || 0), 0)}</div><div>en total</div></div>
+        const processed = items.map(i => ({ name: i.name, ...processItem(i) }));
+        const bestProfit = processed.reduce((a,b) => (a.avgProfit > b.avgProfit ? a : b));
+        const bestRent = processed.reduce((a,b) => (a.avgRent > b.avgRent ? a : b));
+        const totalAvgProfit = processed.reduce((s,i) => s + i.avgProfit, 0);
+        statsDiv.innerHTML = `
+            <div class="stat-card"><h4>🏆 MAYOR GANANCIA PROMEDIO</h4><div class="value">${bestProfit.name}</div><div>${Math.round(bestProfit.avgProfit).toLocaleString()} silver</div></div>
+            <div class="stat-card"><h4>📈 MEJOR RENTABILIDAD</h4><div class="value">${bestRent.name}</div><div>${bestRent.avgRent.toFixed(1)}%</div></div>
+            <div class="stat-card"><h4>💰 GANANCIA TOTAL PROMEDIO</h4><div class="value">${Math.round(totalAvgProfit).toLocaleString()} silver</div><div>por unidad</div></div>
+            <div class="stat-card"><h4>🏙️ CIUDADES CON DATOS</h4><div class="value">${processed.reduce((s,i) => s + i.validCount, 0)}</div><div>en total</div></div>
         `;
     }
 
+    // ========== RENDER LISTA DE OBJETOS ==========
     function renderItems() {
-        const container = document.getElementById('itemsContainer');
-        if (!items.length) { 
-            container.innerHTML = '<div class="item-card" style="text-align:center"><i class="fas fa-skull"></i> No hay objetos. Agrega uno arriba.</div>'; 
-            renderStats([]); 
-            return; 
+        const container = document.getElementById('itemsList');
+        if (items.length === 0) {
+            container.innerHTML = '<div class="card" style="text-align:center">No hay objetos. Agrega uno arriba.</div>';
+            renderStats();
+            return;
         }
         
-        const itemsWithData = items.map(item => {
-            const analysis = calculateAllForItem(item);
-            return { ...item, ...analysis };
-        }).sort((a,b) => (b.avgProfit || 0) - (a.avgProfit || 0));
+        const processed = items.map(item => ({ ...item, ...processItem(item) }));
+        processed.sort((a,b) => b.avgProfit - a.avgProfit);
         
-        container.innerHTML = itemsWithData.map((item, idx) => {
-            let rank = idx === 0 ? '⚔️' : idx === 1 ? '🔪' : idx === 2 ? '🏴' : '';
-            const cityNames = {
-                fortSterling: '🏔️ Fort Sterling',
-                bridgewatch: '🏜️ Bridgewatch',
-                lymhurst: '🌳 Lymhurst',
-                martlock: '⚙️ Martlock',
-                thetford: '✨ Thetford'
-            };
-            
-            const cityRows = item.cityResults.map(cityResult => {
-                const cityName = cityNames[cityResult.city] || cityResult.city;
-                return `
-                    <div class="city-result">
-                        ${cityName}: Compra ${Math.round(cityResult.buyPrice).toLocaleString()} → 
-                        Ganancia <span>${Math.round(cityResult.utilidadNeta).toLocaleString()} silver</span> 
-                        (${cityResult.rentabilidad.toFixed(1)}%)
-                    </div>
-                `;
-            }).join('');
+        container.innerHTML = processed.map((item, idx) => {
+            const rank = idx === 0 ? '⚔️' : idx === 1 ? '🔪' : idx === 2 ? '🏴' : '';
+            const cityRows = item.results.map(r => `
+                <div style="font-size:0.75rem; margin-top:4px;">${r.city}: Compra ${Math.round(r.buy).toLocaleString()} → Ganancia <span style="color:var(--accent)">${Math.round(r.profit).toLocaleString()} silver</span> (${r.rent.toFixed(1)}%)</div>
+            `).join('');
             
             return `
-            <div class="item-card">
+            <div class="item">
                 <div class="item-header">
                     <span class="item-name">${rank} ${item.name}</span>
-                    <button class="delete-btn" onclick="deleteItem('${item.name}')"><i class="fas fa-trash"></i></button>
+                    <button class="delete-btn" onclick="deleteItem('${item.name}')">🗑️</button>
                 </div>
-                
-                <div class="black-market-sell">
-                    <label><i class="fas fa-skull"></i> PRECIO VENTA BLACK MARKET</label>
-                    <input type="number" value="${item.blackMarketSell}" onchange="updateBlackMarketSell('${item.name}', this.value)">
+                <div class="black-sell">
+                    <label>🏴‍☠️ PRECIO VENTA BLACK MARKET</label>
+                    <input type="number" value="${item.blackSell}" onchange="updateBlackSell('${item.name}', this.value)">
                 </div>
-                
-                <div class="city-buy-grid">
-                    <div class="city-buy-field"><label>🏔️ Fort Sterling</label><input type="number" value="${item.buyPrices.fortSterling || ''}" onchange="updateBuyPrice('${item.name}', 'fortSterling', this.value)"></div>
-                    <div class="city-buy-field"><label>🏜️ Bridgewatch</label><input type="number" value="${item.buyPrices.bridgewatch || ''}" onchange="updateBuyPrice('${item.name}', 'bridgewatch', this.value)"></div>
-                    <div class="city-buy-field"><label>🌳 Lymhurst</label><input type="number" value="${item.buyPrices.lymhurst || ''}" onchange="updateBuyPrice('${item.name}', 'lymhurst', this.value)"></div>
-                    <div class="city-buy-field"><label>⚙️ Martlock</label><input type="number" value="${item.buyPrices.martlock || ''}" onchange="updateBuyPrice('${item.name}', 'martlock', this.value)"></div>
-                    <div class="city-buy-field"><label>✨ Thetford</label><input type="number" value="${item.buyPrices.thetford || ''}" onchange="updateBuyPrice('${item.name}', 'thetford', this.value)"></div>
+                <div class="city-prices">
+                    <div><label>🏔️ Fort Sterling</label><input type="number" value="${item.buyPrices.fortSterling || ''}" onchange="updateBuy('${item.name}', 'fortSterling', this.value)"></div>
+                    <div><label>🏜️ Bridgewatch</label><input type="number" value="${item.buyPrices.bridgewatch || ''}" onchange="updateBuy('${item.name}', 'bridgewatch', this.value)"></div>
+                    <div><label>🌳 Lymhurst</label><input type="number" value="${item.buyPrices.lymhurst || ''}" onchange="updateBuy('${item.name}', 'lymhurst', this.value)"></div>
+                    <div><label>⚙️ Martlock</label><input type="number" value="${item.buyPrices.martlock || ''}" onchange="updateBuy('${item.name}', 'martlock', this.value)"></div>
+                    <div><label>✨ Thetford</label><input type="number" value="${item.buyPrices.thetford || ''}" onchange="updateBuy('${item.name}', 'thetford', this.value)"></div>
                 </div>
-                
                 ${cityRows}
-                
-                <div class="precio-promedio">
-                    📊 GANANCIA PROMEDIO: ${Math.round(item.avgProfit).toLocaleString()} silver (${item.avgRentabilidad.toFixed(1)}% rentabilidad)
-                </div>
-                
-                <div class="item-results">
-                    <div class="result"><div class="label">Ciudades con datos</div><div class="number">${item.validCities} / 5</div></div>
-                    <div class="result"><div class="label">Impuesto</div><div class="number">${(getTaxRate()*100).toFixed(1)}%</div></div>
-                    <div class="result"><div class="label">Pérdida fija</div><div class="number">${(getLossRate()*100).toFixed(1)}%</div></div>
-                    <div class="result"><div class="label">Margen total</div><div class="number">${((getTaxRate()+getLossRate())*100).toFixed(1)}%</div></div>
+                <div class="profit-line">📊 GANANCIA PROMEDIO: ${Math.round(item.avgProfit).toLocaleString()} silver (${item.avgRent.toFixed(1)}% rentabilidad)</div>
+                <div class="results">
+                    <div><div class="sub">Ciudades</div><div>${item.validCount}/5</div></div>
+                    <div><div class="sub">Impuesto</div><div>${(getTax()*100).toFixed(1)}%</div></div>
+                    <div><div class="sub">Pérdida fija</div><div>${(getLoss()*100).toFixed(1)}%</div></div>
+                    <div><div class="sub">Margen total</div><div>${((getTax()+getLoss())*100).toFixed(1)}%</div></div>
                 </div>
             </div>`;
         }).join('');
-        
-        renderStats(itemsWithData);
+        renderStats();
         saveToLocal();
     }
 
-    function updateBuyPrice(name, city, val) {
-        const i = items.find(x => x.name === name);
-        if (i) {
-            i.buyPrices[city] = parseFloat(val) || 0;
-            renderItems();
-            if (document.getElementById('simulatorModal').classList.contains('active')) renderSimulator();
-        }
+    // ========== ACTUALIZACIONES ==========
+    function updateBuy(name, city, val) {
+        const item = items.find(i => i.name === name);
+        if (item) { item.buyPrices[city] = parseFloat(val) || 0; renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); }
     }
+    function updateBlackSell(name, val) {
+        const item = items.find(i => i.name === name);
+        if (item) { item.blackSell = parseFloat(val) || 0; renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); }
+    }
+    function deleteItem(name) { items = items.filter(i => i.name !== name); delete simQtys[name]; renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); }
 
-    function updateBlackMarketSell(name, val) {
-        const i = items.find(x => x.name === name);
-        if (i) {
-            i.blackMarketSell = parseFloat(val) || 0;
-            renderItems();
-            if (document.getElementById('simulatorModal').classList.contains('active')) renderSimulator();
-        }
-    }
-
-    function deleteItem(name) { 
-        items = items.filter(i => i.name !== name); 
-        delete simulatorQuantities[name]; 
-        renderItems(); 
-        if (document.getElementById('simulatorModal').classList.contains('active')) renderSimulator(); 
-    }
-    
+    // ========== AGREGAR OBJETO ==========
     function addItem() {
-        // Obtener valores del formulario
         const name = document.getElementById('newName').value.trim();
-        const blackMarketSell = parseFloat(document.getElementById('blackMarketSell').value);
-        
+        const blackSell = parseFloat(document.getElementById('blackSell').value);
         const buyPrices = {
             fortSterling: parseFloat(document.getElementById('buyFS').value) || 0,
             bridgewatch: parseFloat(document.getElementById('buyBW').value) || 0,
@@ -908,136 +318,84 @@
             thetford: parseFloat(document.getElementById('buyTH').value) || 0
         };
         
-        // Validaciones
-        if (!name) { 
-            showToast('❌ Nombre del objeto requerido'); 
-            return; 
-        }
+        if (!name) { toast('Nombre requerido'); return; }
+        if (!blackSell || blackSell <= 0) { toast('Precio Black Market requerido'); return; }
+        if (Object.values(buyPrices).every(v => v === 0)) { toast('Al menos un precio de compra'); return; }
+        if (items.some(i => i.name.toLowerCase() === name.toLowerCase())) { toast('Ya existe ese objeto'); return; }
         
-        if (isNaN(blackMarketSell) || blackMarketSell <= 0) { 
-            showToast('❌ Precio de venta en Black Market requerido'); 
-            return; 
-        }
+        items.push({ name, blackSell, buyPrices });
+        simQtys[name] = 0;
         
-        const hasBuyPrice = Object.values(buyPrices).some(p => p > 0);
-        if (!hasBuyPrice) { 
-            showToast('❌ Ingresa al menos un precio de compra en alguna ciudad'); 
-            return; 
-        }
-        
-        // Verificar si ya existe un objeto con el mismo nombre
-        if (items.some(item => item.name.toLowerCase() === name.toLowerCase())) {
-            showToast(`❌ Ya existe un objeto llamado "${name}"`);
-            return;
-        }
-        
-        // Crear nuevo objeto
-        const newItem = {
-            name: name,
-            blackMarketSell: blackMarketSell,
-            buyPrices: buyPrices
-        };
-        
-        items.push(newItem);
-        simulatorQuantities[name] = 0;
-        
-        // Limpiar formulario
         document.getElementById('newName').value = '';
-        document.getElementById('blackMarketSell').value = '';
-        document.getElementById('buyFS').value = '';
-        document.getElementById('buyBW').value = '';
-        document.getElementById('buyLH').value = '';
-        document.getElementById('buyML').value = '';
-        document.getElementById('buyTH').value = '';
+        document.getElementById('blackSell').value = '';
+        ['buyFS','buyBW','buyLH','buyML','buyTH'].forEach(id => document.getElementById(id).value = '');
         
-        // Actualizar vista
         renderItems();
-        showToast(`✅ ${name} agregado correctamente`);
-        
-        // Opcional: cerrar el formulario después de agregar (opcional)
-        // if (formOpen) {
-        //     toggleForm();
-        // }
+        toast(`${name} agregado`);
     }
 
-    function initQuantities() { 
-        items.forEach(i => { 
-            if (simulatorQuantities[i.name] === undefined) simulatorQuantities[i.name] = 0; 
-        }); 
+    // ========== PERSISTENCIA ==========
+    function saveToLocal() { localStorage.setItem('bmData', JSON.stringify({ items, tax: getTax()*100, loss: getLoss()*100 })); }
+    function loadFromLocal() {
+        const data = localStorage.getItem('bmData');
+        if (data) {
+            const d = JSON.parse(data);
+            items = d.items || [];
+            document.getElementById('taxRate').value = d.tax || 10.5;
+            document.getElementById('lossRate').value = d.loss || 20.0;
+        } else { items = []; }
+        simQtys = {};
+        renderItems();
     }
-    
-    function getAverageProfitForSimulator(item) {
-        const analysis = calculateAllForItem(item);
-        return analysis.avgProfit;
-    }
-    
+    function saveData() { saveToLocal(); toast('Datos guardados'); }
+    function clearAll() { if(confirm('¿Eliminar todos los objetos?')) { items = []; simQtys = {}; renderItems(); saveToLocal(); toast('Todo limpiado'); } }
+    function exportData() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(items)])); a.download = `bm_${Date.now()}.json`; a.click(); toast('Exportado'); }
+    function importTrigger() { document.getElementById('importFile').click(); }
+    function importData(input) { const file = input.files[0]; if(!file) return; const r = new FileReader(); r.onload = e => { try { items = JSON.parse(e.target.result); simQtys = {}; renderItems(); saveToLocal(); toast('Importado'); } catch(err) { toast('Error'); } }; r.readAsText(file); input.value = ''; }
+
+    // ========== SIMULADOR ==========
+    function getAvgProfit(item) { return processItem(item).avgProfit; }
     function renderSimulator() {
-        const container = document.getElementById('simulatorItems');
-        if (!items.length) { 
-            container.innerHTML = '<div class="sim-item" style="text-align:center">Sin objetos para simular</div>'; 
-            return; 
-        }
-        
-        const itemsWithProfit = items.map(item => {
-            const avgProfit = getAverageProfitForSimulator(item);
-            return { ...item, avgProfit };
-        });
-        
-        itemsWithProfit.forEach(i => { 
-            if (simulatorQuantities[i.name] === undefined) simulatorQuantities[i.name] = 0; 
-        });
-        
-        container.innerHTML = itemsWithProfit.map(i => {
-            const q = simulatorQuantities[i.name] || 0;
-            const totalProfit = i.avgProfit * q;
-            const totalInvestment = i.buyPrices ? 
-                Object.values(i.buyPrices).filter(p => p > 0).reduce((a,b) => a + b, 0) / Object.values(i.buyPrices).filter(p => p > 0).length * q : 0;
-            return `<div class="sim-item">
-                <div class="sim-item-header">
-                    <span><i class="fas fa-gem"></i> ${i.name}</span>
-                    <div class="sim-item-control">
-                        <button onclick="changeQuantity('${i.name}',-1)">-</button>
-                        <input type="number" value="${q}" onchange="setQuantity('${i.name}',this.value)" min="0">
-                        <button onclick="changeQuantity('${i.name}',1)">+</button>
-                    </div>
-                </div>
-                <div><i class="fas fa-chart-simple"></i> Ganancia promedio/unidad: ${Math.round(i.avgProfit).toLocaleString()} silver<br>
-                <i class="fas fa-coins"></i> Ganancia total: ${Math.round(totalProfit).toLocaleString()} silver</div>
-            </div>`;
+        const container = document.getElementById('simItems');
+        if (items.length === 0) { container.innerHTML = '<div>Sin objetos</div>'; return; }
+        const data = items.map(i => ({ name: i.name, profit: getAvgProfit(i) }));
+        data.forEach(d => { if (simQtys[d.name] === undefined) simQtys[d.name] = 0; });
+        container.innerHTML = data.map(d => {
+            const q = simQtys[d.name] || 0;
+            return `<div class="sim-item"><div class="sim-item-header"><span>${d.name}</span><div class="sim-control"><button onclick="changeQty('${d.name}',-1)">-</button><input type="number" value="${q}" onchange="setQty('${d.name}',this.value)" min="0"><button onclick="changeQty('${d.name}',1)">+</button></div></div><div>Ganancia/unidad: ${Math.round(d.profit).toLocaleString()} silver · Total: ${Math.round(d.profit*q).toLocaleString()}</div></div>`;
         }).join('');
-        
-        updateSimTotal(itemsWithProfit);
+        updateSimTotal(data);
     }
-    
-    function updateSimTotal(itemsWithProfit) {
-        let totalProfit = 0;
-        let totalInvestment = 0;
-        itemsWithProfit.forEach(i => { 
-            const q = simulatorQuantities[i.name] || 0;
-            totalProfit += i.avgProfit * q;
-            const avgBuyPrice = Object.values(i.buyPrices).filter(p => p > 0).reduce((a,b) => a + b, 0) / Object.values(i.buyPrices).filter(p => p > 0).length;
-            totalInvestment += avgBuyPrice * q;
-        });
-        document.getElementById('totalGanancia').innerHTML = `${Math.round(totalProfit).toLocaleString()} silver <i class="fas fa-skull"></i>`;
-        document.getElementById('totalInversion').innerHTML = `Inversión estimada: ${Math.round(totalInvestment).toLocaleString()} silver | Rentabilidad global: ${totalInvestment > 0 ? ((totalProfit/totalInvestment)*100).toFixed(2) : 0}%`;
+    function updateSimTotal(data) {
+        let total = 0, inv = 0;
+        data.forEach(d => { const q = simQtys[d.name] || 0; total += d.profit * q; });
+        document.getElementById('simTotalProfit').innerHTML = `${Math.round(total).toLocaleString()} silver`;
+        document.getElementById('simTotalInv').innerHTML = `Inversión estimada: calculable por ciudad`;
     }
-    
-    function changeQuantity(n, d) { simulatorQuantities[n] = Math.max(0, (simulatorQuantities[n] || 0) + d); renderSimulator(); }
-    function setQuantity(n, v) { let q = parseInt(v); if (isNaN(q) || q < 0) q = 0; simulatorQuantities[n] = q; renderSimulator(); }
-    function resetQuantities() { Object.keys(simulatorQuantities).forEach(k => simulatorQuantities[k] = 0); renderSimulator(); showToast('Cantidades reiniciadas'); }
-    function applyGlobalQuantity() { const toggle = document.getElementById('globalQtyToggle'); if (!toggle.checked) return; const qty = parseInt(document.getElementById('globalQtyValue').value); if (isNaN(qty) || qty < 0) return; Object.keys(simulatorQuantities).forEach(k => simulatorQuantities[k] = qty); renderSimulator(); showToast(`Volumen ${qty} aplicado`); }
-    function openSimulator() { initQuantities(); renderSimulator(); document.getElementById('simulatorModal').classList.add('active'); }
-    function closeSimulator() { document.getElementById('simulatorModal').classList.remove('active'); }
+    function changeQty(n, d) { simQtys[n] = Math.max(0, (simQtys[n] || 0) + d); renderSimulator(); }
+    function setQty(n, v) { let q = parseInt(v); if (isNaN(q) || q < 0) q = 0; simQtys[n] = q; renderSimulator(); }
+    function resetSimQtys() { Object.keys(simQtys).forEach(k => simQtys[k] = 0); renderSimulator(); toast('Cantidades reiniciadas'); }
+    function applyGlobalQty() { const toggle = document.getElementById('globalQtyToggle'); if (!toggle.checked) return; const val = parseInt(document.getElementById('globalQtyVal').value); if (isNaN(val) || val < 0) return; Object.keys(simQtys).forEach(k => simQtys[k] = val); renderSimulator(); toast(`Volumen ${val} aplicado`); }
+    function openSimulator() { renderSimulator(); document.getElementById('simModal').classList.add('active'); }
+    function closeSimulator() { document.getElementById('simModal').classList.remove('active'); }
+
+    // ========== UI ==========
+    function toast(msg) { const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = `<i class="fas fa-skull"></i> ${msg}`; document.body.appendChild(t); setTimeout(() => t.remove(), 2000); }
     function toggleTheme() { document.body.classList.toggle('light'); saveToLocal(); }
-
-    document.getElementById('taxRate').addEventListener('input', () => { renderItems(); if (document.getElementById('simulatorModal').classList.contains('active')) renderSimulator(); });
-    document.getElementById('lossRate').addEventListener('input', () => { renderItems(); if (document.getElementById('simulatorModal').classList.contains('active')) renderSimulator(); });
+    let formOpen = false;
+    function toggleForm() { const c = document.getElementById('formContent'); const i = document.getElementById('formIcon'); if (formOpen) { c.classList.remove('open'); i.classList.remove('fa-chevron-up'); i.classList.add('fa-chevron-down'); } else { c.classList.add('open'); i.classList.remove('fa-chevron-down'); i.classList.add('fa-chevron-up'); } formOpen = !formOpen; }
     
-    const toggle = document.getElementById('globalQtyToggle'), input = document.getElementById('globalQtyValue'), btn = document.getElementById('applyGlobalQty');
-    toggle.onchange = () => { input.disabled = !toggle.checked; btn.disabled = !toggle.checked; };
-
+    // ========== BOTÓN FLOTANTE ==========
+    const floatBtn = document.getElementById('floatBtn'), floatMenu = document.getElementById('floatMenu');
+    floatBtn.onclick = () => { floatMenu.style.display = floatMenu.style.display === 'block' ? 'none' : 'block'; setTimeout(() => { floatMenu.style.display = 'none'; }, 3000); };
+    document.addEventListener('click', (e) => { if (!floatBtn.contains(e.target) && !floatMenu.contains(e.target)) floatMenu.style.display = 'none'; });
+    
+    // ========== GLOBAL QTY LISTENERS ==========
+    document.getElementById('globalQtyToggle').onchange = () => { const d = document.getElementById('globalQtyVal'); const b = document.getElementById('applyGlobalBtn'); d.disabled = !document.getElementById('globalQtyToggle').checked; b.disabled = !document.getElementById('globalQtyToggle').checked; };
+    document.getElementById('taxRate').oninput = () => { renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); };
+    document.getElementById('lossRate').oninput = () => { renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); };
+    
     loadFromLocal();
-    loadBtnPosition();
 </script>
 </body>
 </html>
