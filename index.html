@@ -23,7 +23,6 @@
             --accent: #b91c1c;
             --accent-hover: #7f1a1a;
             --positive: #b91c1c;
-            --negative: #9a3412;
             --shadow: 0 4px 12px rgba(0,0,0,0.5);
         }
 
@@ -203,7 +202,9 @@
             border-radius: 14px;
             border-left: 3px solid var(--accent);
         }
-        .btn {
+        
+        /* Botón de guardar - SIEMPRE VISIBLE */
+        .save-object-btn {
             background: var(--accent);
             border: none;
             padding: 14px;
@@ -213,8 +214,11 @@
             cursor: pointer;
             transition: all 0.2s;
             width: 100%;
+            margin-top: 12px;
+            font-size: 1rem;
         }
-        .btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
+        .save-object-btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
+        
         .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
         .btn-outline:hover { background: var(--accent); color: white; }
         .data-buttons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
@@ -435,7 +439,7 @@
             <img src="2011.jpg" alt="Pirate Logo" class="pirate-logo">
             <div>
                 <h1>BLACK MARKET TOOL</h1>
-                <div class="sub">Albion Online · Compra en ciudades · Venta en Black Market</div>
+                <div class="sub">Compra en ciudades · Venta en Black Market</div>
             </div>
         </div>
         <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
@@ -496,13 +500,14 @@
                         <label><i class="fas fa-skull"></i> PRECIO DE VENTA EN BLACK MARKET (único)</label>
                         <input type="number" id="blackMarketSell" placeholder="Precio al que vendes en Black Market" style="width:100%; margin-top:8px; background:var(--bg-card); border:1px solid var(--border); padding:12px; border-radius:12px; color:var(--text-primary);">
                     </div>
-
-                    <button class="btn" onclick="addItem()"><i class="fas fa-skull"></i> AGREGAR OBJETO</button>
                 </div>
             </div>
         </div>
+        
+        <!-- Botón de guardar SIEMPRE VISIBLE fuera del plegable -->
+        <button class="save-object-btn" onclick="addItem()"><i class="fas fa-skull"></i> AGREGAR OBJETO</button>
 
-        <div class="data-management">
+        <div class="data-management" style="margin-top: 16px;">
             <div class="section-title"><i class="fas fa-database"></i> GESTIÓN DE DATOS</div>
             <div class="data-buttons">
                 <button class="btn-outline" onclick="saveToLocal()"><i class="fas fa-save"></i> Guardar</button>
@@ -917,6 +922,7 @@
         items.push(newItem);
         simulatorQuantities[name] = 0;
         
+        // Limpiar formulario
         document.getElementById('newName').value = '';
         document.getElementById('blackMarketSell').value = '';
         document.getElementById('buyFS').value = '';
@@ -927,6 +933,11 @@
         
         renderItems();
         showToast(`${name} agregado`);
+        
+        // Opcional: cerrar el formulario después de agregar
+        if (formOpen) {
+            toggleForm();
+        }
     }
 
     function initQuantities() { 
