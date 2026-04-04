@@ -165,7 +165,7 @@
             color: var(--text-secondary);
             letter-spacing: 0.5px;
         }
-        .form-row input, .form-row select {
+        .form-row input {
             background: var(--bg-card);
             border: 1px solid var(--border);
             padding: 12px;
@@ -230,6 +230,24 @@
         .item-header { display: flex; justify-content: space-between; margin-bottom: 12px; }
         .item-name { font-family: 'Cinzel', serif; font-weight: bold; font-size: 1.1rem; color: var(--accent); }
         
+        .buy-price {
+            background: var(--bg-input);
+            padding: 10px;
+            border-radius: 14px;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        .buy-price label { font-size: 0.65rem; color: var(--text-secondary); display: block; margin-bottom: 4px; }
+        .buy-price input {
+            background: transparent;
+            border: none;
+            width: 100%;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+        
         .city-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -272,16 +290,6 @@
         }
         .precio-medio span { color: white; opacity: 0.9; margin-right: 8px; }
         
-        .item-fields { margin-bottom: 8px; }
-        .field {
-            background: var(--bg-input);
-            padding: 8px;
-            border-radius: 14px;
-            margin-bottom: 12px;
-        }
-        .field label { font-size: 0.6rem; color: var(--text-secondary); display: block; margin-bottom: 4px; }
-        .field input { background: transparent; border: none; width: 100%; color: var(--text-primary); font-weight: bold; font-size: 1rem; }
-        
         .item-results {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -304,7 +312,7 @@
             cursor: pointer;
         }
 
-        /* Botón flotante arrastrable */
+        /* Botón flotante */
         .floating-btn {
             position: fixed;
             bottom: 80px;
@@ -325,7 +333,6 @@
         .floating-btn:active { cursor: grabbing; }
         .floating-btn i { font-size: 1.8rem; color: white; }
         
-        /* Menú de opciones */
         .floating-menu {
             position: fixed;
             background: var(--bg-card);
@@ -354,7 +361,6 @@
         }
         .floating-menu button:hover { background: var(--bg-input); }
 
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -436,7 +442,7 @@
             </div>
         </div>
 
-        <!-- Formulario plegable -->
+        <!-- Formulario plegable corregido -->
         <div class="add-section">
             <div class="section-header" onclick="toggleForm()">
                 <div class="section-title"><i class="fas fa-plus-circle"></i> NUEVO OBJETO</div>
@@ -446,38 +452,43 @@
                 <div class="form-grid">
                     <div class="form-row">
                         <label><i class="fas fa-tag"></i> NOMBRE DEL OBJETO</label>
-                        <input type="text" id="newName" placeholder="Ej: Bolsa T5, Calavera Ósea, etc.">
+                        <input type="text" id="newName" placeholder="Ej: Bolsa T5, Calavera Ósea">
                     </div>
                     
                     <div class="form-row">
-                        <label><i class="fas fa-city"></i> PRECIOS DE COMPRA POR CIUDAD</label>
+                        <label><i class="fas fa-shopping-cart"></i> PRECIO DE COMPRA (único)</label>
+                        <input type="number" id="buyPrice" placeholder="Precio al que compras el objeto">
+                    </div>
+                    
+                    <div class="form-row">
+                        <label><i class="fas fa-city"></i> PRECIOS DE VENTA POR CIUDAD</label>
                         <div class="cities-grid">
                             <div class="city-input">
                                 <label>🏔️ Fort Sterling</label>
-                                <input type="number" id="priceFS" placeholder="Precio compra">
+                                <input type="number" id="priceFS" placeholder="Precio venta">
                             </div>
                             <div class="city-input">
                                 <label>🏜️ Bridgewatch</label>
-                                <input type="number" id="priceBW" placeholder="Precio compra">
+                                <input type="number" id="priceBW" placeholder="Precio venta">
                             </div>
                             <div class="city-input">
                                 <label>🌳 Lymhurst</label>
-                                <input type="number" id="priceLH" placeholder="Precio compra">
+                                <input type="number" id="priceLH" placeholder="Precio venta">
                             </div>
                             <div class="city-input">
                                 <label>⚙️ Martlock</label>
-                                <input type="number" id="priceML" placeholder="Precio compra">
+                                <input type="number" id="priceML" placeholder="Precio venta">
                             </div>
                             <div class="city-input">
                                 <label>✨ Thetford</label>
-                                <input type="number" id="priceTH" placeholder="Precio compra">
+                                <input type="number" id="priceTH" placeholder="Precio venta">
                             </div>
                         </div>
                     </div>
 
                     <div class="black-market-row">
-                        <label><i class="fas fa-skull"></i> PRECIO BLACK MARKET</label>
-                        <input type="number" id="blackMarketPrice" placeholder="Precio de venta en Black Market" style="width:100%; margin-top:8px; background:var(--bg-card); border:1px solid var(--border); padding:12px; border-radius:12px; color:var(--text-primary);">
+                        <label><i class="fas fa-skull"></i> PRECIO DE VENTA EN BLACK MARKET</label>
+                        <input type="number" id="blackMarketPrice" placeholder="Precio venta en Black Market" style="width:100%; margin-top:8px; background:var(--bg-card); border:1px solid var(--border); padding:12px; border-radius:12px; color:var(--text-primary);">
                     </div>
 
                     <button class="btn" onclick="addItem()"><i class="fas fa-skull"></i> AGREGAR OBJETO</button>
@@ -499,7 +510,7 @@
 
     <div class="stats-grid" id="statsGrid"></div>
     <div class="items-container" id="itemsContainer"></div>
-    <footer><i class="fas fa-anchor"></i> Precio promedio = (Suma de ciudades con datos + Black Market) / Cantidad · Datos guardados localmente</footer>
+    <footer><i class="fas fa-anchor"></i> Precio promedio de venta = (Suma de ciudades + Black Market) / Cantidad · Datos guardados localmente</footer>
 </div>
 
 <!-- Botón flotante -->
@@ -507,12 +518,10 @@
     <i class="fas fa-skull"></i>
 </div>
 
-<!-- Menú flotante -->
 <div id="floatingMenu" class="floating-menu">
     <button onclick="openSimulator()"><i class="fas fa-chart-line"></i> Simulador de volumen</button>
 </div>
 
-<!-- Modal Simulador -->
 <div id="simulatorModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -539,15 +548,13 @@
     let items = [];
     let simulatorQuantities = {};
 
-    // ========== BOTÓN FLOTANTE ARRASTRABLE ==========
+    // ========== BOTÓN FLOTANTE ==========
     const floatingBtn = document.getElementById('floatingBtn');
     const floatingMenu = document.getElementById('floatingMenu');
     let isDragging = false;
     let dragStartX, dragStartY;
     let btnStartX, btnStartY;
-    let clickTimeout;
     
-    // Cargar posición guardada
     function loadBtnPosition() {
         const saved = localStorage.getItem('floatingBtnPosition');
         if (saved) {
@@ -584,13 +591,10 @@
         const dy = e.clientY - dragStartY;
         let newLeft = btnStartX + dx;
         let newTop = btnStartY + dy;
-        
-        // Limitar dentro de la pantalla
         const maxX = window.innerWidth - floatingBtn.offsetWidth;
         const maxY = window.innerHeight - floatingBtn.offsetHeight;
         newLeft = Math.min(maxX, Math.max(0, newLeft));
         newTop = Math.min(maxY, Math.max(0, newTop));
-        
         floatingBtn.style.bottom = 'auto';
         floatingBtn.style.right = 'auto';
         floatingBtn.style.left = newLeft + 'px';
@@ -605,30 +609,22 @@
         }
     });
     
-    // Menú al hacer clic (no arrastrar)
     floatingBtn.addEventListener('click', (e) => {
         if (!isDragging) {
-            // Cerrar menú si está abierto
             if (floatingMenu.classList.contains('active')) {
                 floatingMenu.classList.remove('active');
             } else {
-                // Posicionar menú cerca del botón
                 const rect = floatingBtn.getBoundingClientRect();
                 floatingMenu.style.bottom = 'auto';
                 floatingMenu.style.top = (rect.top - floatingMenu.offsetHeight - 10) + 'px';
                 floatingMenu.style.left = rect.left + 'px';
                 floatingMenu.style.right = 'auto';
                 floatingMenu.classList.add('active');
-                
-                // Cerrar menú después de 3 segundos
-                setTimeout(() => {
-                    floatingMenu.classList.remove('active');
-                }, 3000);
+                setTimeout(() => floatingMenu.classList.remove('active'), 3000);
             }
         }
     });
     
-    // Cerrar menú al hacer clic fuera
     document.addEventListener('click', (e) => {
         if (!floatingBtn.contains(e.target) && !floatingMenu.contains(e.target)) {
             floatingMenu.classList.remove('active');
@@ -656,7 +652,8 @@
     function getTaxRate() { return parseFloat(document.getElementById('taxRate').value) / 100; }
     function getLossRate() { return parseFloat(document.getElementById('lossRate').value) / 100; }
 
-    function getAveragePrice(prices) {
+    // Calcular precio promedio de venta (ciudades + black market)
+    function getAverageSellPrice(prices) {
         let sum = 0;
         let count = 0;
         const cities = ['fortSterling', 'bridgewatch', 'lymhurst', 'martlock', 'thetford'];
@@ -678,16 +675,16 @@
     function calculateItem(item) {
         const tax = getTaxRate();
         const loss = getLossRate();
-        const precioMedio = getAveragePrice(item.prices || {});
+        const precioVentaPromedio = getAverageSellPrice(item.prices || {});
         const factor = 1 - tax;
-        const ingresoNeto = precioMedio * factor;
+        const ingresoNeto = precioVentaPromedio * factor;
         const utilidadBruta = ingresoNeto - item.buy;
         const perdidaVarias = utilidadBruta * loss;
         const utilidadNeta = utilidadBruta - perdidaVarias;
         const rentabilidad = item.buy > 0 ? (utilidadNeta / item.buy) * 100 : 0;
         const precioMinimo = item.buy / factor;
         const eficiencia = item.buy > 0 ? (utilidadNeta / item.buy) * 1000 : 0;
-        return { precioMedio, ingresoNeto, utilidadBruta, perdidaVarias, utilidadNeta, rentabilidad, precioMinimo, eficiencia };
+        return { precioVentaPromedio, ingresoNeto, utilidadBruta, perdidaVarias, utilidadNeta, rentabilidad, precioMinimo, eficiencia };
     }
 
     function calculateAll() { return items.map(i => ({ ...i, ...calculateItem(i) })); }
@@ -807,21 +804,26 @@
                     <button class="delete-btn" onclick="deleteItem('${item.name}')"><i class="fas fa-trash"></i></button>
                 </div>
                 
+                <div class="buy-price">
+                    <label><i class="fas fa-shopping-cart"></i> PRECIO DE COMPRA</label>
+                    <input type="number" value="${item.buy}" onchange="updateBuyPrice('${item.name}', this.value)">
+                </div>
+                
                 <div class="city-grid">
-                    <div class="city-field"><label>🏔️ Fort Sterling</label><input type="number" value="${prices.fortSterling || ''}" onchange="updatePrice('${item.name}', 'fortSterling', this.value)"></div>
-                    <div class="city-field"><label>🏜️ Bridgewatch</label><input type="number" value="${prices.bridgewatch || ''}" onchange="updatePrice('${item.name}', 'bridgewatch', this.value)"></div>
-                    <div class="city-field"><label>🌳 Lymhurst</label><input type="number" value="${prices.lymhurst || ''}" onchange="updatePrice('${item.name}', 'lymhurst', this.value)"></div>
-                    <div class="city-field"><label>⚙️ Martlock</label><input type="number" value="${prices.martlock || ''}" onchange="updatePrice('${item.name}', 'martlock', this.value)"></div>
-                    <div class="city-field"><label>✨ Thetford</label><input type="number" value="${prices.thetford || ''}" onchange="updatePrice('${item.name}', 'thetford', this.value)"></div>
+                    <div class="city-field"><label>🏔️ Fort Sterling</label><input type="number" value="${prices.fortSterling || ''}" onchange="updateSellPrice('${item.name}', 'fortSterling', this.value)"></div>
+                    <div class="city-field"><label>🏜️ Bridgewatch</label><input type="number" value="${prices.bridgewatch || ''}" onchange="updateSellPrice('${item.name}', 'bridgewatch', this.value)"></div>
+                    <div class="city-field"><label>🌳 Lymhurst</label><input type="number" value="${prices.lymhurst || ''}" onchange="updateSellPrice('${item.name}', 'lymhurst', this.value)"></div>
+                    <div class="city-field"><label>⚙️ Martlock</label><input type="number" value="${prices.martlock || ''}" onchange="updateSellPrice('${item.name}', 'martlock', this.value)"></div>
+                    <div class="city-field"><label>✨ Thetford</label><input type="number" value="${prices.thetford || ''}" onchange="updateSellPrice('${item.name}', 'thetford', this.value)"></div>
                 </div>
                 
                 <div class="field">
                     <label><i class="fas fa-skull"></i> BLACK MARKET</label>
-                    <input type="number" value="${prices.blackMarket || ''}" onchange="updatePrice('${item.name}', 'blackMarket', this.value)">
+                    <input type="number" value="${prices.blackMarket || ''}" onchange="updateSellPrice('${item.name}', 'blackMarket', this.value)">
                 </div>
                 
                 <div class="precio-medio">
-                    <span><i class="fas fa-chart-line"></i> PRECIO PROMEDIO:</span> ${Math.round(item.precioMedio).toLocaleString()} silver
+                    <span><i class="fas fa-chart-line"></i> PRECIO PROMEDIO DE VENTA:</span> ${Math.round(item.precioVentaPromedio).toLocaleString()} silver
                 </div>
                 
                 <div class="item-results">
@@ -836,7 +838,16 @@
         saveToLocal();
     }
 
-    function updatePrice(name, field, val) {
+    function updateBuyPrice(name, val) {
+        const i = items.find(x => x.name === name);
+        if (i) {
+            i.buy = parseFloat(val) || 0;
+            renderItems();
+            if (document.getElementById('simulatorModal').classList.contains('active')) renderSimulator();
+        }
+    }
+
+    function updateSellPrice(name, field, val) {
         const i = items.find(x => x.name === name);
         if (i) {
             if (!i.prices) i.prices = {};
@@ -850,6 +861,7 @@
     
     function addItem() {
         const name = document.getElementById('newName').value.trim();
+        const buyPrice = parseFloat(document.getElementById('buyPrice').value);
         
         const fortSterling = parseFloat(document.getElementById('priceFS').value) || 0;
         const bridgewatch = parseFloat(document.getElementById('priceBW').value) || 0;
@@ -859,18 +871,10 @@
         const blackMarket = parseFloat(document.getElementById('blackMarketPrice').value) || 0;
         
         if (!name) { showToast('Nombre del objeto requerido'); return; }
+        if (isNaN(buyPrice) || buyPrice <= 0) { showToast('Precio de compra válido requerido'); return; }
         
-        const hasPrice = fortSterling > 0 || bridgewatch > 0 || lymhurst > 0 || martlock > 0 || thetford > 0 || blackMarket > 0;
-        if (!hasPrice) { showToast('Ingresa al menos un precio de venta'); return; }
-        
-        let buySum = 0;
-        let buyCount = 0;
-        [fortSterling, bridgewatch, lymhurst, martlock, thetford].forEach(p => {
-            if (p > 0) { buySum += p; buyCount++; }
-        });
-        const buyPrice = buyCount > 0 ? buySum / buyCount : 0;
-        
-        if (buyPrice <= 0) { showToast('Ingresa al menos un precio de compra en alguna ciudad'); return; }
+        const hasSellPrice = fortSterling > 0 || bridgewatch > 0 || lymhurst > 0 || martlock > 0 || thetford > 0 || blackMarket > 0;
+        if (!hasSellPrice) { showToast('Ingresa al menos un precio de venta'); return; }
         
         const newItem = {
             name: name,
@@ -889,6 +893,7 @@
         simulatorQuantities[name] = 0;
         
         document.getElementById('newName').value = '';
+        document.getElementById('buyPrice').value = '';
         document.getElementById('priceFS').value = '';
         document.getElementById('priceBW').value = '';
         document.getElementById('priceLH').value = '';
