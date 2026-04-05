@@ -12,7 +12,6 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        /* Modo oscuro (por defecto) */
         :root {
             --bg: #0a0a0a;
             --card: #111111;
@@ -22,10 +21,8 @@
             --text-sec: #9a9a9a;
             --accent: #b91c1c;
             --accent-hover: #7f1a1a;
-            --accent-light: #ff4444;
         }
         
-        /* Modo claro */
         body.light {
             --bg: #e8e8e8;
             --card: #ffffff;
@@ -65,7 +62,7 @@
         .theme-btn { background: var(--card); border: 1px solid var(--border); border-radius: 30px; padding: 6px 12px; cursor: pointer; color: var(--text); }
         
         /* Tarjetas */
-        .card { background: var(--card); border-radius: 20px; padding: 16px; margin-bottom: 16px; border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .card { background: var(--card); border-radius: 20px; padding: 16px; margin-bottom: 16px; border: 1px solid var(--border); }
         .row-2 { display: flex; gap: 12px; flex-wrap: wrap; }
         .row-2 > div { flex: 1; background: var(--input); border-radius: 16px; padding: 10px; text-align: center; border-left: 3px solid var(--accent); }
         .row-2 label { font-size: 0.7rem; color: var(--text-sec); display: block; margin-bottom: 5px; }
@@ -75,7 +72,6 @@
         .form-group { margin-bottom: 12px; }
         .form-group label { font-size: 0.7rem; color: var(--text-sec); display: block; margin-bottom: 4px; }
         .form-group input, .city-input input { width: 100%; background: var(--input); border: 1px solid var(--border); padding: 10px; border-radius: 12px; color: var(--text); outline: none; }
-        .form-group input:focus, .city-input input:focus { border-color: var(--accent); }
         .cities-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; margin: 10px 0; }
         .city-input label { font-size: 0.6rem; display: block; margin-bottom: 2px; color: var(--text-sec); }
         .black-market-box { background: rgba(185,28,28,0.15); padding: 12px; border-radius: 14px; margin: 12px 0; border-left: 3px solid var(--accent); }
@@ -83,7 +79,7 @@
         
         .btn { background: var(--accent); border: none; padding: 14px; border-radius: 14px; color: white; font-weight: bold; cursor: pointer; width: 100%; margin: 8px 0; transition: all 0.2s; }
         .btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
-        .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 10px; border-radius: 12px; cursor: pointer; transition: all 0.2s; }
+        .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 10px; border-radius: 12px; cursor: pointer; transition: all 0.2s; text-align: center; }
         .btn-outline:hover { background: var(--accent); color: white; }
         
         .data-buttons { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; margin-top: 12px; }
@@ -98,8 +94,7 @@
         .item { background: var(--card); border-radius: 20px; padding: 14px; margin-bottom: 12px; border: 1px solid var(--border); }
         .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
         .item-name { font-family: 'Cinzel', serif; font-size: 1.1rem; color: var(--accent); font-weight: bold; }
-        .delete-btn { background: rgba(185,28,28,0.2); border: none; padding: 4px 12px; border-radius: 20px; color: var(--accent); cursor: pointer; transition: all 0.2s; }
-        .delete-btn:hover { background: rgba(185,28,28,0.4); }
+        .delete-btn { background: rgba(185,28,28,0.2); border: none; padding: 4px 12px; border-radius: 20px; color: var(--accent); cursor: pointer; }
         .city-prices { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; background: var(--input); padding: 10px; border-radius: 14px; margin: 10px 0; }
         .city-prices div { background: var(--card); padding: 6px; border-radius: 10px; }
         .city-prices label { font-size: 0.55rem; display: block; color: var(--text-sec); }
@@ -124,14 +119,14 @@
         .sim-total { text-align: center; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
         .sim-total h3 { color: var(--accent); font-size: 1.3rem; }
         
-        /* Botón flotante y menú */
+        /* Botón flotante */
         .floating-container { position: fixed; bottom: 20px; right: 20px; z-index: 100; }
         .floating-btn { width: 56px; height: 56px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.2s; }
         .floating-btn:hover { transform: scale(1.05); background: var(--accent-hover); }
         .floating-btn i { font-size: 1.8rem; color: white; }
-        .floating-menu { position: absolute; bottom: 70px; right: 0; background: var(--card); border-radius: 16px; padding: 8px; display: none; border: 1px solid var(--accent); box-shadow: 0 4px 20px rgba(0,0,0,0.3); min-width: 180px; }
+        .floating-menu { position: absolute; bottom: 70px; right: 0; background: var(--card); border-radius: 16px; padding: 8px; display: none; border: 1px solid var(--accent); min-width: 180px; }
         .floating-menu.active { display: block; }
-        .floating-menu button { background: transparent; border: none; padding: 12px; width: 100%; text-align: left; color: var(--text); cursor: pointer; border-radius: 10px; display: flex; align-items: center; gap: 10px; transition: all 0.2s; }
+        .floating-menu button { background: transparent; border: none; padding: 12px; width: 100%; text-align: left; color: var(--text); cursor: pointer; border-radius: 10px; display: flex; align-items: center; gap: 10px; }
         .floating-menu button:hover { background: var(--input); color: var(--accent); }
         
         /* Utilidades */
@@ -143,7 +138,6 @@
         @keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
         footer { text-align: center; font-size: 0.6rem; color: var(--text-sec); margin-top: 20px; padding: 16px; }
         
-        /* Responsive */
         @media (max-width: 550px) {
             body { padding: 10px; }
             .cities-grid { grid-template-columns: 1fr; }
@@ -166,6 +160,7 @@
         <button class="theme-btn" onclick="toggleTheme()">🌓</button>
     </div>
 
+    <!-- Impuestos -->
     <div class="card">
         <div class="row-2">
             <div><label>💰 IMPUESTO</label><input type="number" id="taxRate" step="0.1" value="10.5"></div>
@@ -173,29 +168,31 @@
         </div>
     </div>
 
+    <!-- Formulario nuevo objeto -->
     <div class="card">
         <div class="toggle-header" onclick="toggleForm()">
             <span><i class="fas fa-plus-circle"></i> NUEVO OBJETO</span>
             <i class="fas fa-chevron-down" id="formIcon"></i>
         </div>
         <div id="formContent" class="form-content">
-            <div class="form-group"><label>NOMBRE DEL OBJETO</label><input type="text" id="newName" placeholder="Ej: Bolsa T5, Calavera Ósea"></div>
-            <label>PRECIO DE COMPRA POR CIUDAD (lo que pagas)</label>
+            <div class="form-group"><label>NOMBRE</label><input type="text" id="newName" placeholder="Ej: Bolsa T5"></div>
+            <label>PRECIO DE COMPRA POR CIUDAD</label>
             <div class="cities-grid">
-                <div class="city-input"><label>🏔️ Fort Sterling</label><input type="number" id="buyFS" placeholder="Precio compra"></div>
-                <div class="city-input"><label>🏜️ Bridgewatch</label><input type="number" id="buyBW" placeholder="Precio compra"></div>
-                <div class="city-input"><label>🌳 Lymhurst</label><input type="number" id="buyLH" placeholder="Precio compra"></div>
-                <div class="city-input"><label>⚙️ Martlock</label><input type="number" id="buyML" placeholder="Precio compra"></div>
-                <div class="city-input"><label>✨ Thetford</label><input type="number" id="buyTH" placeholder="Precio compra"></div>
+                <div class="city-input"><label>🏔️ Fort Sterling</label><input type="number" id="buyFS"></div>
+                <div class="city-input"><label>🏜️ Bridgewatch</label><input type="number" id="buyBW"></div>
+                <div class="city-input"><label>🌳 Lymhurst</label><input type="number" id="buyLH"></div>
+                <div class="city-input"><label>⚙️ Martlock</label><input type="number" id="buyML"></div>
+                <div class="city-input"><label>✨ Thetford</label><input type="number" id="buyTH"></div>
             </div>
             <div class="black-market-box">
-                <label>🏴‍☠️ PRECIO VENTA BLACK MARKET (único)</label>
-                <input type="number" id="blackSell" placeholder="Precio al que vendes" style="width:100%; margin-top:8px;">
+                <label>🏴‍☠️ PRECIO VENTA BLACK MARKET</label>
+                <input type="number" id="blackSell" placeholder="Precio único de venta">
             </div>
             <button class="btn" onclick="addItem()"><i class="fas fa-skull"></i> AGREGAR OBJETO</button>
         </div>
     </div>
 
+    <!-- Gestión de datos -->
     <div class="card">
         <div style="margin-bottom: 8px;"><i class="fas fa-database"></i> GESTIÓN DE DATOS</div>
         <div class="data-buttons">
@@ -207,12 +204,16 @@
         <input type="file" id="importFile" style="display:none" onchange="importData(this)">
     </div>
 
+    <!-- Estadísticas -->
     <div class="stats" id="statsArea"></div>
+    
+    <!-- Lista de objetos -->
     <div id="itemsList"></div>
+    
     <footer><i class="fas fa-anchor"></i> Ganancia = (BlackMarket - PrecioCompra) - Impuestos - Pérdida · Promedio entre ciudades con datos</footer>
 </div>
 
-<!-- Botón flotante con menú -->
+<!-- Botón flotante -->
 <div class="floating-container">
     <div class="floating-menu" id="floatMenu">
         <button onclick="openSimulator()"><i class="fas fa-chart-line"></i> Simulador de volumen</button>
@@ -231,7 +232,7 @@
         </div>
         <div style="margin-bottom: 16px;">
             <label><input type="checkbox" id="globalQtyToggle"> Aplicar misma cantidad a todos</label>
-            <div style="margin-top: 8px; display: flex; gap: 8px; align-items: center;">
+            <div style="margin-top: 8px; display: flex; gap: 8px;">
                 <input type="number" id="globalQtyVal" value="50" disabled style="flex:1; padding:8px; border-radius:10px; background:var(--input); border:1px solid var(--border); color:var(--text);">
                 <button class="btn-outline" id="applyGlobalBtn" disabled onclick="applyGlobalQty()">Aplicar</button>
             </div>
@@ -239,14 +240,13 @@
         <div id="simItems"></div>
         <div class="sim-total">
             <h3 id="simTotalProfit">0 silver</h3>
-            <p id="simTotalInv"></p>
-            <button class="btn-outline" onclick="resetSimQtys()"><i class="fas fa-undo-alt"></i> Resetear cantidades</button>
+            <button class="btn-outline" onclick="resetSimQtys()" style="margin-top: 10px;"><i class="fas fa-undo-alt"></i> Resetear cantidades</button>
         </div>
     </div>
 </div>
 
 <script>
-    // ========== DATOS ==========
+    // ========== DATOS GLOBALES ==========
     let items = [];
     let simQtys = {};
 
@@ -254,19 +254,16 @@
     function getTax() { return parseFloat(document.getElementById('taxRate').value) / 100; }
     function getLoss() { return parseFloat(document.getElementById('lossRate').value) / 100; }
 
-    // ========== CÁLCULO POR CIUDAD ==========
+    // ========== CÁLCULO ==========
     function calcProfit(buy, sell) {
-        const tax = getTax();
-        const loss = getLoss();
-        const net = sell * (1 - tax);
+        const net = sell * (1 - getTax());
         const gross = net - buy;
-        const lossAmount = gross * loss;
-        const final = gross - lossAmount;
+        const final = gross * (1 - getLoss());
         const rent = buy > 0 ? (final / buy) * 100 : 0;
         return { final, rent };
     }
 
-    // ========== PROCESAR UN ITEM ==========
+    // ========== PROCESAR ITEM ==========
     function processItem(item) {
         const cities = ['fortSterling', 'bridgewatch', 'lymhurst', 'martlock', 'thetford'];
         const cityNames = { fortSterling:'🏔️ Fort Sterling', bridgewatch:'🏜️ Bridgewatch', lymhurst:'🌳 Lymhurst', martlock:'⚙️ Martlock', thetford:'✨ Thetford' };
@@ -301,14 +298,14 @@
         const bestRent = processed.reduce((a,b) => (a.avgRent > b.avgRent ? a : b));
         const totalAvgProfit = processed.reduce((s,i) => s + i.avgProfit, 0);
         statsDiv.innerHTML = `
-            <div class="stat-card"><h4>🏆 MAYOR GANANCIA PROMEDIO</h4><div class="value">${bestProfit.name}</div><div>${Math.round(bestProfit.avgProfit).toLocaleString()} silver</div></div>
+            <div class="stat-card"><h4>🏆 MEJOR GANANCIA</h4><div class="value">${bestProfit.name}</div><div>${Math.round(bestProfit.avgProfit).toLocaleString()} silver</div></div>
             <div class="stat-card"><h4>📈 MEJOR RENTABILIDAD</h4><div class="value">${bestRent.name}</div><div>${bestRent.avgRent.toFixed(1)}%</div></div>
             <div class="stat-card"><h4>💰 GANANCIA TOTAL PROMEDIO</h4><div class="value">${Math.round(totalAvgProfit).toLocaleString()} silver</div><div>por unidad</div></div>
             <div class="stat-card"><h4>🏙️ CIUDADES CON DATOS</h4><div class="value">${processed.reduce((s,i) => s + i.validCount, 0)}</div><div>en total</div></div>
         `;
     }
 
-    // ========== RENDER LISTA DE OBJETOS ==========
+    // ========== RENDER LISTA ==========
     function renderItems() {
         const container = document.getElementById('itemsList');
         if (items.length === 0) {
@@ -323,7 +320,7 @@
         container.innerHTML = processed.map((item, idx) => {
             const rank = idx === 0 ? '⚔️' : idx === 1 ? '🔪' : idx === 2 ? '🏴' : '';
             const cityRows = item.results.map(r => `
-                <div style="font-size:0.75rem; margin-top:4px;">${r.city}: Compra ${Math.round(r.buy).toLocaleString()} → Ganancia <span style="color:var(--accent)">${Math.round(r.profit).toLocaleString()} silver</span> (${r.rent.toFixed(1)}%)</div>
+                <div style="font-size:0.75rem; margin-top:4px;">${r.city}: Compra ${Math.round(r.buy).toLocaleString()} → <span style="color:var(--accent)">${Math.round(r.profit).toLocaleString()} silver</span> (${r.rent.toFixed(1)}%)</div>
             `).join('');
             
             return `
@@ -333,7 +330,7 @@
                     <button class="delete-btn" onclick="deleteItem('${item.name}')"><i class="fas fa-trash"></i> Eliminar</button>
                 </div>
                 <div class="black-sell">
-                    <label>🏴‍☠️ PRECIO VENTA BLACK MARKET</label>
+                    <label>🏴‍☠️ BLACK MARKET</label>
                     <input type="number" value="${item.blackSell}" onchange="updateBlackSell('${item.name}', this.value)">
                 </div>
                 <div class="city-prices">
@@ -348,8 +345,8 @@
                 <div class="results">
                     <div><div class="sub">Ciudades</div><div>${item.validCount}/5</div></div>
                     <div><div class="sub">Impuesto</div><div>${(getTax()*100).toFixed(1)}%</div></div>
-                    <div><div class="sub">Pérdida fija</div><div>${(getLoss()*100).toFixed(1)}%</div></div>
-                    <div><div class="sub">Margen total</div><div>${((getTax()+getLoss())*100).toFixed(1)}%</div></div>
+                    <div><div class="sub">Pérdida</div><div>${(getLoss()*100).toFixed(1)}%</div></div>
+                    <div><div class="sub">Margen</div><div>${((getTax()+getLoss())*100).toFixed(1)}%</div></div>
                 </div>
             </div>`;
         }).join('');
@@ -366,7 +363,12 @@
         const item = items.find(i => i.name === name);
         if (item) { item.blackSell = parseFloat(val) || 0; renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); }
     }
-    function deleteItem(name) { items = items.filter(i => i.name !== name); delete simQtys[name]; renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); }
+    function deleteItem(name) { 
+        items = items.filter(i => i.name !== name); 
+        delete simQtys[name]; 
+        renderItems(); 
+        if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); 
+    }
 
     // ========== AGREGAR OBJETO ==========
     function addItem() {
@@ -380,10 +382,10 @@
             thetford: parseFloat(document.getElementById('buyTH').value) || 0
         };
         
-        if (!name) { toast('❌ Nombre requerido'); return; }
-        if (!blackSell || blackSell <= 0) { toast('❌ Precio Black Market requerido'); return; }
-        if (Object.values(buyPrices).every(v => v === 0)) { toast('❌ Al menos un precio de compra'); return; }
-        if (items.some(i => i.name.toLowerCase() === name.toLowerCase())) { toast('❌ Ya existe ese objeto'); return; }
+        if (!name) { toast('Nombre requerido'); return; }
+        if (!blackSell || blackSell <= 0) { toast('Precio Black Market requerido'); return; }
+        if (Object.values(buyPrices).every(v => v === 0)) { toast('Al menos un precio de compra'); return; }
+        if (items.some(i => i.name.toLowerCase() === name.toLowerCase())) { toast('Ya existe ese objeto'); return; }
         
         items.push({ name, blackSell, buyPrices });
         simQtys[name] = 0;
@@ -393,7 +395,7 @@
         ['buyFS','buyBW','buyLH','buyML','buyTH'].forEach(id => document.getElementById(id).value = '');
         
         renderItems();
-        toast(`✅ ${name} agregado`);
+        toast(`${name} agregado`);
     }
 
     // ========== PERSISTENCIA ==========
@@ -409,44 +411,76 @@
         simQtys = {};
         renderItems();
     }
-    function saveData() { saveToLocal(); toast('💾 Datos guardados'); }
-    function clearAll() { if(confirm('¿Eliminar todos los objetos?')) { items = []; simQtys = {}; renderItems(); saveToLocal(); toast('🗑️ Todo limpiado'); } }
-    function exportData() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(items)])); a.download = `bm_${Date.now()}.json`; a.click(); toast('📤 Exportado'); }
+    function saveData() { saveToLocal(); toast('Datos guardados'); }
+    function clearAll() { if(confirm('¿Eliminar todos los objetos?')) { items = []; simQtys = {}; renderItems(); saveToLocal(); toast('Todo limpiado'); } }
+    function exportData() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(items)])); a.download = `bm_${Date.now()}.json`; a.click(); toast('Exportado'); }
     function importTrigger() { document.getElementById('importFile').click(); }
-    function importData(input) { const file = input.files[0]; if(!file) return; const r = new FileReader(); r.onload = e => { try { items = JSON.parse(e.target.result); simQtys = {}; renderItems(); saveToLocal(); toast('📥 Importado'); } catch(err) { toast('Error'); } }; r.readAsText(file); input.value = ''; }
+    function importData(input) { const file = input.files[0]; if(!file) return; const r = new FileReader(); r.onload = e => { try { items = JSON.parse(e.target.result); simQtys = {}; renderItems(); saveToLocal(); toast('Importado'); } catch(err) { toast('Error'); } }; r.readAsText(file); input.value = ''; }
 
     // ========== SIMULADOR ==========
     function getAvgProfit(item) { return processItem(item).avgProfit; }
+    
     function renderSimulator() {
         const container = document.getElementById('simItems');
         if (items.length === 0) { container.innerHTML = '<div style="text-align:center">Sin objetos para simular</div>'; return; }
+        
         const data = items.map(i => ({ name: i.name, profit: getAvgProfit(i) }));
         data.forEach(d => { if (simQtys[d.name] === undefined) simQtys[d.name] = 0; });
+        
         container.innerHTML = data.map(d => {
             const q = simQtys[d.name] || 0;
-            return `<div class="sim-item"><div class="sim-item-header"><span><i class="fas fa-box"></i> ${d.name}</span><div class="sim-control"><button onclick="changeQty('${d.name}',-1)">-</button><input type="number" value="${q}" onchange="setQty('${d.name}',this.value)" min="0"><button onclick="changeQty('${d.name}',1)">+</button></div></div><div><i class="fas fa-chart-line"></i> Ganancia/unidad: ${Math.round(d.profit).toLocaleString()} silver · <i class="fas fa-coins"></i> Total: ${Math.round(d.profit*q).toLocaleString()}</div></div>`;
+            return `<div class="sim-item">
+                        <div class="sim-item-header">
+                            <span><i class="fas fa-box"></i> ${d.name}</span>
+                            <div class="sim-control">
+                                <button onclick="changeQty('${d.name}',-1)">-</button>
+                                <input type="number" value="${q}" onchange="setQty('${d.name}',this.value)" min="0">
+                                <button onclick="changeQty('${d.name}',1)">+</button>
+                            </div>
+                        </div>
+                        <div><i class="fas fa-chart-line"></i> Ganancia/unidad: ${Math.round(d.profit).toLocaleString()} silver · <i class="fas fa-coins"></i> Total: ${Math.round(d.profit * q).toLocaleString()} silver</div>
+                    </div>`;
         }).join('');
-        updateSimTotal(data);
-    }
-    function updateSimTotal(data) {
-        let total = 0;
-        data.forEach(d => { const q = simQtys[d.name] || 0; total += d.profit * q; });
+        
+        const total = data.reduce((sum, d) => sum + (d.profit * (simQtys[d.name] || 0)), 0);
         document.getElementById('simTotalProfit').innerHTML = `${Math.round(total).toLocaleString()} silver <i class="fas fa-skull"></i>`;
-        document.getElementById('simTotalInv').innerHTML = `Inversión calculada por ciudad individualmente`;
     }
+    
     function changeQty(n, d) { simQtys[n] = Math.max(0, (simQtys[n] || 0) + d); renderSimulator(); }
     function setQty(n, v) { let q = parseInt(v); if (isNaN(q) || q < 0) q = 0; simQtys[n] = q; renderSimulator(); }
-    function resetSimQtys() { Object.keys(simQtys).forEach(k => simQtys[k] = 0); renderSimulator(); toast('🔄 Cantidades reiniciadas'); }
-    function applyGlobalQty() { const toggle = document.getElementById('globalQtyToggle'); if (!toggle.checked) return; const val = parseInt(document.getElementById('globalQtyVal').value); if (isNaN(val) || val < 0) return; Object.keys(simQtys).forEach(k => simQtys[k] = val); renderSimulator(); toast(`🔢 Volumen ${val} aplicado a todos`); }
+    function resetSimQtys() { Object.keys(simQtys).forEach(k => simQtys[k] = 0); renderSimulator(); toast('Cantidades reiniciadas'); }
+    function applyGlobalQty() { 
+        const toggle = document.getElementById('globalQtyToggle'); 
+        if (!toggle.checked) return; 
+        const val = parseInt(document.getElementById('globalQtyVal').value); 
+        if (isNaN(val) || val < 0) return; 
+        Object.keys(simQtys).forEach(k => simQtys[k] = val); 
+        renderSimulator(); 
+        toast(`Volumen ${val} aplicado a todos`); 
+    }
+    
     function openSimulator() { renderSimulator(); document.getElementById('simModal').classList.add('active'); }
     function closeSimulator() { document.getElementById('simModal').classList.remove('active'); }
 
     // ========== UI ==========
-    function toast(msg) { const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2000); }
+    function toast(msg) { const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = `<i class="fas fa-skull"></i> ${msg}`; document.body.appendChild(t); setTimeout(() => t.remove(), 2000); }
     function toggleTheme() { document.body.classList.toggle('light'); saveToLocal(); }
     
     let formOpen = false;
-    function toggleForm() { const c = document.getElementById('formContent'); const i = document.getElementById('formIcon'); if (formOpen) { c.classList.remove('open'); i.classList.remove('fa-chevron-up'); i.classList.add('fa-chevron-down'); } else { c.classList.add('open'); i.classList.remove('fa-chevron-down'); i.classList.add('fa-chevron-up'); } formOpen = !formOpen; }
+    function toggleForm() { 
+        const c = document.getElementById('formContent'); 
+        const i = document.getElementById('formIcon'); 
+        if (formOpen) { 
+            c.classList.remove('open'); 
+            i.classList.remove('fa-chevron-up'); 
+            i.classList.add('fa-chevron-down'); 
+        } else { 
+            c.classList.add('open'); 
+            i.classList.remove('fa-chevron-down'); 
+            i.classList.add('fa-chevron-up'); 
+        } 
+        formOpen = !formOpen; 
+    }
     
     // ========== BOTÓN FLOTANTE ==========
     const floatBtn = document.getElementById('floatBtn');
@@ -461,9 +495,7 @@
         } else {
             floatMenu.classList.add('active');
             if (menuTimeout) clearTimeout(menuTimeout);
-            menuTimeout = setTimeout(() => {
-                floatMenu.classList.remove('active');
-            }, 4000);
+            menuTimeout = setTimeout(() => floatMenu.classList.remove('active'), 4000);
         }
     };
     
@@ -474,7 +506,7 @@
         }
     });
     
-    // ========== GLOBAL QTY LISTENERS ==========
+    // ========== LISTENERS ==========
     document.getElementById('globalQtyToggle').onchange = () => { 
         const d = document.getElementById('globalQtyVal'); 
         const b = document.getElementById('applyGlobalBtn'); 
@@ -484,6 +516,7 @@
     document.getElementById('taxRate').oninput = () => { renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); };
     document.getElementById('lossRate').oninput = () => { renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); };
     
+    // ========== INICIO ==========
     loadFromLocal();
 </script>
 </body>
