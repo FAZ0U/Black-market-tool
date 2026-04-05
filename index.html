@@ -294,20 +294,20 @@
             <div class="enchant-row">
                 <div class="enchant-card">
                     <label><i class="fas fa-box"></i> ITEMS BASE</label>
-                    <input type="number" id="baseItemsRune" value="1" min="1" step="1">
+                    <input type="number" id="baseItemsRune" value="0" min="0" step="1">
                 </div>
                 <div class="enchant-card">
                     <label><i class="fas fa-cubes"></i> RUNAS POR ITEM</label>
-                    <input type="number" id="runasPorItem" value="192" min="1" step="1">
+                    <input type="number" id="runasPorItem" value="0" min="0" step="1">
                 </div>
                 <div class="enchant-card">
                     <label><i class="fas fa-coins"></i> PRECIO POR RUNAS</label>
-                    <input type="number" id="precioRuna" value="100" min="0" step="1">
+                    <input type="number" id="precioRuna" value="0" min="0" step="1">
                 </div>
             </div>
             <div class="enchant-result" id="runeResult">
-                <span id="totalRunas">192</span> runas necesarias<br>
-                <span id="costoRunas" style="font-size:1rem;">Costo total: 19,200 silver</span>
+                <span id="totalRunas">0</span> runas necesarias<br>
+                <span id="costoRunas" style="font-size:1rem;">Costo total: 0 silver</span>
             </div>
             <div class="enchant-detail">
                 <i class="fas fa-info-circle"></i> Para encantar de Tier a .1 (ej: T5 → T5.1)
@@ -319,20 +319,20 @@
             <div class="enchant-row">
                 <div class="enchant-card">
                     <label><i class="fas fa-box"></i> ITEMS BASE</label>
-                    <input type="number" id="baseItemsSoul" value="1" min="1" step="1">
+                    <input type="number" id="baseItemsSoul" value="0" min="0" step="1">
                 </div>
                 <div class="enchant-card">
                     <label><i class="fas fa-feather-alt"></i> ALMAS POR ITEM</label>
-                    <input type="number" id="almasPorItem" value="256" min="1" step="1">
+                    <input type="number" id="almasPorItem" value="0" min="0" step="1">
                 </div>
                 <div class="enchant-card">
                     <label><i class="fas fa-coins"></i> PRECIO POR ALMAS</label>
-                    <input type="number" id="precioAlma" value="200" min="0" step="1">
+                    <input type="number" id="precioAlma" value="0" min="0" step="1">
                 </div>
             </div>
             <div class="enchant-result" id="soulResult">
-                <span id="totalAlmas">256</span> almas necesarias<br>
-                <span id="costoAlmas" style="font-size:1rem;">Costo total: 51,200 silver</span>
+                <span id="totalAlmas">0</span> almas necesarias<br>
+                <span id="costoAlmas" style="font-size:1rem;">Costo total: 0 silver</span>
             </div>
             <div class="enchant-detail">
                 <i class="fas fa-info-circle"></i> Para encantar de .1 a .2 (ej: T5.1 → T5.2)
@@ -344,20 +344,20 @@
             <div class="enchant-row">
                 <div class="enchant-card">
                     <label><i class="fas fa-box"></i> ITEMS BASE</label>
-                    <input type="number" id="baseItemsRelic" value="1" min="1" step="1">
+                    <input type="number" id="baseItemsRelic" value="0" min="0" step="1">
                 </div>
                 <div class="enchant-card">
                     <label><i class="fas fa-crown"></i> RELIQUIAS POR ITEM</label>
-                    <input type="number" id="reliquiasPorItem" value="384" min="1" step="1">
+                    <input type="number" id="reliquiasPorItem" value="0" min="0" step="1">
                 </div>
                 <div class="enchant-card">
                     <label><i class="fas fa-coins"></i> PRECIO POR RELIQUIAS</label>
-                    <input type="number" id="precioReliquia" value="400" min="0" step="1">
+                    <input type="number" id="precioReliquia" value="0" min="0" step="1">
                 </div>
             </div>
             <div class="enchant-result" id="relicResult">
-                <span id="totalReliquias">384</span> reliquias necesarias<br>
-                <span id="costoReliquias" style="font-size:1rem;">Costo total: 153,600 silver</span>
+                <span id="totalReliquias">0</span> reliquias necesarias<br>
+                <span id="costoReliquias" style="font-size:1rem;">Costo total: 0 silver</span>
             </div>
             <div class="enchant-detail">
                 <i class="fas fa-info-circle"></i> Para encantar de .2 a .3 (ej: T5.2 → T5.3)
@@ -520,7 +520,45 @@
     }
 
     // ========== PERSISTENCIA ==========
-    function saveToLocal() { localStorage.setItem('bmData', JSON.stringify({ items, tax: getTax()*100, loss: getLoss()*100 })); }
+    function saveToLocal() { 
+        // Guardar objetos principales
+        localStorage.setItem('bmData', JSON.stringify({ items, tax: getTax()*100, loss: getLoss()*100 }));
+        
+        // Guardar valores de la calculadora de encantamientos
+        const enchantData = {
+            baseItemsRune: document.getElementById('baseItemsRune').value,
+            runasPorItem: document.getElementById('runasPorItem').value,
+            precioRuna: document.getElementById('precioRuna').value,
+            baseItemsSoul: document.getElementById('baseItemsSoul').value,
+            almasPorItem: document.getElementById('almasPorItem').value,
+            precioAlma: document.getElementById('precioAlma').value,
+            baseItemsRelic: document.getElementById('baseItemsRelic').value,
+            reliquiasPorItem: document.getElementById('reliquiasPorItem').value,
+            precioReliquia: document.getElementById('precioReliquia').value
+        };
+        localStorage.setItem('enchantData', JSON.stringify(enchantData));
+    }
+    
+    function loadEnchantData() {
+        const saved = localStorage.getItem('enchantData');
+        if (saved) {
+            const data = JSON.parse(saved);
+            if (data.baseItemsRune !== undefined) document.getElementById('baseItemsRune').value = data.baseItemsRune;
+            if (data.runasPorItem !== undefined) document.getElementById('runasPorItem').value = data.runasPorItem;
+            if (data.precioRuna !== undefined) document.getElementById('precioRuna').value = data.precioRuna;
+            if (data.baseItemsSoul !== undefined) document.getElementById('baseItemsSoul').value = data.baseItemsSoul;
+            if (data.almasPorItem !== undefined) document.getElementById('almasPorItem').value = data.almasPorItem;
+            if (data.precioAlma !== undefined) document.getElementById('precioAlma').value = data.precioAlma;
+            if (data.baseItemsRelic !== undefined) document.getElementById('baseItemsRelic').value = data.baseItemsRelic;
+            if (data.reliquiasPorItem !== undefined) document.getElementById('reliquiasPorItem').value = data.reliquiasPorItem;
+            if (data.precioReliquia !== undefined) document.getElementById('precioReliquia').value = data.precioReliquia;
+        }
+        // Actualizar cálculos después de cargar
+        updateRuneCalc();
+        updateSoulCalc();
+        updateRelicCalc();
+    }
+    
     function loadFromLocal() {
         const data = localStorage.getItem('bmData');
         if (data) {
@@ -531,7 +569,9 @@
         } else { items = []; }
         simQtys = {};
         renderItems();
+        loadEnchantData();
     }
+    
     function saveData() { saveToLocal(); toast('Datos guardados'); }
     function clearAll() { if(confirm('¿Eliminar todos los objetos?')) { items = []; simQtys = {}; renderItems(); saveToLocal(); toast('Todo limpiado'); } }
     function exportData() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(items)])); a.download = `bm_${Date.now()}.json`; a.click(); toast('Exportado'); }
@@ -567,9 +607,9 @@
         document.getElementById('simTotalProfit').innerHTML = `${Math.round(total).toLocaleString()} silver <i class="fas fa-skull"></i>`;
     }
     
-    function changeQty(n, d) { simQtys[n] = Math.max(0, (simQtys[n] || 0) + d); renderSimulator(); }
-    function setQty(n, v) { let q = parseInt(v); if (isNaN(q) || q < 0) q = 0; simQtys[n] = q; renderSimulator(); }
-    function resetSimQtys() { Object.keys(simQtys).forEach(k => simQtys[k] = 0); renderSimulator(); toast('Cantidades reiniciadas'); }
+    function changeQty(n, d) { simQtys[n] = Math.max(0, (simQtys[n] || 0) + d); renderSimulator(); saveToLocal(); }
+    function setQty(n, v) { let q = parseInt(v); if (isNaN(q) || q < 0) q = 0; simQtys[n] = q; renderSimulator(); saveToLocal(); }
+    function resetSimQtys() { Object.keys(simQtys).forEach(k => simQtys[k] = 0); renderSimulator(); toast('Cantidades reiniciadas'); saveToLocal(); }
     function applyGlobalQty() { 
         const toggle = document.getElementById('globalQtyToggle'); 
         if (!toggle.checked) return; 
@@ -577,7 +617,8 @@
         if (isNaN(val) || val < 0) return; 
         Object.keys(simQtys).forEach(k => simQtys[k] = val); 
         renderSimulator(); 
-        toast(`Volumen ${val} aplicado a todos`); 
+        toast(`Volumen ${val} aplicado a todos`);
+        saveToLocal();
     }
     
     function openSimulator() { renderSimulator(); document.getElementById('simModal').classList.add('active'); }
@@ -603,7 +644,7 @@
         });
     });
     
-    // Cálculos en tiempo real
+    // Cálculos en tiempo real con guardado automático
     function updateRuneCalc() {
         const items = parseFloat(document.getElementById('baseItemsRune').value) || 0;
         const runasPorItem = parseFloat(document.getElementById('runasPorItem').value) || 0;
@@ -612,6 +653,7 @@
         const costoTotal = totalRunas * precioRuna;
         document.getElementById('totalRunas').innerHTML = totalRunas.toLocaleString();
         document.getElementById('costoRunas').innerHTML = `Costo total: ${costoTotal.toLocaleString()} silver`;
+        saveToLocal();
     }
     
     function updateSoulCalc() {
@@ -622,6 +664,7 @@
         const costoTotal = totalAlmas * precioAlma;
         document.getElementById('totalAlmas').innerHTML = totalAlmas.toLocaleString();
         document.getElementById('costoAlmas').innerHTML = `Costo total: ${costoTotal.toLocaleString()} silver`;
+        saveToLocal();
     }
     
     function updateRelicCalc() {
@@ -632,20 +675,21 @@
         const costoTotal = totalReliquias * precioReliquia;
         document.getElementById('totalReliquias').innerHTML = totalReliquias.toLocaleString();
         document.getElementById('costoReliquias').innerHTML = `Costo total: ${costoTotal.toLocaleString()} silver`;
+        saveToLocal();
     }
     
-    // Listeners calculadora
-    document.getElementById('baseItemsRune').addEventListener('input', updateRuneCalc);
-    document.getElementById('runasPorItem').addEventListener('input', updateRuneCalc);
-    document.getElementById('precioRuna').addEventListener('input', updateRuneCalc);
+    // Listeners calculadora con guardado automático
+    document.getElementById('baseItemsRune').addEventListener('input', () => { updateRuneCalc(); saveToLocal(); });
+    document.getElementById('runasPorItem').addEventListener('input', () => { updateRuneCalc(); saveToLocal(); });
+    document.getElementById('precioRuna').addEventListener('input', () => { updateRuneCalc(); saveToLocal(); });
     
-    document.getElementById('baseItemsSoul').addEventListener('input', updateSoulCalc);
-    document.getElementById('almasPorItem').addEventListener('input', updateSoulCalc);
-    document.getElementById('precioAlma').addEventListener('input', updateSoulCalc);
+    document.getElementById('baseItemsSoul').addEventListener('input', () => { updateSoulCalc(); saveToLocal(); });
+    document.getElementById('almasPorItem').addEventListener('input', () => { updateSoulCalc(); saveToLocal(); });
+    document.getElementById('precioAlma').addEventListener('input', () => { updateSoulCalc(); saveToLocal(); });
     
-    document.getElementById('baseItemsRelic').addEventListener('input', updateRelicCalc);
-    document.getElementById('reliquiasPorItem').addEventListener('input', updateRelicCalc);
-    document.getElementById('precioReliquia').addEventListener('input', updateRelicCalc);
+    document.getElementById('baseItemsRelic').addEventListener('input', () => { updateRelicCalc(); saveToLocal(); });
+    document.getElementById('reliquiasPorItem').addEventListener('input', () => { updateRelicCalc(); saveToLocal(); });
+    document.getElementById('precioReliquia').addEventListener('input', () => { updateRelicCalc(); saveToLocal(); });
     
     function openEnchantCalculator() {
         updateRuneCalc();
@@ -773,9 +817,11 @@
         const b = document.getElementById('applyGlobalBtn'); 
         d.disabled = !document.getElementById('globalQtyToggle').checked; 
         b.disabled = !document.getElementById('globalQtyToggle').checked; 
+        saveToLocal();
     };
-    document.getElementById('taxRate').oninput = () => { renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); };
-    document.getElementById('lossRate').oninput = () => { renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); };
+    document.getElementById('globalQtyVal').addEventListener('input', () => { saveToLocal(); });
+    document.getElementById('taxRate').oninput = () => { renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); saveToLocal(); };
+    document.getElementById('lossRate').oninput = () => { renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); saveToLocal(); };
     
     // ========== INICIO ==========
     loadFloatPosition();
