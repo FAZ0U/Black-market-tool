@@ -93,11 +93,24 @@
         .stat-card h4 { font-size: 0.65rem; color: var(--text-sec); margin-bottom: 5px; }
         .stat-card .value { font-size: 1rem; font-weight: bold; color: var(--accent); }
         
-        /* Items */
-        .item { background: var(--card); border-radius: 20px; padding: 14px; margin-bottom: 12px; border: 1px solid var(--border); }
-        .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
-        .item-name { font-family: 'Cinzel', serif; font-size: 1.1rem; color: var(--accent); font-weight: bold; }
-        .delete-btn { background: rgba(185,28,28,0.2); border: none; padding: 4px 12px; border-radius: 20px; color: var(--accent); cursor: pointer; }
+        /* Items plegables */
+        .item { background: var(--card); border-radius: 20px; margin-bottom: 12px; border: 1px solid var(--border); overflow: hidden; }
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .item-header:hover { background: var(--input); }
+        .item-name { font-family: 'Cinzel', serif; font-size: 1rem; color: var(--accent); font-weight: bold; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .item-preview { font-size: 0.75rem; color: var(--text-sec); margin-left: 8px; }
+        .item-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; padding: 0 14px; }
+        .item-content.open { max-height: 2000px; padding: 0 14px 14px 14px; }
+        .expand-icon { color: var(--accent); transition: transform 0.3s; }
+        .expand-icon.rotated { transform: rotate(180deg); }
+        
         .city-prices { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; background: var(--input); padding: 10px; border-radius: 14px; margin: 10px 0; }
         .city-prices div { background: var(--card); padding: 6px; border-radius: 10px; }
         .city-prices label { font-size: 0.55rem; display: block; color: var(--text-sec); }
@@ -108,6 +121,7 @@
         .profit-line { background: var(--accent); color: white; padding: 8px; border-radius: 12px; text-align: center; margin: 10px 0; font-weight: bold; }
         .results { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; background: var(--input); padding: 8px; border-radius: 14px; margin-top: 10px; text-align: center; }
         .results div .sub { font-size: 0.6rem; color: var(--text-sec); margin-bottom: 3px; }
+        .delete-btn { background: rgba(185,28,28,0.2); border: none; padding: 4px 12px; border-radius: 20px; color: var(--accent); cursor: pointer; }
         
         /* Modales */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; padding: 20px; overflow: auto; }
@@ -122,7 +136,7 @@
         .sim-total { text-align: center; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
         .sim-total h3 { color: var(--accent); font-size: 1.3rem; }
         
-        /* Calculadora de encantamientos profesional */
+        /* Calculadora de encantamientos */
         .enchant-tabs { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
         .enchant-tab { flex: 1; text-align: center; padding: 10px; cursor: pointer; border-radius: 12px; transition: all 0.2s; font-weight: bold; }
         .enchant-tab.rune { color: var(--runas); }
@@ -145,7 +159,7 @@
         .enchant-result span { font-size: 1.2rem; font-weight: bold; }
         .enchant-detail { font-size: 0.75rem; color: var(--text-sec); text-align: center; margin-top: 8px; }
         
-        /* Botón flotante arrastrable */
+        /* Botón flotante */
         .floating-container { position: fixed; z-index: 100; }
         .floating-btn { width: 56px; height: 56px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: grab; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.2s; user-select: none; }
         .floating-btn:active { cursor: grabbing; }
@@ -175,6 +189,7 @@
             .enchant-row { flex-direction: column; }
             h1 { font-size: 1.1rem; }
             .logo { width: 35px; height: 35px; }
+            .item-name { font-size: 0.9rem; }
         }
     </style>
 </head>
@@ -241,7 +256,7 @@
     <footer><i class="fas fa-anchor"></i> Ganancia = (BlackMarket - PrecioCompra) - Impuestos - Pérdida · Promedio entre ciudades con datos</footer>
 </div>
 
-<!-- Botón flotante arrastrable -->
+<!-- Botón flotante -->
 <div class="floating-container" id="floatingContainer">
     <div class="floating-menu" id="floatMenu">
         <button onclick="openSimulator()"><i class="fas fa-chart-line"></i> Simulador de volumen</button>
@@ -252,7 +267,7 @@
     </div>
 </div>
 
-<!-- Modal Simulador de Volumen -->
+<!-- Modal Simulador -->
 <div id="simModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -274,7 +289,7 @@
     </div>
 </div>
 
-<!-- Modal Calculadora de Encantamientos Profesional -->
+<!-- Modal Calculadora de Encantamientos -->
 <div id="enchantModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -282,86 +297,40 @@
             <button class="btn-outline" onclick="closeEnchantCalculator()"><i class="fas fa-times"></i> Cerrar</button>
         </div>
         
-        <!-- Pestañas -->
         <div class="enchant-tabs">
             <div class="enchant-tab rune active" data-tab="rune">🏺 Runas<br><span style="font-size:0.6rem;">Tier → .1</span></div>
             <div class="enchant-tab soul" data-tab="soul">✨ Almas<br><span style="font-size:0.6rem;">.1 → .2</span></div>
             <div class="enchant-tab relic" data-tab="relic">💎 Reliquias<br><span style="font-size:0.6rem;">.2 → .3</span></div>
         </div>
         
-        <!-- Panel Runas -->
         <div id="panelRune" class="enchant-panel active">
             <div class="enchant-row">
-                <div class="enchant-card">
-                    <label><i class="fas fa-box"></i> ITEMS BASE</label>
-                    <input type="number" id="baseItemsRune" value="0" min="0" step="1">
-                </div>
-                <div class="enchant-card">
-                    <label><i class="fas fa-cubes"></i> RUNAS POR ITEM</label>
-                    <input type="number" id="runasPorItem" value="0" min="0" step="1">
-                </div>
-                <div class="enchant-card">
-                    <label><i class="fas fa-coins"></i> PRECIO POR RUNAS</label>
-                    <input type="number" id="precioRuna" value="0" min="0" step="1">
-                </div>
+                <div class="enchant-card"><label>📦 ITEMS BASE</label><input type="number" id="baseItemsRune" value="0" min="0" step="1"></div>
+                <div class="enchant-card"><label>🏺 RUNAS POR ITEM</label><input type="number" id="runasPorItem" value="0" min="0" step="1"></div>
+                <div class="enchant-card"><label>💰 PRECIO POR RUNAS</label><input type="number" id="precioRuna" value="0" min="0" step="1"></div>
             </div>
-            <div class="enchant-result" id="runeResult">
-                <span id="totalRunas">0</span> runas necesarias<br>
-                <span id="costoRunas" style="font-size:1rem;">Costo total: 0 silver</span>
-            </div>
-            <div class="enchant-detail">
-                <i class="fas fa-info-circle"></i> Para encantar de Tier a .1 (ej: T5 → T5.1)
-            </div>
+            <div class="enchant-result"><span id="totalRunas">0</span> runas necesarias<br><span id="costoRunas" style="font-size:1rem;">Costo total: 0 silver</span></div>
+            <div class="enchant-detail"><i class="fas fa-info-circle"></i> Para encantar de Tier a .1 (ej: T5 → T5.1)</div>
         </div>
         
-        <!-- Panel Almas -->
         <div id="panelSoul" class="enchant-panel">
             <div class="enchant-row">
-                <div class="enchant-card">
-                    <label><i class="fas fa-box"></i> ITEMS BASE</label>
-                    <input type="number" id="baseItemsSoul" value="0" min="0" step="1">
-                </div>
-                <div class="enchant-card">
-                    <label><i class="fas fa-feather-alt"></i> ALMAS POR ITEM</label>
-                    <input type="number" id="almasPorItem" value="0" min="0" step="1">
-                </div>
-                <div class="enchant-card">
-                    <label><i class="fas fa-coins"></i> PRECIO POR ALMAS</label>
-                    <input type="number" id="precioAlma" value="0" min="0" step="1">
-                </div>
+                <div class="enchant-card"><label>📦 ITEMS BASE</label><input type="number" id="baseItemsSoul" value="0" min="0" step="1"></div>
+                <div class="enchant-card"><label>✨ ALMAS POR ITEM</label><input type="number" id="almasPorItem" value="0" min="0" step="1"></div>
+                <div class="enchant-card"><label>💰 PRECIO POR ALMAS</label><input type="number" id="precioAlma" value="0" min="0" step="1"></div>
             </div>
-            <div class="enchant-result" id="soulResult">
-                <span id="totalAlmas">0</span> almas necesarias<br>
-                <span id="costoAlmas" style="font-size:1rem;">Costo total: 0 silver</span>
-            </div>
-            <div class="enchant-detail">
-                <i class="fas fa-info-circle"></i> Para encantar de .1 a .2 (ej: T5.1 → T5.2)
-            </div>
+            <div class="enchant-result"><span id="totalAlmas">0</span> almas necesarias<br><span id="costoAlmas" style="font-size:1rem;">Costo total: 0 silver</span></div>
+            <div class="enchant-detail"><i class="fas fa-info-circle"></i> Para encantar de .1 a .2 (ej: T5.1 → T5.2)</div>
         </div>
         
-        <!-- Panel Reliquias -->
         <div id="panelRelic" class="enchant-panel">
             <div class="enchant-row">
-                <div class="enchant-card">
-                    <label><i class="fas fa-box"></i> ITEMS BASE</label>
-                    <input type="number" id="baseItemsRelic" value="0" min="0" step="1">
-                </div>
-                <div class="enchant-card">
-                    <label><i class="fas fa-crown"></i> RELIQUIAS POR ITEM</label>
-                    <input type="number" id="reliquiasPorItem" value="0" min="0" step="1">
-                </div>
-                <div class="enchant-card">
-                    <label><i class="fas fa-coins"></i> PRECIO POR RELIQUIAS</label>
-                    <input type="number" id="precioReliquia" value="0" min="0" step="1">
-                </div>
+                <div class="enchant-card"><label>📦 ITEMS BASE</label><input type="number" id="baseItemsRelic" value="0" min="0" step="1"></div>
+                <div class="enchant-card"><label>💎 RELIQUIAS POR ITEM</label><input type="number" id="reliquiasPorItem" value="0" min="0" step="1"></div>
+                <div class="enchant-card"><label>💰 PRECIO POR RELIQUIAS</label><input type="number" id="precioReliquia" value="0" min="0" step="1"></div>
             </div>
-            <div class="enchant-result" id="relicResult">
-                <span id="totalReliquias">0</span> reliquias necesarias<br>
-                <span id="costoReliquias" style="font-size:1rem;">Costo total: 0 silver</span>
-            </div>
-            <div class="enchant-detail">
-                <i class="fas fa-info-circle"></i> Para encantar de .2 a .3 (ej: T5.2 → T5.3)
-            </div>
+            <div class="enchant-result"><span id="totalReliquias">0</span> reliquias necesarias<br><span id="costoReliquias" style="font-size:1rem;">Costo total: 0 silver</span></div>
+            <div class="enchant-detail"><i class="fas fa-info-circle"></i> Para encantar de .2 a .3 (ej: T5.2 → T5.3)</div>
         </div>
     </div>
 </div>
@@ -370,6 +339,7 @@
     // ========== DATOS GLOBALES ==========
     let items = [];
     let simQtys = {};
+    let expandedItems = {}; // Guardar estado de expansión
 
     // ========== IMPUESTOS ==========
     function getTax() { return parseFloat(document.getElementById('taxRate').value) / 100; }
@@ -426,7 +396,7 @@
         `;
     }
 
-    // ========== RENDER LISTA ==========
+    // ========== RENDER LISTA PLEGABLE ==========
     function renderItems() {
         const container = document.getElementById('itemsList');
         if (items.length === 0) {
@@ -440,38 +410,54 @@
         
         container.innerHTML = processed.map((item, idx) => {
             const rank = idx === 0 ? '⚔️' : idx === 1 ? '🔪' : idx === 2 ? '🏴' : '';
+            const isExpanded = expandedItems[item.name] || false;
+            
             const cityRows = item.results.map(r => `
                 <div style="font-size:0.75rem; margin-top:4px;">${r.city}: Compra ${Math.round(r.buy).toLocaleString()} → <span style="color:var(--accent)">${Math.round(r.profit).toLocaleString()} silver</span> (${r.rent.toFixed(1)}%)</div>
             `).join('');
             
             return `
             <div class="item">
-                <div class="item-header">
-                    <span class="item-name">${rank} ${item.name}</span>
-                    <button class="delete-btn" onclick="deleteItem('${item.name}')"><i class="fas fa-trash"></i> Eliminar</button>
+                <div class="item-header" onclick="toggleItem('${item.name.replace(/'/g, "\\'")}')">
+                    <div class="item-name">
+                        ${rank} ${item.name}
+                        <span class="item-preview">${Math.round(item.avgProfit).toLocaleString()} silver promedio</span>
+                    </div>
+                    <i class="fas fa-chevron-down expand-icon ${isExpanded ? 'rotated' : ''}"></i>
                 </div>
-                <div class="black-sell">
-                    <label>🏴‍☠️ BLACK MARKET</label>
-                    <input type="number" value="${item.blackSell}" onchange="updateBlackSell('${item.name}', this.value)">
-                </div>
-                <div class="city-prices">
-                    <div><label>🏔️ Fort Sterling</label><input type="number" value="${item.buyPrices.fortSterling || ''}" onchange="updateBuy('${item.name}', 'fortSterling', this.value)"></div>
-                    <div><label>🏜️ Bridgewatch</label><input type="number" value="${item.buyPrices.bridgewatch || ''}" onchange="updateBuy('${item.name}', 'bridgewatch', this.value)"></div>
-                    <div><label>🌳 Lymhurst</label><input type="number" value="${item.buyPrices.lymhurst || ''}" onchange="updateBuy('${item.name}', 'lymhurst', this.value)"></div>
-                    <div><label>⚙️ Martlock</label><input type="number" value="${item.buyPrices.martlock || ''}" onchange="updateBuy('${item.name}', 'martlock', this.value)"></div>
-                    <div><label>✨ Thetford</label><input type="number" value="${item.buyPrices.thetford || ''}" onchange="updateBuy('${item.name}', 'thetford', this.value)"></div>
-                </div>
-                ${cityRows}
-                <div class="profit-line">📊 GANANCIA PROMEDIO: ${Math.round(item.avgProfit).toLocaleString()} silver (${item.avgRent.toFixed(1)}% rentabilidad)</div>
-                <div class="results">
-                    <div><div class="sub">Ciudades</div><div>${item.validCount}/5</div></div>
-                    <div><div class="sub">Impuesto</div><div>${(getTax()*100).toFixed(1)}%</div></div>
-                    <div><div class="sub">Pérdida</div><div>${(getLoss()*100).toFixed(1)}%</div></div>
-                    <div><div class="sub">Margen</div><div>${((getTax()+getLoss())*100).toFixed(1)}%</div></div>
+                <div class="item-content ${isExpanded ? 'open' : ''}">
+                    <div class="black-sell">
+                        <label>🏴‍☠️ BLACK MARKET</label>
+                        <input type="number" value="${item.blackSell}" onchange="updateBlackSell('${item.name.replace(/'/g, "\\'")}', this.value)">
+                    </div>
+                    <div class="city-prices">
+                        <div><label>🏔️ Fort Sterling</label><input type="number" value="${item.buyPrices.fortSterling || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'fortSterling', this.value)"></div>
+                        <div><label>🏜️ Bridgewatch</label><input type="number" value="${item.buyPrices.bridgewatch || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'bridgewatch', this.value)"></div>
+                        <div><label>🌳 Lymhurst</label><input type="number" value="${item.buyPrices.lymhurst || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'lymhurst', this.value)"></div>
+                        <div><label>⚙️ Martlock</label><input type="number" value="${item.buyPrices.martlock || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'martlock', this.value)"></div>
+                        <div><label>✨ Thetford</label><input type="number" value="${item.buyPrices.thetford || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'thetford', this.value)"></div>
+                    </div>
+                    ${cityRows}
+                    <div class="profit-line">📊 GANANCIA PROMEDIO: ${Math.round(item.avgProfit).toLocaleString()} silver (${item.avgRent.toFixed(1)}% rentabilidad)</div>
+                    <div class="results">
+                        <div><div class="sub">Ciudades</div><div>${item.validCount}/5</div></div>
+                        <div><div class="sub">Impuesto</div><div>${(getTax()*100).toFixed(1)}%</div></div>
+                        <div><div class="sub">Pérdida</div><div>${(getLoss()*100).toFixed(1)}%</div></div>
+                        <div><div class="sub">Margen</div><div>${((getTax()+getLoss())*100).toFixed(1)}%</div></div>
+                    </div>
+                    <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+                        <button class="delete-btn" onclick="deleteItem('${item.name.replace(/'/g, "\\'")}')"><i class="fas fa-trash"></i> Eliminar</button>
+                    </div>
                 </div>
             </div>`;
         }).join('');
         renderStats();
+        saveToLocal();
+    }
+    
+    function toggleItem(name) {
+        expandedItems[name] = !expandedItems[name];
+        renderItems();
         saveToLocal();
     }
 
@@ -487,6 +473,7 @@
     function deleteItem(name) { 
         items = items.filter(i => i.name !== name); 
         delete simQtys[name]; 
+        delete expandedItems[name];
         renderItems(); 
         if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); 
     }
@@ -510,6 +497,7 @@
         
         items.push({ name, blackSell, buyPrices });
         simQtys[name] = 0;
+        expandedItems[name] = false;
         
         document.getElementById('newName').value = '';
         document.getElementById('blackSell').value = '';
@@ -521,10 +509,7 @@
 
     // ========== PERSISTENCIA ==========
     function saveToLocal() { 
-        // Guardar objetos principales
-        localStorage.setItem('bmData', JSON.stringify({ items, tax: getTax()*100, loss: getLoss()*100 }));
-        
-        // Guardar valores de la calculadora de encantamientos
+        localStorage.setItem('bmData', JSON.stringify({ items, tax: getTax()*100, loss: getLoss()*100, expandedItems }));
         const enchantData = {
             baseItemsRune: document.getElementById('baseItemsRune').value,
             runasPorItem: document.getElementById('runasPorItem').value,
@@ -553,7 +538,6 @@
             if (data.reliquiasPorItem !== undefined) document.getElementById('reliquiasPorItem').value = data.reliquiasPorItem;
             if (data.precioReliquia !== undefined) document.getElementById('precioReliquia').value = data.precioReliquia;
         }
-        // Actualizar cálculos después de cargar
         updateRuneCalc();
         updateSoulCalc();
         updateRelicCalc();
@@ -566,19 +550,23 @@
             items = d.items || [];
             document.getElementById('taxRate').value = d.tax || 10.5;
             document.getElementById('lossRate').value = d.loss || 20.0;
-        } else { items = []; }
+            expandedItems = d.expandedItems || {};
+        } else { 
+            items = [];
+            expandedItems = {};
+        }
         simQtys = {};
         renderItems();
         loadEnchantData();
     }
     
     function saveData() { saveToLocal(); toast('Datos guardados'); }
-    function clearAll() { if(confirm('¿Eliminar todos los objetos?')) { items = []; simQtys = {}; renderItems(); saveToLocal(); toast('Todo limpiado'); } }
+    function clearAll() { if(confirm('¿Eliminar todos los objetos?')) { items = []; simQtys = {}; expandedItems = {}; renderItems(); saveToLocal(); toast('Todo limpiado'); } }
     function exportData() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(items)])); a.download = `bm_${Date.now()}.json`; a.click(); toast('Exportado'); }
     function importTrigger() { document.getElementById('importFile').click(); }
-    function importData(input) { const file = input.files[0]; if(!file) return; const r = new FileReader(); r.onload = e => { try { items = JSON.parse(e.target.result); simQtys = {}; renderItems(); saveToLocal(); toast('Importado'); } catch(err) { toast('Error'); } }; r.readAsText(file); input.value = ''; }
+    function importData(input) { const file = input.files[0]; if(!file) return; const r = new FileReader(); r.onload = e => { try { items = JSON.parse(e.target.result); simQtys = {}; expandedItems = {}; renderItems(); saveToLocal(); toast('Importado'); } catch(err) { toast('Error'); } }; r.readAsText(file); input.value = ''; }
 
-    // ========== SIMULADOR DE VOLUMEN ==========
+    // ========== SIMULADOR ==========
     function getAvgProfit(item) { return processItem(item).avgProfit; }
     
     function renderSimulator() {
@@ -624,15 +612,9 @@
     function openSimulator() { renderSimulator(); document.getElementById('simModal').classList.add('active'); }
     function closeSimulator() { document.getElementById('simModal').classList.remove('active'); }
 
-    // ========== CALCULADORA DE ENCANTAMIENTOS PROFESIONAL ==========
-    
-    // Pestañas
+    // ========== CALCULADORA DE ENCANTAMIENTOS ==========
     const tabs = document.querySelectorAll('.enchant-tab');
-    const panels = {
-        rune: document.getElementById('panelRune'),
-        soul: document.getElementById('panelSoul'),
-        relic: document.getElementById('panelRelic')
-    };
+    const panels = { rune: document.getElementById('panelRune'), soul: document.getElementById('panelSoul'), relic: document.getElementById('panelRelic') };
     
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
@@ -644,63 +626,48 @@
         });
     });
     
-    // Cálculos en tiempo real con guardado automático
     function updateRuneCalc() {
         const items = parseFloat(document.getElementById('baseItemsRune').value) || 0;
-        const runasPorItem = parseFloat(document.getElementById('runasPorItem').value) || 0;
-        const precioRuna = parseFloat(document.getElementById('precioRuna').value) || 0;
-        const totalRunas = items * runasPorItem;
-        const costoTotal = totalRunas * precioRuna;
-        document.getElementById('totalRunas').innerHTML = totalRunas.toLocaleString();
-        document.getElementById('costoRunas').innerHTML = `Costo total: ${costoTotal.toLocaleString()} silver`;
+        const runas = parseFloat(document.getElementById('runasPorItem').value) || 0;
+        const precio = parseFloat(document.getElementById('precioRuna').value) || 0;
+        const total = items * runas;
+        document.getElementById('totalRunas').innerHTML = total.toLocaleString();
+        document.getElementById('costoRunas').innerHTML = `Costo total: ${(total * precio).toLocaleString()} silver`;
         saveToLocal();
     }
     
     function updateSoulCalc() {
         const items = parseFloat(document.getElementById('baseItemsSoul').value) || 0;
-        const almasPorItem = parseFloat(document.getElementById('almasPorItem').value) || 0;
-        const precioAlma = parseFloat(document.getElementById('precioAlma').value) || 0;
-        const totalAlmas = items * almasPorItem;
-        const costoTotal = totalAlmas * precioAlma;
-        document.getElementById('totalAlmas').innerHTML = totalAlmas.toLocaleString();
-        document.getElementById('costoAlmas').innerHTML = `Costo total: ${costoTotal.toLocaleString()} silver`;
+        const almas = parseFloat(document.getElementById('almasPorItem').value) || 0;
+        const precio = parseFloat(document.getElementById('precioAlma').value) || 0;
+        const total = items * almas;
+        document.getElementById('totalAlmas').innerHTML = total.toLocaleString();
+        document.getElementById('costoAlmas').innerHTML = `Costo total: ${(total * precio).toLocaleString()} silver`;
         saveToLocal();
     }
     
     function updateRelicCalc() {
         const items = parseFloat(document.getElementById('baseItemsRelic').value) || 0;
-        const reliquiasPorItem = parseFloat(document.getElementById('reliquiasPorItem').value) || 0;
-        const precioReliquia = parseFloat(document.getElementById('precioReliquia').value) || 0;
-        const totalReliquias = items * reliquiasPorItem;
-        const costoTotal = totalReliquias * precioReliquia;
-        document.getElementById('totalReliquias').innerHTML = totalReliquias.toLocaleString();
-        document.getElementById('costoReliquias').innerHTML = `Costo total: ${costoTotal.toLocaleString()} silver`;
+        const reliquias = parseFloat(document.getElementById('reliquiasPorItem').value) || 0;
+        const precio = parseFloat(document.getElementById('precioReliquia').value) || 0;
+        const total = items * reliquias;
+        document.getElementById('totalReliquias').innerHTML = total.toLocaleString();
+        document.getElementById('costoReliquias').innerHTML = `Costo total: ${(total * precio).toLocaleString()} silver`;
         saveToLocal();
     }
     
-    // Listeners calculadora con guardado automático
-    document.getElementById('baseItemsRune').addEventListener('input', () => { updateRuneCalc(); saveToLocal(); });
-    document.getElementById('runasPorItem').addEventListener('input', () => { updateRuneCalc(); saveToLocal(); });
-    document.getElementById('precioRuna').addEventListener('input', () => { updateRuneCalc(); saveToLocal(); });
+    document.getElementById('baseItemsRune').addEventListener('input', updateRuneCalc);
+    document.getElementById('runasPorItem').addEventListener('input', updateRuneCalc);
+    document.getElementById('precioRuna').addEventListener('input', updateRuneCalc);
+    document.getElementById('baseItemsSoul').addEventListener('input', updateSoulCalc);
+    document.getElementById('almasPorItem').addEventListener('input', updateSoulCalc);
+    document.getElementById('precioAlma').addEventListener('input', updateSoulCalc);
+    document.getElementById('baseItemsRelic').addEventListener('input', updateRelicCalc);
+    document.getElementById('reliquiasPorItem').addEventListener('input', updateRelicCalc);
+    document.getElementById('precioReliquia').addEventListener('input', updateRelicCalc);
     
-    document.getElementById('baseItemsSoul').addEventListener('input', () => { updateSoulCalc(); saveToLocal(); });
-    document.getElementById('almasPorItem').addEventListener('input', () => { updateSoulCalc(); saveToLocal(); });
-    document.getElementById('precioAlma').addEventListener('input', () => { updateSoulCalc(); saveToLocal(); });
-    
-    document.getElementById('baseItemsRelic').addEventListener('input', () => { updateRelicCalc(); saveToLocal(); });
-    document.getElementById('reliquiasPorItem').addEventListener('input', () => { updateRelicCalc(); saveToLocal(); });
-    document.getElementById('precioReliquia').addEventListener('input', () => { updateRelicCalc(); saveToLocal(); });
-    
-    function openEnchantCalculator() {
-        updateRuneCalc();
-        updateSoulCalc();
-        updateRelicCalc();
-        document.getElementById('enchantModal').classList.add('active');
-    }
-    
-    function closeEnchantCalculator() {
-        document.getElementById('enchantModal').classList.remove('active');
-    }
+    function openEnchantCalculator() { updateRuneCalc(); updateSoulCalc(); updateRelicCalc(); document.getElementById('enchantModal').classList.add('active'); }
+    function closeEnchantCalculator() { document.getElementById('enchantModal').classList.remove('active'); }
 
     // ========== UI ==========
     function toast(msg) { const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = `<i class="fas fa-skull"></i> ${msg}`; document.body.appendChild(t); setTimeout(() => t.remove(), 2000); }
@@ -722,7 +689,7 @@
         formOpen = !formOpen; 
     }
     
-    // ========== BOTÓN FLOTANTE ARRASTRABLE ==========
+    // ========== BOTÓN FLOTANTE ==========
     const floatContainer = document.getElementById('floatingContainer');
     const floatBtn = document.getElementById('floatBtn');
     const floatMenu = document.getElementById('floatMenu');
@@ -747,10 +714,7 @@
     
     function saveFloatPosition() {
         const rect = floatContainer.getBoundingClientRect();
-        localStorage.setItem('floatPosition', JSON.stringify({
-            left: rect.left + 'px',
-            top: rect.top + 'px'
-        }));
+        localStorage.setItem('floatPosition', JSON.stringify({ left: rect.left + 'px', top: rect.top + 'px' }));
     }
     
     floatBtn.addEventListener('mousedown', (e) => {
@@ -770,12 +734,10 @@
         const dy = e.clientY - dragStartY;
         let newLeft = containerStartX + dx;
         let newTop = containerStartY + dy;
-        
         const maxX = window.innerWidth - floatContainer.offsetWidth;
         const maxY = window.innerHeight - floatContainer.offsetHeight;
         newLeft = Math.min(maxX, Math.max(0, newLeft));
         newTop = Math.min(maxY, Math.max(0, newTop));
-        
         floatContainer.style.left = newLeft + 'px';
         floatContainer.style.top = newTop + 'px';
         floatContainer.style.bottom = 'auto';
@@ -811,7 +773,7 @@
         }
     });
     
-    // ========== GLOBAL QTY LISTENERS ==========
+    // ========== LISTENERS ==========
     document.getElementById('globalQtyToggle').onchange = () => { 
         const d = document.getElementById('globalQtyVal'); 
         const b = document.getElementById('applyGlobalBtn'); 
