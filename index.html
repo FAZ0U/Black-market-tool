@@ -106,7 +106,7 @@
         .results { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; background: var(--input); padding: 8px; border-radius: 14px; margin-top: 10px; text-align: center; }
         .results div .sub { font-size: 0.6rem; color: var(--text-sec); margin-bottom: 3px; }
         
-        /* Modal Simulador */
+        /* Modales */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; padding: 20px; overflow: auto; }
         .modal.active { display: flex; align-items: center; justify-content: center; }
         .modal-content { background: var(--card); border-radius: 28px; max-width: 650px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 20px; border: 1px solid var(--accent); }
@@ -119,12 +119,21 @@
         .sim-total { text-align: center; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
         .sim-total h3 { color: var(--accent); font-size: 1.3rem; }
         
-        /* Botón flotante */
-        .floating-container { position: fixed; bottom: 20px; right: 20px; z-index: 100; }
-        .floating-btn { width: 56px; height: 56px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.2s; }
+        /* Calculadora de encantamientos */
+        .enchant-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+        .enchant-card { flex: 1; background: var(--input); border-radius: 16px; padding: 12px; text-align: center; }
+        .enchant-card label { font-size: 0.7rem; color: var(--text-sec); display: block; margin-bottom: 5px; }
+        .enchant-card input { background: transparent; border: none; font-size: 1.2rem; font-weight: bold; color: var(--accent); width: 100%; text-align: center; outline: none; }
+        .enchant-result { background: var(--accent); color: white; padding: 12px; border-radius: 14px; text-align: center; margin-top: 16px; }
+        .enchant-result span { font-size: 1.2rem; font-weight: bold; }
+        
+        /* Botón flotante arrastrable */
+        .floating-container { position: fixed; z-index: 100; }
+        .floating-btn { width: 56px; height: 56px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: grab; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.2s; user-select: none; }
+        .floating-btn:active { cursor: grabbing; }
         .floating-btn:hover { transform: scale(1.05); background: var(--accent-hover); }
-        .floating-btn i { font-size: 1.8rem; color: white; }
-        .floating-menu { position: absolute; bottom: 70px; right: 0; background: var(--card); border-radius: 16px; padding: 8px; display: none; border: 1px solid var(--accent); min-width: 180px; }
+        .floating-btn i { font-size: 1.8rem; color: white; pointer-events: none; }
+        .floating-menu { position: absolute; bottom: 70px; right: 0; background: var(--card); border-radius: 16px; padding: 8px; display: none; border: 1px solid var(--accent); min-width: 200px; }
         .floating-menu.active { display: block; }
         .floating-menu button { background: transparent; border: none; padding: 12px; width: 100%; text-align: left; color: var(--text); cursor: pointer; border-radius: 10px; display: flex; align-items: center; gap: 10px; }
         .floating-menu button:hover { background: var(--input); color: var(--accent); }
@@ -145,6 +154,7 @@
             .stats { grid-template-columns: 1fr; }
             .data-buttons { grid-template-columns: 1fr; }
             .row-2 { flex-direction: column; }
+            .enchant-row { flex-direction: column; }
             h1 { font-size: 1.1rem; }
             .logo { width: 35px; height: 35px; }
         }
@@ -213,17 +223,18 @@
     <footer><i class="fas fa-anchor"></i> Ganancia = (BlackMarket - PrecioCompra) - Impuestos - Pérdida · Promedio entre ciudades con datos</footer>
 </div>
 
-<!-- Botón flotante -->
-<div class="floating-container">
+<!-- Botón flotante arrastrable -->
+<div class="floating-container" id="floatingContainer">
     <div class="floating-menu" id="floatMenu">
         <button onclick="openSimulator()"><i class="fas fa-chart-line"></i> Simulador de volumen</button>
+        <button onclick="openEnchantCalculator()"><i class="fas fa-magic"></i> Calculadora de encantamientos</button>
     </div>
     <div class="floating-btn" id="floatBtn">
         <i class="fas fa-skull"></i>
     </div>
 </div>
 
-<!-- Modal Simulador -->
+<!-- Modal Simulador de Volumen -->
 <div id="simModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -241,6 +252,32 @@
         <div class="sim-total">
             <h3 id="simTotalProfit">0 silver</h3>
             <button class="btn-outline" onclick="resetSimQtys()" style="margin-top: 10px;"><i class="fas fa-undo-alt"></i> Resetear cantidades</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Calculadora de Encantamientos -->
+<div id="enchantModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2><i class="fas fa-magic"></i> Calculadora de encantamientos</h2>
+            <button class="btn-outline" onclick="closeEnchantCalculator()"><i class="fas fa-times"></i> Cerrar</button>
+        </div>
+        <div class="enchant-row">
+            <div class="enchant-card">
+                <label><i class="fas fa-box"></i> ITEMS BASE</label>
+                <input type="number" id="baseItems" value="1" min="1" step="1">
+            </div>
+            <div class="enchant-card">
+                <label><i class="fas fa-gem"></i> RUNAS POR ENCANTAMIENTO</label>
+                <input type="number" id="runasPorItem" value="192" min="1" step="1">
+            </div>
+        </div>
+        <div class="enchant-result" id="enchantResult">
+            <span id="totalRunas">192</span> runas necesarias
+        </div>
+        <div style="margin-top: 16px; text-align: center; font-size: 0.8rem; color: var(--text-sec);">
+            <i class="fas fa-info-circle"></i> Ejemplo: Para encantar una Bolsa T5 a T5.1 se necesitan 192 runas
         </div>
     </div>
 </div>
@@ -417,7 +454,7 @@
     function importTrigger() { document.getElementById('importFile').click(); }
     function importData(input) { const file = input.files[0]; if(!file) return; const r = new FileReader(); r.onload = e => { try { items = JSON.parse(e.target.result); simQtys = {}; renderItems(); saveToLocal(); toast('Importado'); } catch(err) { toast('Error'); } }; r.readAsText(file); input.value = ''; }
 
-    // ========== SIMULADOR ==========
+    // ========== SIMULADOR DE VOLUMEN ==========
     function getAvgProfit(item) { return processItem(item).avgProfit; }
     
     function renderSimulator() {
@@ -462,6 +499,27 @@
     function openSimulator() { renderSimulator(); document.getElementById('simModal').classList.add('active'); }
     function closeSimulator() { document.getElementById('simModal').classList.remove('active'); }
 
+    // ========== CALCULADORA DE ENCANTAMIENTOS ==========
+    function updateEnchantCalculator() {
+        const baseItems = parseFloat(document.getElementById('baseItems').value) || 0;
+        const runasPorItem = parseFloat(document.getElementById('runasPorItem').value) || 0;
+        const totalRunas = baseItems * runasPorItem;
+        document.getElementById('totalRunas').innerHTML = totalRunas.toLocaleString();
+    }
+    
+    function openEnchantCalculator() {
+        updateEnchantCalculator();
+        document.getElementById('enchantModal').classList.add('active');
+    }
+    
+    function closeEnchantCalculator() {
+        document.getElementById('enchantModal').classList.remove('active');
+    }
+    
+    // Listeners para la calculadora de encantamientos
+    document.getElementById('baseItems').addEventListener('input', updateEnchantCalculator);
+    document.getElementById('runasPorItem').addEventListener('input', updateEnchantCalculator);
+
     // ========== UI ==========
     function toast(msg) { const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = `<i class="fas fa-skull"></i> ${msg}`; document.body.appendChild(t); setTimeout(() => t.remove(), 2000); }
     function toggleTheme() { document.body.classList.toggle('light'); saveToLocal(); }
@@ -482,31 +540,97 @@
         formOpen = !formOpen; 
     }
     
-    // ========== BOTÓN FLOTANTE ==========
+    // ========== BOTÓN FLOTANTE ARRASTRABLE ==========
+    const floatContainer = document.getElementById('floatingContainer');
     const floatBtn = document.getElementById('floatBtn');
     const floatMenu = document.getElementById('floatMenu');
+    let isDragging = false;
+    let dragStartX, dragStartY;
+    let containerStartX, containerStartY;
     let menuTimeout;
     
-    floatBtn.onclick = (e) => {
-        e.stopPropagation();
-        if (floatMenu.classList.contains('active')) {
-            floatMenu.classList.remove('active');
-            if (menuTimeout) clearTimeout(menuTimeout);
+    // Cargar posición guardada
+    function loadFloatPosition() {
+        const saved = localStorage.getItem('floatPosition');
+        if (saved) {
+            const pos = JSON.parse(saved);
+            floatContainer.style.left = pos.left;
+            floatContainer.style.top = pos.top;
+            floatContainer.style.bottom = 'auto';
+            floatContainer.style.right = 'auto';
         } else {
-            floatMenu.classList.add('active');
-            if (menuTimeout) clearTimeout(menuTimeout);
-            menuTimeout = setTimeout(() => floatMenu.classList.remove('active'), 4000);
+            floatContainer.style.bottom = '20px';
+            floatContainer.style.right = '20px';
+        }
+    }
+    
+    function saveFloatPosition() {
+        const rect = floatContainer.getBoundingClientRect();
+        localStorage.setItem('floatPosition', JSON.stringify({
+            left: rect.left + 'px',
+            top: rect.top + 'px'
+        }));
+    }
+    
+    floatBtn.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        dragStartX = e.clientX;
+        dragStartY = e.clientY;
+        const rect = floatContainer.getBoundingClientRect();
+        containerStartX = rect.left;
+        containerStartY = rect.top;
+        floatBtn.style.cursor = 'grabbing';
+        e.preventDefault();
+    });
+    
+    document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - dragStartX;
+        const dy = e.clientY - dragStartY;
+        let newLeft = containerStartX + dx;
+        let newTop = containerStartY + dy;
+        
+        const maxX = window.innerWidth - floatContainer.offsetWidth;
+        const maxY = window.innerHeight - floatContainer.offsetHeight;
+        newLeft = Math.min(maxX, Math.max(0, newLeft));
+        newTop = Math.min(maxY, Math.max(0, newTop));
+        
+        floatContainer.style.left = newLeft + 'px';
+        floatContainer.style.top = newTop + 'px';
+        floatContainer.style.bottom = 'auto';
+        floatContainer.style.right = 'auto';
+    });
+    
+    document.addEventListener('mouseup', () => {
+        if (isDragging) {
+            isDragging = false;
+            floatBtn.style.cursor = 'grab';
+            saveFloatPosition();
+        }
+    });
+    
+    floatBtn.onclick = (e) => {
+        if (!isDragging) {
+            e.stopPropagation();
+            if (floatMenu.classList.contains('active')) {
+                floatMenu.classList.remove('active');
+                if (menuTimeout) clearTimeout(menuTimeout);
+            } else {
+                floatMenu.classList.add('active');
+                if (menuTimeout) clearTimeout(menuTimeout);
+                menuTimeout = setTimeout(() => floatMenu.classList.remove('active'), 5000);
+            }
         }
     };
     
     document.addEventListener('click', (e) => {
-        if (!floatBtn.contains(e.target) && !floatMenu.contains(e.target)) {
+        if (!floatContainer.contains(e.target)) {
             floatMenu.classList.remove('active');
             if (menuTimeout) clearTimeout(menuTimeout);
         }
     });
     
-    // ========== LISTENERS ==========
+    // ========== GLOBAL QTY LISTENERS ==========
     document.getElementById('globalQtyToggle').onchange = () => { 
         const d = document.getElementById('globalQtyVal'); 
         const b = document.getElementById('applyGlobalBtn'); 
@@ -517,6 +641,7 @@
     document.getElementById('lossRate').oninput = () => { renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); };
     
     // ========== INICIO ==========
+    loadFloatPosition();
     loadFromLocal();
 </script>
 </body>
