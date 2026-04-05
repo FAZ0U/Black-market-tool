@@ -21,6 +21,9 @@
             --text-sec: #9a9a9a;
             --accent: #b91c1c;
             --accent-hover: #7f1a1a;
+            --runas: #3b82f6;
+            --almas: #a855f7;
+            --reliquias: #f59e0b;
         }
         
         body.light {
@@ -119,13 +122,28 @@
         .sim-total { text-align: center; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
         .sim-total h3 { color: var(--accent); font-size: 1.3rem; }
         
-        /* Calculadora de encantamientos */
-        .enchant-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+        /* Calculadora de encantamientos profesional */
+        .enchant-tabs { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+        .enchant-tab { flex: 1; text-align: center; padding: 10px; cursor: pointer; border-radius: 12px; transition: all 0.2s; font-weight: bold; }
+        .enchant-tab.rune { color: var(--runas); }
+        .enchant-tab.soul { color: var(--almas); }
+        .enchant-tab.relic { color: var(--reliquias); }
+        .enchant-tab.active { background: var(--input); border-bottom: 3px solid; }
+        .enchant-tab.rune.active { border-bottom-color: var(--runas); }
+        .enchant-tab.soul.active { border-bottom-color: var(--almas); }
+        .enchant-tab.relic.active { border-bottom-color: var(--reliquias); }
+        
+        .enchant-panel { display: none; }
+        .enchant-panel.active { display: block; }
+        
+        .enchant-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
         .enchant-card { flex: 1; background: var(--input); border-radius: 16px; padding: 12px; text-align: center; }
         .enchant-card label { font-size: 0.7rem; color: var(--text-sec); display: block; margin-bottom: 5px; }
         .enchant-card input { background: transparent; border: none; font-size: 1.2rem; font-weight: bold; color: var(--accent); width: 100%; text-align: center; outline: none; }
+        
         .enchant-result { background: var(--accent); color: white; padding: 12px; border-radius: 14px; text-align: center; margin-top: 16px; }
         .enchant-result span { font-size: 1.2rem; font-weight: bold; }
+        .enchant-detail { font-size: 0.75rem; color: var(--text-sec); text-align: center; margin-top: 8px; }
         
         /* Botón flotante arrastrable */
         .floating-container { position: fixed; z-index: 100; }
@@ -256,28 +274,94 @@
     </div>
 </div>
 
-<!-- Modal Calculadora de Encantamientos -->
+<!-- Modal Calculadora de Encantamientos Profesional -->
 <div id="enchantModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
             <h2><i class="fas fa-magic"></i> Calculadora de encantamientos</h2>
             <button class="btn-outline" onclick="closeEnchantCalculator()"><i class="fas fa-times"></i> Cerrar</button>
         </div>
-        <div class="enchant-row">
-            <div class="enchant-card">
-                <label><i class="fas fa-box"></i> ITEMS BASE</label>
-                <input type="number" id="baseItems" value="1" min="1" step="1">
+        
+        <!-- Pestañas -->
+        <div class="enchant-tabs">
+            <div class="enchant-tab rune active" data-tab="rune">🏺 Runas<br><span style="font-size:0.6rem;">Tier → .1</span></div>
+            <div class="enchant-tab soul" data-tab="soul">✨ Almas<br><span style="font-size:0.6rem;">.1 → .2</span></div>
+            <div class="enchant-tab relic" data-tab="relic">💎 Reliquias<br><span style="font-size:0.6rem;">.2 → .3</span></div>
+        </div>
+        
+        <!-- Panel Runas -->
+        <div id="panelRune" class="enchant-panel active">
+            <div class="enchant-row">
+                <div class="enchant-card">
+                    <label><i class="fas fa-box"></i> ITEMS BASE</label>
+                    <input type="number" id="baseItemsRune" value="1" min="1" step="1">
+                </div>
+                <div class="enchant-card">
+                    <label><i class="fas fa-cubes"></i> RUNAS POR ITEM</label>
+                    <input type="number" id="runasPorItem" value="192" min="1" step="1">
+                </div>
+                <div class="enchant-card">
+                    <label><i class="fas fa-coins"></i> PRECIO POR RUNAS</label>
+                    <input type="number" id="precioRuna" value="100" min="0" step="1">
+                </div>
             </div>
-            <div class="enchant-card">
-                <label><i class="fas fa-gem"></i> RUNAS POR ENCANTAMIENTO</label>
-                <input type="number" id="runasPorItem" value="192" min="1" step="1">
+            <div class="enchant-result" id="runeResult">
+                <span id="totalRunas">192</span> runas necesarias<br>
+                <span id="costoRunas" style="font-size:1rem;">Costo total: 19,200 silver</span>
+            </div>
+            <div class="enchant-detail">
+                <i class="fas fa-info-circle"></i> Para encantar de Tier a .1 (ej: T5 → T5.1)
             </div>
         </div>
-        <div class="enchant-result" id="enchantResult">
-            <span id="totalRunas">192</span> runas necesarias
+        
+        <!-- Panel Almas -->
+        <div id="panelSoul" class="enchant-panel">
+            <div class="enchant-row">
+                <div class="enchant-card">
+                    <label><i class="fas fa-box"></i> ITEMS BASE</label>
+                    <input type="number" id="baseItemsSoul" value="1" min="1" step="1">
+                </div>
+                <div class="enchant-card">
+                    <label><i class="fas fa-feather-alt"></i> ALMAS POR ITEM</label>
+                    <input type="number" id="almasPorItem" value="256" min="1" step="1">
+                </div>
+                <div class="enchant-card">
+                    <label><i class="fas fa-coins"></i> PRECIO POR ALMAS</label>
+                    <input type="number" id="precioAlma" value="200" min="0" step="1">
+                </div>
+            </div>
+            <div class="enchant-result" id="soulResult">
+                <span id="totalAlmas">256</span> almas necesarias<br>
+                <span id="costoAlmas" style="font-size:1rem;">Costo total: 51,200 silver</span>
+            </div>
+            <div class="enchant-detail">
+                <i class="fas fa-info-circle"></i> Para encantar de .1 a .2 (ej: T5.1 → T5.2)
+            </div>
         </div>
-        <div style="margin-top: 16px; text-align: center; font-size: 0.8rem; color: var(--text-sec);">
-            <i class="fas fa-info-circle"></i> Ejemplo: Para encantar una Bolsa T5 a T5.1 se necesitan 192 runas
+        
+        <!-- Panel Reliquias -->
+        <div id="panelRelic" class="enchant-panel">
+            <div class="enchant-row">
+                <div class="enchant-card">
+                    <label><i class="fas fa-box"></i> ITEMS BASE</label>
+                    <input type="number" id="baseItemsRelic" value="1" min="1" step="1">
+                </div>
+                <div class="enchant-card">
+                    <label><i class="fas fa-crown"></i> RELIQUIAS POR ITEM</label>
+                    <input type="number" id="reliquiasPorItem" value="384" min="1" step="1">
+                </div>
+                <div class="enchant-card">
+                    <label><i class="fas fa-coins"></i> PRECIO POR RELIQUIAS</label>
+                    <input type="number" id="precioReliquia" value="400" min="0" step="1">
+                </div>
+            </div>
+            <div class="enchant-result" id="relicResult">
+                <span id="totalReliquias">384</span> reliquias necesarias<br>
+                <span id="costoReliquias" style="font-size:1rem;">Costo total: 153,600 silver</span>
+            </div>
+            <div class="enchant-detail">
+                <i class="fas fa-info-circle"></i> Para encantar de .2 a .3 (ej: T5.2 → T5.3)
+            </div>
         </div>
     </div>
 </div>
@@ -499,26 +583,80 @@
     function openSimulator() { renderSimulator(); document.getElementById('simModal').classList.add('active'); }
     function closeSimulator() { document.getElementById('simModal').classList.remove('active'); }
 
-    // ========== CALCULADORA DE ENCANTAMIENTOS ==========
-    function updateEnchantCalculator() {
-        const baseItems = parseFloat(document.getElementById('baseItems').value) || 0;
+    // ========== CALCULADORA DE ENCANTAMIENTOS PROFESIONAL ==========
+    
+    // Pestañas
+    const tabs = document.querySelectorAll('.enchant-tab');
+    const panels = {
+        rune: document.getElementById('panelRune'),
+        soul: document.getElementById('panelSoul'),
+        relic: document.getElementById('panelRelic')
+    };
+    
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const target = tab.dataset.tab;
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            Object.values(panels).forEach(p => p.classList.remove('active'));
+            panels[target].classList.add('active');
+        });
+    });
+    
+    // Cálculos en tiempo real
+    function updateRuneCalc() {
+        const items = parseFloat(document.getElementById('baseItemsRune').value) || 0;
         const runasPorItem = parseFloat(document.getElementById('runasPorItem').value) || 0;
-        const totalRunas = baseItems * runasPorItem;
+        const precioRuna = parseFloat(document.getElementById('precioRuna').value) || 0;
+        const totalRunas = items * runasPorItem;
+        const costoTotal = totalRunas * precioRuna;
         document.getElementById('totalRunas').innerHTML = totalRunas.toLocaleString();
+        document.getElementById('costoRunas').innerHTML = `Costo total: ${costoTotal.toLocaleString()} silver`;
     }
     
+    function updateSoulCalc() {
+        const items = parseFloat(document.getElementById('baseItemsSoul').value) || 0;
+        const almasPorItem = parseFloat(document.getElementById('almasPorItem').value) || 0;
+        const precioAlma = parseFloat(document.getElementById('precioAlma').value) || 0;
+        const totalAlmas = items * almasPorItem;
+        const costoTotal = totalAlmas * precioAlma;
+        document.getElementById('totalAlmas').innerHTML = totalAlmas.toLocaleString();
+        document.getElementById('costoAlmas').innerHTML = `Costo total: ${costoTotal.toLocaleString()} silver`;
+    }
+    
+    function updateRelicCalc() {
+        const items = parseFloat(document.getElementById('baseItemsRelic').value) || 0;
+        const reliquiasPorItem = parseFloat(document.getElementById('reliquiasPorItem').value) || 0;
+        const precioReliquia = parseFloat(document.getElementById('precioReliquia').value) || 0;
+        const totalReliquias = items * reliquiasPorItem;
+        const costoTotal = totalReliquias * precioReliquia;
+        document.getElementById('totalReliquias').innerHTML = totalReliquias.toLocaleString();
+        document.getElementById('costoReliquias').innerHTML = `Costo total: ${costoTotal.toLocaleString()} silver`;
+    }
+    
+    // Listeners calculadora
+    document.getElementById('baseItemsRune').addEventListener('input', updateRuneCalc);
+    document.getElementById('runasPorItem').addEventListener('input', updateRuneCalc);
+    document.getElementById('precioRuna').addEventListener('input', updateRuneCalc);
+    
+    document.getElementById('baseItemsSoul').addEventListener('input', updateSoulCalc);
+    document.getElementById('almasPorItem').addEventListener('input', updateSoulCalc);
+    document.getElementById('precioAlma').addEventListener('input', updateSoulCalc);
+    
+    document.getElementById('baseItemsRelic').addEventListener('input', updateRelicCalc);
+    document.getElementById('reliquiasPorItem').addEventListener('input', updateRelicCalc);
+    document.getElementById('precioReliquia').addEventListener('input', updateRelicCalc);
+    
     function openEnchantCalculator() {
-        updateEnchantCalculator();
+        updateRuneCalc();
+        updateSoulCalc();
+        updateRelicCalc();
         document.getElementById('enchantModal').classList.add('active');
     }
     
     function closeEnchantCalculator() {
         document.getElementById('enchantModal').classList.remove('active');
     }
-    
-    // Listeners para la calculadora de encantamientos
-    document.getElementById('baseItems').addEventListener('input', updateEnchantCalculator);
-    document.getElementById('runasPorItem').addEventListener('input', updateEnchantCalculator);
 
     // ========== UI ==========
     function toast(msg) { const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = `<i class="fas fa-skull"></i> ${msg}`; document.body.appendChild(t); setTimeout(() => t.remove(), 2000); }
@@ -549,7 +687,6 @@
     let containerStartX, containerStartY;
     let menuTimeout;
     
-    // Cargar posición guardada
     function loadFloatPosition() {
         const saved = localStorage.getItem('floatPosition');
         if (saved) {
