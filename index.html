@@ -112,9 +112,7 @@
         .filter-group { display: flex; flex-direction: column; gap: 4px; }
         .filter-group label { font-size: 0.7rem; color: var(--text-sec); }
         .filter-group input { background: var(--input); border: 1px solid var(--border); padding: 8px; border-radius: 10px; color: var(--text); }
-        .granularity-buttons { display: flex; gap: 8px; justify-content: center; margin: 16px 0; }
-        .charts-row { display: flex; flex-wrap: wrap; gap: 20px; margin: 20px 0; }
-        .chart-box { flex: 1; min-width: 250px; background: var(--input); border-radius: 16px; padding: 12px; }
+        .chart-container { margin: 20px 0; background: var(--input); border-radius: 16px; padding: 12px; }
         .operations-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
         .operations-table th, .operations-table td { padding: 8px; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.8rem; }
         .operations-table th { color: var(--accent); }
@@ -141,7 +139,6 @@
             .cities-grid, .city-prices { grid-template-columns: 1fr; }
             .stats, .data-buttons, .row-2, .enchant-row { grid-template-columns: 1fr; }
             .operations-filters { flex-direction: column; }
-            .charts-row { flex-direction: column; }
             .modal-content { max-width: 95%; }
             .operations-table th, .operations-table td { font-size: 0.7rem; padding: 4px; }
         }
@@ -160,8 +157,8 @@
     <!-- Impuestos -->
     <div class="card">
         <div class="row-2">
-            <div><label>💰 IMPUESTO (%)</label><input type="text" id="taxRate" step="any" value="10.5" inputmode="decimal"></div>
-            <div><label>⚠️ PÉRDIDA FIJA (%)</label><input type="text" id="lossRate" step="any" value="20.0" inputmode="decimal"></div>
+            <div><label>💰 IMPUESTO (%)</label><input type="text" id="taxRate" value="10.5" inputmode="decimal"></div>
+            <div><label>⚠️ PÉRDIDA FIJA (%)</label><input type="text" id="lossRate" value="20.0" inputmode="decimal"></div>
         </div>
     </div>
 
@@ -175,15 +172,15 @@
             <div class="form-group"><label>NOMBRE</label><input type="text" id="newName" placeholder="Ej: Bolsa T5"></div>
             <label>PRECIO DE COMPRA POR CIUDAD</label>
             <div class="cities-grid">
-                <div class="city-input"><label>🏔️ Fort Sterling</label><input type="text" id="buyFS" inputmode="decimal" step="any"></div>
-                <div class="city-input"><label>🏜️ Bridgewatch</label><input type="text" id="buyBW" inputmode="decimal" step="any"></div>
-                <div class="city-input"><label>🌳 Lymhurst</label><input type="text" id="buyLH" inputmode="decimal" step="any"></div>
-                <div class="city-input"><label>⚙️ Martlock</label><input type="text" id="buyML" inputmode="decimal" step="any"></div>
-                <div class="city-input"><label>✨ Thetford</label><input type="text" id="buyTH" inputmode="decimal" step="any"></div>
+                <div class="city-input"><label>🏔️ Fort Sterling</label><input type="text" id="buyFS" inputmode="decimal"></div>
+                <div class="city-input"><label>🏜️ Bridgewatch</label><input type="text" id="buyBW" inputmode="decimal"></div>
+                <div class="city-input"><label>🌳 Lymhurst</label><input type="text" id="buyLH" inputmode="decimal"></div>
+                <div class="city-input"><label>⚙️ Martlock</label><input type="text" id="buyML" inputmode="decimal"></div>
+                <div class="city-input"><label>✨ Thetford</label><input type="text" id="buyTH" inputmode="decimal"></div>
             </div>
             <div class="black-market-box">
                 <label>🏴‍☠️ PRECIO VENTA BLACK MARKET</label>
-                <input type="text" id="blackSell" placeholder="Precio único de venta" inputmode="decimal" step="any">
+                <input type="text" id="blackSell" placeholder="Precio único de venta" inputmode="decimal">
             </div>
             <button class="btn" onclick="addItem()"><i class="fas fa-skull"></i> AGREGAR OBJETO</button>
         </div>
@@ -257,27 +254,27 @@
             <div class="enchant-tab relic" data-tab="relic">💎 Reliquias<br><span style="font-size:0.6rem;">.2 → .3</span></div>
         </div>
         <div id="panelRune" class="enchant-panel active">
-            <div class="enchant-row"><div class="enchant-card"><label>📦 ITEMS BASE</label><input type="text" id="baseItemsRune" value="0" inputmode="decimal" step="any"></div>
-            <div class="enchant-card"><label>🏺 RUNAS POR ITEM</label><input type="text" id="runasPorItem" value="0" inputmode="decimal" step="any"></div>
-            <div class="enchant-card"><label>💰 PRECIO POR RUNAS</label><input type="text" id="precioRuna" value="0" inputmode="decimal" step="any"></div></div>
+            <div class="enchant-row"><div class="enchant-card"><label>📦 ITEMS BASE</label><input type="text" id="baseItemsRune" value="0" inputmode="decimal"></div>
+            <div class="enchant-card"><label>🏺 RUNAS POR ITEM</label><input type="text" id="runasPorItem" value="0" inputmode="decimal"></div>
+            <div class="enchant-card"><label>💰 PRECIO POR RUNAS</label><input type="text" id="precioRuna" value="0" inputmode="decimal"></div></div>
             <div class="enchant-result"><span id="totalRunas">0</span> runas necesarias<br><span id="costoRunas">Costo total: 0 silver</span></div>
         </div>
         <div id="panelSoul" class="enchant-panel">
-            <div class="enchant-row"><div class="enchant-card"><label>📦 ITEMS BASE</label><input type="text" id="baseItemsSoul" value="0" inputmode="decimal" step="any"></div>
-            <div class="enchant-card"><label>✨ ALMAS POR ITEM</label><input type="text" id="almasPorItem" value="0" inputmode="decimal" step="any"></div>
-            <div class="enchant-card"><label>💰 PRECIO POR ALMAS</label><input type="text" id="precioAlma" value="0" inputmode="decimal" step="any"></div></div>
+            <div class="enchant-row"><div class="enchant-card"><label>📦 ITEMS BASE</label><input type="text" id="baseItemsSoul" value="0" inputmode="decimal"></div>
+            <div class="enchant-card"><label>✨ ALMAS POR ITEM</label><input type="text" id="almasPorItem" value="0" inputmode="decimal"></div>
+            <div class="enchant-card"><label>💰 PRECIO POR ALMAS</label><input type="text" id="precioAlma" value="0" inputmode="decimal"></div></div>
             <div class="enchant-result"><span id="totalAlmas">0</span> almas necesarias<br><span id="costoAlmas">Costo total: 0 silver</span></div>
         </div>
         <div id="panelRelic" class="enchant-panel">
-            <div class="enchant-row"><div class="enchant-card"><label>📦 ITEMS BASE</label><input type="text" id="baseItemsRelic" value="0" inputmode="decimal" step="any"></div>
-            <div class="enchant-card"><label>💎 RELIQUIAS POR ITEM</label><input type="text" id="reliquiasPorItem" value="0" inputmode="decimal" step="any"></div>
-            <div class="enchant-card"><label>💰 PRECIO POR RELIQUIAS</label><input type="text" id="precioReliquia" value="0" inputmode="decimal" step="any"></div></div>
+            <div class="enchant-row"><div class="enchant-card"><label>📦 ITEMS BASE</label><input type="text" id="baseItemsRelic" value="0" inputmode="decimal"></div>
+            <div class="enchant-card"><label>💎 RELIQUIAS POR ITEM</label><input type="text" id="reliquiasPorItem" value="0" inputmode="decimal"></div>
+            <div class="enchant-card"><label>💰 PRECIO POR RELIQUIAS</label><input type="text" id="precioReliquia" value="0" inputmode="decimal"></div></div>
             <div class="enchant-result"><span id="totalReliquias">0</span> reliquias necesarias<br><span id="costoReliquias">Costo total: 0 silver</span></div>
         </div>
     </div>
 </div>
 
-<!-- Modal Registro de Operaciones -->
+<!-- Modal Registro de Operaciones SIMPLIFICADO -->
 <div id="operationsModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -297,33 +294,22 @@
             </div>
         </div>
         
-        <!-- Filtros rango -->
+        <!-- Filtro de fechas (solo desde/hasta) -->
         <div class="operations-filters">
             <div class="filter-group"><label>📅 Desde</label><input type="date" id="dateFrom"></div>
             <div class="filter-group"><label>📅 Hasta</label><input type="date" id="dateTo"></div>
-            <button class="btn-outline" onclick="applyDateRange()">Aplicar rango</button>
-            <button class="btn-outline" onclick="setQuickRange('day')">Hoy</button>
-            <button class="btn-outline" onclick="setQuickRange('week')">Última semana</button>
-            <button class="btn-outline" onclick="setQuickRange('month')">Último mes</button>
+            <button class="btn-outline" onclick="applyDateRange()">Filtrar</button>
         </div>
         
-        <!-- Granularidad -->
-        <div class="granularity-buttons">
-            <button class="btn-outline granularity-btn" data-granularity="day">📆 Por día</button>
-            <button class="btn-outline granularity-btn" data-granularity="3days">📊 Cada 3 días</button>
-            <button class="btn-outline granularity-btn" data-granularity="month">📅 Por mes</button>
-        </div>
-        
-        <!-- Tarjeta total -->
+        <!-- Tarjeta de ganancia total -->
         <div class="total-profit-card" id="totalProfitCard">💰 Ganancia total: 0 silver</div>
         
-        <!-- Gráficos -->
-        <div class="charts-row">
-            <div class="chart-box"><canvas id="profitBarChart"></canvas></div>
-            <div class="chart-box"><canvas id="profitPieChart"></canvas></div>
+        <!-- Gráfico de torta (solo este) -->
+        <div class="chart-container">
+            <canvas id="profitPieChart"></canvas>
         </div>
         
-        <!-- Tabla operaciones -->
+        <!-- Tabla de operaciones -->
         <div style="overflow-x: auto;">
             <table class="operations-table" id="operationsTable">
                 <thead><tr><th>Fecha</th><th>Objeto</th><th>Compra</th><th>Venta</th><th>Ganancia</th><th></th></tr></thead>
@@ -334,12 +320,11 @@
 </div>
 
 <script>
-    // ========== FUNCIONES DE NORMALIZACIÓN DE NÚMEROS ==========
+    // ========== FUNCIONES DE NORMALIZACIÓN ==========
     function parseNumber(value) {
         if (value === undefined || value === null) return 0;
         let str = String(value).trim();
         if (str === '') return 0;
-        // Reemplazar coma por punto
         str = str.replace(',', '.');
         let num = parseFloat(str);
         return isNaN(num) ? 0 : num;
@@ -350,9 +335,7 @@
     let simQtys = {};
     let expandedItems = {};
     let operations = [];
-    let barChart = null;
     let pieChart = null;
-    let currentGranularity = 'day';
     let currentDateFrom = null;
     let currentDateTo = null;
 
@@ -371,7 +354,6 @@
         return { net, gross, lossAmount, final };
     }
 
-    // Precio promedio de compra (media de ciudades)
     function getAvgBuyPrice(item) {
         const cities = ['fortSterling', 'bridgewatch', 'lymhurst', 'martlock', 'thetford'];
         let sum = 0, count = 0;
@@ -381,7 +363,6 @@
 
     function getAvgSellPrice(item) { return item.blackSell; }
 
-    // Ganancia para una operación (usando precios actuales)
     function computeProfitForOperation(objectName, buyQty, sellQty) {
         const obj = items.find(i => i.name === objectName);
         if (!obj) return 0;
@@ -393,7 +374,7 @@
         return profitPerUnit * units;
     }
 
-    // ========== PROCESAR ITEM ==========
+    // ========== PROCESAR ITEM (para mostrar) ==========
     function processItem(item) {
         const cities = ['fortSterling', 'bridgewatch', 'lymhurst', 'martlock', 'thetford'];
         const cityNames = { fortSterling:'🏔️ Fort Sterling', bridgewatch:'🏜️ Bridgewatch', lymhurst:'🌳 Lymhurst', martlock:'⚙️ Martlock', thetford:'✨ Thetford' };
@@ -404,7 +385,7 @@
             const buy = item.buyPrices[city];
             if (buy > 0 && item.blackSell > 0) {
                 const profit = calculateProfitDetails(buy, item.blackSell);
-                results.push({ city: cityNames[city], buy, profit: profit.final, net: profit.net, gross: profit.gross, lossAmount: profit.lossAmount });
+                results.push({ city: cityNames[city], buy, profit: profit.final });
                 totalProfit += profit.final;
                 validCount++;
             }
@@ -439,14 +420,7 @@
             const avgBuy = getAvgBuyPrice(item);
             const avgSell = getAvgSellPrice(item);
             const profitDetails = calculateProfitDetails(avgBuy, avgSell);
-            const cityRows = item.results.map(r => `
-                <div style="font-size:0.75rem; margin-top:4px;">
-                    ${r.city}: Compra ${Math.round(r.buy).toLocaleString()} → 
-                    Neto: ${Math.round(r.net).toLocaleString()} | 
-                    Bruto: ${Math.round(r.gross).toLocaleString()} | 
-                    Pérdida: ${Math.round(r.lossAmount).toLocaleString()} | 
-                    <strong>Ganancia neta: ${Math.round(r.profit).toLocaleString()} silver</strong>
-                </div>`).join('');
+            const cityRows = item.results.map(r => `<div style="font-size:0.75rem; margin-top:4px;">${r.city}: Compra ${Math.round(r.buy).toLocaleString()} → Ganancia neta: ${Math.round(r.profit).toLocaleString()} silver</div>`).join('');
             return `<div class="item"><div class="item-header" onclick="toggleItem('${item.name.replace(/'/g, "\\'")}')"><div class="item-name">${rank} ${item.name}<span class="item-preview">${Math.round(item.avgProfit).toLocaleString()} silver neto promedio</span></div><i class="fas fa-chevron-down expand-icon ${isExpanded ? 'rotated' : ''}"></i></div>
             <div class="item-content ${isExpanded ? 'open' : ''}">
                 <div class="black-sell"><label>🏴‍☠️ BLACK MARKET</label><input type="text" value="${item.blackSell}" onchange="updateBlackSell('${item.name.replace(/'/g, "\\'")}', this.value)" inputmode="decimal"></div>
@@ -458,16 +432,16 @@
                     <div><label>✨ Thetford</label><input type="text" value="${item.buyPrices.thetford || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'thetford', this.value)" inputmode="decimal"></div>
                 </div>
                 <div class="profit-detail">
-                    <div><strong>📊 Desglose del cálculo (promedio):</strong></div>
-                    <div>Precio compra promedio: ${Math.round(avgBuy).toLocaleString()} silver</div>
-                    <div>Precio venta Black Market: ${Math.round(avgSell).toLocaleString()} silver</div>
-                    <div>→ Neto después de impuesto (${(getTax()*100).toFixed(1)}%): ${Math.round(profitDetails.net).toLocaleString()}</div>
+                    <div><strong>📊 Desglose (promedio):</strong></div>
+                    <div>Compra promedio: ${Math.round(avgBuy).toLocaleString()} silver</div>
+                    <div>Venta Black Market: ${Math.round(avgSell).toLocaleString()} silver</div>
+                    <div>→ Neto después de ${(getTax()*100).toFixed(1)}% impuesto: ${Math.round(profitDetails.net).toLocaleString()}</div>
                     <div>→ Ganancia bruta: ${Math.round(profitDetails.gross).toLocaleString()}</div>
                     <div>→ Pérdida fija (${(getLoss()*100).toFixed(1)}%): ${Math.round(profitDetails.lossAmount).toLocaleString()}</div>
                     <div><strong>✨ Ganancia neta por unidad: ${Math.round(profitDetails.final).toLocaleString()} silver</strong></div>
                 </div>
                 ${cityRows}
-                <div class="profit-line">📊 GANANCIA PROMEDIO (ciudades): ${Math.round(item.avgProfit).toLocaleString()} silver</div>
+                <div class="profit-line">📊 GANANCIA PROMEDIO: ${Math.round(item.avgProfit).toLocaleString()} silver</div>
                 <div class="results">
                     <div><div class="sub">Ciudades</div><div>${item.validCount}/5</div></div>
                     <div><div class="sub">Impuesto</div><div>${(getTax()*100).toFixed(1)}%</div></div>
@@ -583,7 +557,7 @@
     function openEnchantCalculator() { updateRuneCalc(); updateSoulCalc(); updateRelicCalc(); document.getElementById('enchantModal').classList.add('active'); }
     function closeEnchantCalculator() { document.getElementById('enchantModal').classList.remove('active'); }
 
-    // ========== OPERACIONES ==========
+    // ========== OPERACIONES (SIMPLIFICADO) ==========
     function updateOperationsSelect() {
         const select = document.getElementById('opObject');
         if (select) { select.innerHTML = '<option value="">Selecciona objeto</option>'; items.forEach(item => { const opt = document.createElement('option'); opt.value = item.name; opt.textContent = item.name; select.appendChild(opt); }); }
@@ -607,45 +581,14 @@
         const from = new Date(fromDate); const to = new Date(toDate); to.setHours(23,59,59);
         return operations.filter(op => { const d = new Date(op.date); return d >= from && d <= to; });
     }
-    function groupByInterval(ops, interval) {
-        if (ops.length===0) return [];
-        const sorted = [...ops].sort((a,b)=>new Date(a.date)-new Date(b.date));
-        if (interval==='day') {
-            const map = new Map(); sorted.forEach(op => map.set(op.date, (map.get(op.date)||0)+op.profit));
-            return Array.from(map.entries()).map(([date,profit])=>({date,profit})).sort((a,b)=>new Date(a.date)-new Date(b.date));
-        } else if (interval==='3days') {
-            const result = []; let groupStart=null, groupProfit=0, groupEnd=null;
-            for (let i=0; i<sorted.length; i++) {
-                const cur = new Date(sorted[i].date);
-                if (!groupStart) { groupStart=cur; groupProfit=sorted[i].profit; groupEnd=sorted[i].date; }
-                else {
-                    const diff = Math.floor((cur - groupStart)/(1000*60*60*24));
-                    if (diff<3) { groupProfit+=sorted[i].profit; groupEnd=sorted[i].date; }
-                    else { result.push({ date: groupStart.toISOString().split('T')[0], profit: groupProfit, endDate: groupEnd }); groupStart=cur; groupProfit=sorted[i].profit; groupEnd=sorted[i].date; }
-                }
-            }
-            if (groupStart) result.push({ date: groupStart.toISOString().split('T')[0], profit: groupProfit, endDate: groupEnd });
-            return result;
-        } else {
-            const map = new Map(); sorted.forEach(op => { const d = new Date(op.date); const ym = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`; map.set(ym, (map.get(ym)||0)+op.profit); });
-            return Array.from(map.entries()).map(([date,profit])=>({date,profit})).sort();
-        }
-    }
-    function updateCharts(ops) {
-        const grouped = groupByInterval(ops, currentGranularity);
-        const barLabels = grouped.map(g => currentGranularity==='3days' && g.endDate ? `${g.date} → ${g.endDate}` : g.date);
-        const barData = grouped.map(g => g.profit);
-        if (barChart) barChart.destroy();
-        const ctxBar = document.getElementById('profitBarChart').getContext('2d');
-        barChart = new Chart(ctxBar, { type: 'bar', data: { labels: barLabels, datasets: [{ label: 'Ganancia (silver)', data: barData, backgroundColor: '#b91c1c', borderRadius: 8 }] }, options: { responsive: true, maintainAspectRatio: true, plugins: { tooltip: { callbacks: { label: (ctx) => `${ctx.raw.toLocaleString()} silver` } } } } });
-        
+    function updatePieChart(ops) {
         const objMap = new Map();
         ops.forEach(op => objMap.set(op.objectName, (objMap.get(op.objectName)||0) + op.profit));
-        const pieLabels = Array.from(objMap.keys());
-        const pieData = Array.from(objMap.values());
+        const labels = Array.from(objMap.keys());
+        const data = Array.from(objMap.values());
         if (pieChart) pieChart.destroy();
-        const ctxPie = document.getElementById('profitPieChart').getContext('2d');
-        pieChart = new Chart(ctxPie, { type: 'pie', data: { labels: pieLabels, datasets: [{ data: pieData, backgroundColor: ['#b91c1c','#3b82f6','#a855f7','#f59e0b','#10b981','#ef4444','#06b6d4','#ec489a'] }] }, options: { responsive: true, plugins: { tooltip: { callbacks: { label: (ctx) => `${ctx.label}: ${ctx.raw.toLocaleString()} silver` } } } } });
+        const ctx = document.getElementById('profitPieChart').getContext('2d');
+        pieChart = new Chart(ctx, { type: 'pie', data: { labels: labels, datasets: [{ data: data, backgroundColor: ['#b91c1c','#3b82f6','#a855f7','#f59e0b','#10b981','#ef4444','#06b6d4','#ec489a'] }] }, options: { responsive: true, maintainAspectRatio: true, plugins: { tooltip: { callbacks: { label: (ctx) => `${ctx.label}: ${ctx.raw.toLocaleString()} silver` } } } } });
     }
     function renderOperationsTable(ops) {
         const tbody = document.getElementById('operationsTableBody');
@@ -663,7 +606,7 @@
             delCell.appendChild(delBtn);
         });
     }
-    function updateTotalProfitCard(ops) { const total = ops.reduce((s,o)=>s+o.profit,0); document.getElementById('totalProfitCard').innerHTML = `💰 Ganancia total en el período: ${Math.round(total).toLocaleString()} silver`; }
+    function updateTotalProfitCard(ops) { const total = ops.reduce((s,o)=>s+o.profit,0); document.getElementById('totalProfitCard').innerHTML = `💰 Ganancia total: ${Math.round(total).toLocaleString()} silver`; }
     function applyDateRange() {
         const from = document.getElementById('dateFrom').value;
         const to = document.getElementById('dateTo').value;
@@ -671,29 +614,12 @@
         const filtered = getOperationsInRange(from, to);
         renderOperationsTable(filtered);
         updateTotalProfitCard(filtered);
-        updateCharts(filtered);
+        updatePieChart(filtered);
     }
-    function setQuickRange(range) {
-        const today = new Date(); let from = new Date();
-        if (range === 'day') from = today;
-        else if (range === 'week') from.setDate(today.getDate()-7);
-        else if (range === 'month') from.setMonth(today.getMonth()-1);
-        document.getElementById('dateFrom').value = from.toISOString().split('T')[0];
-        document.getElementById('dateTo').value = today.toISOString().split('T')[0];
-        applyDateRange();
-    }
-    function setGranularity(gran) {
-        currentGranularity = gran;
-        const from = document.getElementById('dateFrom').value, to = document.getElementById('dateTo').value;
-        const filtered = getOperationsInRange(from, to);
-        updateCharts(filtered);
-        document.querySelectorAll('.granularity-btn').forEach(btn => { if (btn.dataset.granularity === gran) btn.style.background = 'var(--accent)'; else btn.style.background = ''; });
-    }
-    function initGranularityButtons() { document.querySelectorAll('.granularity-btn').forEach(btn => { btn.addEventListener('click', () => setGranularity(btn.dataset.granularity)); }); }
     function openOperationsModal() {
         if (!currentDateFrom) { const today = new Date(); const thirtyAgo = new Date(); thirtyAgo.setDate(today.getDate()-30); document.getElementById('dateFrom').value = thirtyAgo.toISOString().split('T')[0]; document.getElementById('dateTo').value = today.toISOString().split('T')[0]; currentDateFrom = document.getElementById('dateFrom').value; currentDateTo = document.getElementById('dateTo').value; }
         else { document.getElementById('dateFrom').value = currentDateFrom; document.getElementById('dateTo').value = currentDateTo; }
-        applyDateRange(); initGranularityButtons(); setGranularity(currentGranularity);
+        applyDateRange();
         updateOperationsSelect();
         document.getElementById('operationsModal').classList.add('active');
     }
@@ -705,7 +631,7 @@
     let formOpen = false;
     function toggleForm() { const c = document.getElementById('formContent'); const i = document.getElementById('formIcon'); if (formOpen) { c.classList.remove('open'); i.classList.remove('fa-chevron-up'); i.classList.add('fa-chevron-down'); } else { c.classList.add('open'); i.classList.remove('fa-chevron-down'); i.classList.add('fa-chevron-up'); } formOpen = !formOpen; }
 
-    // ========== BOTÓN FLOTANTE ARRASTRABLE ==========
+    // ========== BOTÓN FLOTANTE ==========
     const floatContainer = document.getElementById('floatingContainer');
     const floatBtn = document.getElementById('floatBtn');
     const floatMenu = document.getElementById('floatMenu');
