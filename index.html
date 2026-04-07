@@ -123,6 +123,9 @@
         .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--accent); color: white; padding: 8px 20px; border-radius: 40px; font-size: 0.85rem; z-index: 2000; animation: fadeOut 2s forwards; }
         @keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
         footer { text-align: center; font-size: 0.6rem; color: var(--text-sec); margin-top: 20px; padding: 16px; }
+        /* Formulario nuevo perfil */
+        .new-profile-form { background: var(--input); border-radius: 16px; padding: 16px; margin-bottom: 20px; }
+        .new-profile-form input, .new-profile-form button { width: 100%; margin-top: 8px; }
         @media (max-width: 550px) {
             body { padding: 10px; }
             .cities-grid, .city-prices { grid-template-columns: 1fr; }
@@ -271,11 +274,21 @@
             <button class="btn-outline" onclick="closeProfilesModal()"><i class="fas fa-times"></i> Cerrar</button>
         </div>
         
+        <!-- Formulario simplificado para nuevo perfil -->
+        <div class="new-profile-form">
+            <div style="font-weight: bold; margin-bottom: 8px;">➕ Crear nuevo perfil</div>
+            <input type="text" id="newProfileName" placeholder="Nombre (ej: 1-3 abril)" style="width:100%; background:var(--card); border:1px solid var(--border); padding:10px; border-radius:12px; color:var(--text); margin-bottom:8px;">
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <input type="date" id="newProfileStart" style="flex:1; background:var(--card); border:1px solid var(--border); padding:10px; border-radius:12px; color:var(--text);">
+                <input type="date" id="newProfileEnd" style="flex:1; background:var(--card); border:1px solid var(--border); padding:10px; border-radius:12px; color:var(--text);">
+                <button class="btn-outline" onclick="createProfile()" style="flex:0.5;">Crear</button>
+            </div>
+        </div>
+        
         <!-- Selector de perfil y acciones -->
         <div class="profile-selector">
             <select id="profileSelect"></select>
             <div class="profile-actions">
-                <button class="small-btn" onclick="newProfile()"><i class="fas fa-plus"></i> Nuevo</button>
                 <button class="small-btn" onclick="editProfile()"><i class="fas fa-edit"></i> Editar</button>
                 <button class="small-btn" onclick="deleteProfile()"><i class="fas fa-trash"></i> Eliminar</button>
             </div>
@@ -627,15 +640,21 @@
         if (profile) { profile.operations.splice(index,1); saveToLocal(); refreshProfileUI(); toast('Operación eliminada'); }
     }
 
-    function newProfile() {
-        let name = prompt('Nombre del perfil (ej: 1-3 abril)'); if (!name) return;
-        let start = prompt('Fecha inicio (AAAA-MM-DD)'); if (!start) return;
-        let end = prompt('Fecha fin (AAAA-MM-DD)'); if (!end) return;
+    function createProfile() {
+        const name = document.getElementById('newProfileName').value.trim();
+        const startDate = document.getElementById('newProfileStart').value;
+        const endDate = document.getElementById('newProfileEnd').value;
+        if (!name) { toast('Nombre del perfil requerido'); return; }
+        if (!startDate || !endDate) { toast('Debes seleccionar fecha inicio y fin'); return; }
         const newId = 'profile_' + Date.now();
-        profiles.push({ id: newId, name: name, startDate: start, endDate: end, operations: [] });
+        profiles.push({ id: newId, name: name, startDate: startDate, endDate: endDate, operations: [] });
         saveToLocal();
         currentProfileId = newId;
         refreshProfileUI();
+        // Limpiar campos
+        document.getElementById('newProfileName').value = '';
+        document.getElementById('newProfileStart').value = '';
+        document.getElementById('newProfileEnd').value = '';
         toast('Perfil creado');
     }
 
