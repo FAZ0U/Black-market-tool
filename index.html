@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#0a0a0a">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192.png">
-    <title>Black Market Tool</title>
+    <title>Black Market Tool - Perfiles</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -21,9 +21,6 @@
             --text-sec: #9a9a9a;
             --accent: #b91c1c;
             --accent-hover: #7f1a1a;
-            --runas: #3b82f6;
-            --almas: #a855f7;
-            --reliquias: #f59e0b;
         }
         body.light {
             --bg: #e8e8e8;
@@ -81,7 +78,6 @@
         .black-sell label { color: var(--accent); font-size: 0.7rem; }
         .black-sell input { background: transparent; border: none; font-size: 1rem; font-weight: bold; width: 100%; text-align: center; color: var(--accent); outline: none; }
         .profit-detail { background: var(--input); padding: 8px; border-radius: 12px; margin: 8px 0; font-size: 0.7rem; }
-        .profit-detail div { margin: 4px 0; }
         .profit-line { background: var(--accent); color: white; padding: 8px; border-radius: 12px; text-align: center; margin: 10px 0; font-weight: bold; }
         .results { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; background: var(--input); padding: 8px; border-radius: 14px; margin-top: 10px; text-align: center; }
         .delete-btn { background: rgba(185,28,28,0.2); border: none; padding: 4px 12px; border-radius: 20px; color: var(--accent); cursor: pointer; }
@@ -89,6 +85,10 @@
         .modal.active { display: flex; align-items: center; justify-content: center; }
         .modal-content { background: var(--card); border-radius: 28px; max-width: 900px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 20px; border: 1px solid var(--accent); }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+        .profile-selector { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
+        .profile-selector select { flex: 2; background: var(--input); border: 1px solid var(--border); padding: 10px; border-radius: 12px; color: var(--text); }
+        .profile-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+        .small-btn { background: var(--input); border: 1px solid var(--border); padding: 8px 12px; border-radius: 12px; cursor: pointer; color: var(--text); font-size: 0.8rem; }
         .sim-item { background: var(--input); border-radius: 14px; padding: 10px; margin-bottom: 10px; }
         .sim-item-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
         .sim-control { display: flex; gap: 8px; align-items: center; }
@@ -97,10 +97,7 @@
         .sim-total { text-align: center; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
         .enchant-tabs { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
         .enchant-tab { flex: 1; text-align: center; padding: 10px; cursor: pointer; border-radius: 12px; transition: all 0.2s; font-weight: bold; }
-        .enchant-tab.rune { color: var(--runas); }
-        .enchant-tab.soul { color: var(--almas); }
-        .enchant-tab.relic { color: var(--reliquias); }
-        .enchant-tab.active { background: var(--input); border-bottom: 3px solid; }
+        .enchant-tab.active { background: var(--input); border-bottom: 3px solid var(--accent); }
         .enchant-panel { display: none; }
         .enchant-panel.active { display: block; }
         .enchant-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
@@ -108,16 +105,12 @@
         .enchant-card label { font-size: 0.7rem; color: var(--text-sec); display: block; margin-bottom: 5px; }
         .enchant-card input { background: transparent; border: none; font-size: 1.2rem; font-weight: bold; color: var(--accent); width: 100%; text-align: center; outline: none; }
         .enchant-result { background: var(--accent); color: white; padding: 12px; border-radius: 14px; text-align: center; margin-top: 16px; }
-        .operations-filters { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; align-items: flex-end; }
-        .filter-group { display: flex; flex-direction: column; gap: 4px; }
-        .filter-group label { font-size: 0.7rem; color: var(--text-sec); }
-        .filter-group input { background: var(--input); border: 1px solid var(--border); padding: 8px; border-radius: 10px; color: var(--text); }
-        .chart-container { margin: 20px 0; background: var(--input); border-radius: 16px; padding: 12px; }
         .operations-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
         .operations-table th, .operations-table td { padding: 8px; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.8rem; }
         .operations-table th { color: var(--accent); }
         .delete-op-btn { background: none; border: none; color: var(--accent); cursor: pointer; }
         .total-profit-card { background: var(--accent); color: white; padding: 12px; border-radius: 16px; text-align: center; margin-bottom: 16px; }
+        .chart-container { margin: 20px 0; background: var(--input); border-radius: 16px; padding: 12px; }
         .floating-container { position: fixed; z-index: 100; }
         .floating-btn { width: 56px; height: 56px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: grab; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.2s; user-select: none; }
         .floating-btn:active { cursor: grabbing; }
@@ -127,10 +120,6 @@
         .floating-menu.active { display: block; }
         .floating-menu button { background: transparent; border: none; padding: 12px; width: 100%; text-align: left; color: var(--text); cursor: pointer; border-radius: 10px; display: flex; align-items: center; gap: 10px; }
         .floating-menu button:hover { background: var(--input); color: var(--accent); }
-        .toggle-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 4px 0; }
-        .toggle-header span { font-weight: bold; color: var(--accent); }
-        .form-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
-        .form-content.open { max-height: 800px; transition: max-height 0.3s ease-in; }
         .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--accent); color: white; padding: 8px 20px; border-radius: 40px; font-size: 0.85rem; z-index: 2000; animation: fadeOut 2s forwards; }
         @keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
         footer { text-align: center; font-size: 0.6rem; color: var(--text-sec); margin-top: 20px; padding: 16px; }
@@ -138,7 +127,7 @@
             body { padding: 10px; }
             .cities-grid, .city-prices { grid-template-columns: 1fr; }
             .stats, .data-buttons, .row-2, .enchant-row { grid-template-columns: 1fr; }
-            .operations-filters { flex-direction: column; }
+            .profile-selector { flex-direction: column; align-items: stretch; }
             .modal-content { max-width: 95%; }
             .operations-table th, .operations-table td { font-size: 0.7rem; padding: 4px; }
         }
@@ -149,7 +138,7 @@
     <div class="header">
         <div class="logo-area">
             <img src="2011.jpg" class="logo" alt="logo">
-            <div><h1>BLACK MARKET TOOL</h1><div class="sub">Compra en ciudades · Venta en Black Market</div></div>
+            <div><h1>BLACK MARKET TOOL</h1><div class="sub">Perfiles · Seguimiento de ganancias</div></div>
         </div>
         <button class="theme-btn" onclick="toggleTheme()">🌓</button>
     </div>
@@ -186,7 +175,7 @@
         </div>
     </div>
 
-    <!-- Gestión de datos -->
+    <!-- Gestión de datos general -->
     <div class="card">
         <div style="margin-bottom: 8px;"><i class="fas fa-database"></i> GESTIÓN DE DATOS</div>
         <div class="data-buttons">
@@ -198,13 +187,13 @@
         <input type="file" id="importFile" style="display:none" onchange="importData(this)">
     </div>
 
-    <!-- Estadísticas -->
+    <!-- Estadísticas de objetos -->
     <div class="stats" id="statsArea"></div>
     
     <!-- Lista de objetos -->
     <div id="itemsList"></div>
     
-    <footer><i class="fas fa-anchor"></i> Ganancia neta = (PrecioVenta * 0.895 - PrecioCompra) * 0.8 · Promedio entre ciudades</footer>
+    <footer><i class="fas fa-anchor"></i> Ganancia neta = (PrecioVenta * (1-impuesto) - PrecioCompra) * (1-pérdida)</footer>
 </div>
 
 <!-- Botón flotante -->
@@ -212,7 +201,7 @@
     <div class="floating-menu" id="floatMenu">
         <button onclick="openSimulator()"><i class="fas fa-chart-line"></i> Simulador de volumen</button>
         <button onclick="openEnchantCalculator()"><i class="fas fa-magic"></i> Calculadora de encantamientos</button>
-        <button onclick="openOperationsModal()"><i class="fas fa-clipboard-list"></i> Registro de operaciones</button>
+        <button onclick="openProfilesModal()"><i class="fas fa-users"></i> Perfiles y operaciones</button>
     </div>
     <div class="floating-btn" id="floatBtn">
         <i class="fas fa-skull"></i>
@@ -236,7 +225,7 @@
         <div id="simItems"></div>
         <div class="sim-total">
             <h3 id="simTotalProfit">0 silver</h3>
-            <button class="btn-outline" onclick="resetSimQtys()" style="margin-top: 10px;"><i class="fas fa-undo-alt"></i> Resetear cantidades</button>
+            <button class="btn-outline" onclick="resetSimQtys()"><i class="fas fa-undo-alt"></i> Resetear cantidades</button>
         </div>
     </div>
 </div>
@@ -249,9 +238,9 @@
             <button class="btn-outline" onclick="closeEnchantCalculator()"><i class="fas fa-times"></i> Cerrar</button>
         </div>
         <div class="enchant-tabs">
-            <div class="enchant-tab rune active" data-tab="rune">🏺 Runas<br><span style="font-size:0.6rem;">Tier → .1</span></div>
-            <div class="enchant-tab soul" data-tab="soul">✨ Almas<br><span style="font-size:0.6rem;">.1 → .2</span></div>
-            <div class="enchant-tab relic" data-tab="relic">💎 Reliquias<br><span style="font-size:0.6rem;">.2 → .3</span></div>
+            <div class="enchant-tab rune active" data-tab="rune">🏺 Runas</div>
+            <div class="enchant-tab soul" data-tab="soul">✨ Almas</div>
+            <div class="enchant-tab relic" data-tab="relic">💎 Reliquias</div>
         </div>
         <div id="panelRune" class="enchant-panel active">
             <div class="enchant-row"><div class="enchant-card"><label>📦 ITEMS BASE</label><input type="text" id="baseItemsRune" value="0" inputmode="decimal"></div>
@@ -274,15 +263,25 @@
     </div>
 </div>
 
-<!-- Modal Registro de Operaciones SIMPLIFICADO -->
-<div id="operationsModal" class="modal">
+<!-- Modal Perfiles y Operaciones (con sistema de perfiles) -->
+<div id="profilesModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h2><i class="fas fa-clipboard-list"></i> Registro de operaciones</h2>
-            <button class="btn-outline" onclick="closeOperationsModal()"><i class="fas fa-times"></i> Cerrar</button>
+            <h2><i class="fas fa-users"></i> Perfiles y operaciones</h2>
+            <button class="btn-outline" onclick="closeProfilesModal()"><i class="fas fa-times"></i> Cerrar</button>
         </div>
         
-        <!-- FORMULARIO NUEVA OPERACIÓN -->
+        <!-- Selector de perfil y acciones -->
+        <div class="profile-selector">
+            <select id="profileSelect"></select>
+            <div class="profile-actions">
+                <button class="small-btn" onclick="newProfile()"><i class="fas fa-plus"></i> Nuevo</button>
+                <button class="small-btn" onclick="editProfile()"><i class="fas fa-edit"></i> Editar</button>
+                <button class="small-btn" onclick="deleteProfile()"><i class="fas fa-trash"></i> Eliminar</button>
+            </div>
+        </div>
+        
+        <!-- Formulario añadir operación (en el perfil actual) -->
         <div class="card" style="margin-bottom: 16px;">
             <div style="font-weight: bold; margin-bottom: 8px;">➕ Nueva operación</div>
             <div style="display: flex; flex-wrap: wrap; gap: 8px;">
@@ -290,79 +289,155 @@
                 <select id="opObject" style="flex:2; background:var(--input); border:1px solid var(--border); padding:8px; border-radius:10px; color:var(--text);"></select>
                 <input type="text" id="opBuyQty" placeholder="Cant. comprada" style="flex:1; background:var(--input); border:1px solid var(--border); padding:8px; border-radius:10px; color:var(--text); inputmode="numeric"">
                 <input type="text" id="opSellQty" placeholder="Cant. vendida" style="flex:1; background:var(--input); border:1px solid var(--border); padding:8px; border-radius:10px; color:var(--text); inputmode="numeric"">
-                <button class="btn-outline" onclick="addOperation()" style="padding:8px 16px;">Añadir</button>
+                <button class="btn-outline" onclick="addOperationToCurrentProfile()">Añadir</button>
             </div>
         </div>
         
-        <!-- Filtro de fechas (solo desde/hasta) -->
-        <div class="operations-filters">
-            <div class="filter-group"><label>📅 Desde</label><input type="date" id="dateFrom"></div>
-            <div class="filter-group"><label>📅 Hasta</label><input type="date" id="dateTo"></div>
-            <button class="btn-outline" onclick="applyDateRange()">Filtrar</button>
-        </div>
+        <!-- Tarjeta de ganancia total del perfil actual -->
+        <div class="total-profit-card" id="profileTotalProfit">💰 Ganancia total: 0 silver</div>
         
-        <!-- Tarjeta de ganancia total -->
-        <div class="total-profit-card" id="totalProfitCard">💰 Ganancia total: 0 silver</div>
-        
-        <!-- Gráfico de torta (solo este) -->
+        <!-- Gráfico de torta del perfil actual -->
         <div class="chart-container">
-            <canvas id="profitPieChart"></canvas>
+            <canvas id="profilePieChart"></canvas>
         </div>
         
-        <!-- Tabla de operaciones -->
+        <!-- Tabla de operaciones del perfil actual -->
         <div style="overflow-x: auto;">
-            <table class="operations-table" id="operationsTable">
+            <table class="operations-table" id="profileOperationsTable">
                 <thead><tr><th>Fecha</th><th>Objeto</th><th>Compra</th><th>Venta</th><th>Ganancia</th><th></th></tr></thead>
-                <tbody id="operationsTableBody"></tbody>
+                <tbody id="profileTableBody"></tbody>
             </table>
         </div>
     </div>
 </div>
 
 <script>
-    // ========== FUNCIONES DE NORMALIZACIÓN ==========
+    // ========== FUNCIONES DE FORMATEO DE NÚMEROS ==========
+    function formatNumber(value) {
+        if (value === undefined || value === null) return '0';
+        let num = parseNumber(value);
+        return num.toLocaleString('es-ES'); // separador de miles: punto, decimales: coma
+    }
     function parseNumber(value) {
         if (value === undefined || value === null) return 0;
         let str = String(value).trim();
         if (str === '') return 0;
-        str = str.replace(',', '.');
+        // eliminar separadores de miles (puntos o comas según la entrada)
+        str = str.replace(/\./g, '').replace(',', '.');
         let num = parseFloat(str);
         return isNaN(num) ? 0 : num;
+    }
+    // Aplicar formateo automático a inputs numéricos
+    function autoFormatInput(input) {
+        if (!input) return;
+        input.addEventListener('input', function(e) {
+            let raw = this.value.replace(/[^\d.,-]/g, '');
+            let num = parseNumber(raw);
+            if (!isNaN(num)) {
+                this.value = num.toLocaleString('es-ES');
+            }
+        });
+        input.addEventListener('blur', function() {
+            let num = parseNumber(this.value);
+            this.value = num.toLocaleString('es-ES');
+        });
+        input.addEventListener('focus', function() {
+            let num = parseNumber(this.value);
+            this.value = num.toString();
+        });
     }
 
     // ========== DATOS GLOBALES ==========
     let items = [];
     let simQtys = {};
     let expandedItems = {};
-    let operations = [];
+    // Perfiles y operaciones globales
+    let profiles = [];
+    let currentProfileId = "general";
     let pieChart = null;
-    let currentDateFrom = null;
-    let currentDateTo = null;
-
-    // ========== IMPUESTOS ==========
+    
+    // Perfil general por defecto (siempre existe)
+    function initProfiles() {
+        if (profiles.length === 0) {
+            profiles = [
+                { id: "general", name: "Perfil General", startDate: null, endDate: null, operations: [] }
+            ];
+            currentProfileId = "general";
+        }
+    }
+    
+    // Obtener operaciones de un perfil (si es general, todas las operaciones de todos los perfiles; si es personalizado, solo las suyas)
+    function getOperationsForProfile(profileId) {
+        if (profileId === "general") {
+            let allOps = [];
+            profiles.forEach(p => {
+                if (p.id !== "general") allOps.push(...p.operations);
+            });
+            return allOps;
+        } else {
+            let prof = profiles.find(p => p.id === profileId);
+            return prof ? prof.operations : [];
+        }
+    }
+    
+    // Guardar todo en localStorage
+    function saveToLocal() {
+        localStorage.setItem('bmData', JSON.stringify({ items, tax: parseNumber(document.getElementById('taxRate').value), loss: parseNumber(document.getElementById('lossRate').value), expandedItems }));
+        localStorage.setItem('profilesData', JSON.stringify(profiles));
+        localStorage.setItem('enchantData', JSON.stringify({
+            baseItemsRune: document.getElementById('baseItemsRune').value,
+            runasPorItem: document.getElementById('runasPorItem').value,
+            precioRuna: document.getElementById('precioRuna').value,
+            baseItemsSoul: document.getElementById('baseItemsSoul').value,
+            almasPorItem: document.getElementById('almasPorItem').value,
+            precioAlma: document.getElementById('precioAlma').value,
+            baseItemsRelic: document.getElementById('baseItemsRelic').value,
+            reliquiasPorItem: document.getElementById('reliquiasPorItem').value,
+            precioReliquia: document.getElementById('precioReliquia').value
+        }));
+    }
+    
+    function loadFromLocal() {
+        const data = localStorage.getItem('bmData');
+        if (data) {
+            const d = JSON.parse(data);
+            items = d.items || [];
+            document.getElementById('taxRate').value = d.tax ?? 10.5;
+            document.getElementById('lossRate').value = d.loss ?? 20.0;
+            expandedItems = d.expandedItems || {};
+        } else { items = []; expandedItems = {}; }
+        const profData = localStorage.getItem('profilesData');
+        if (profData) {
+            profiles = JSON.parse(profData);
+        } else {
+            profiles = [{ id: "general", name: "Perfil General", startDate: null, endDate: null, operations: [] }];
+        }
+        initProfiles();
+        simQtys = {};
+        renderItems();
+        loadEnchantData();
+        updateOperationsSelect();
+        // No renderizamos el modal de perfiles aquí, solo cuando se abra
+    }
+    
+    // ========== IMPUESTOS Y CÁLCULOS ==========
     function getTax() { return parseNumber(document.getElementById('taxRate').value) / 100; }
     function getLoss() { return parseNumber(document.getElementById('lossRate').value) / 100; }
-
-    // ========== CÁLCULO DETALLADO ==========
     function calculateProfitDetails(buy, sell) {
-        const tax = getTax();
-        const loss = getLoss();
+        const tax = getTax(); const loss = getLoss();
         const net = sell * (1 - tax);
         const gross = net - buy;
         const lossAmount = gross * loss;
         const final = gross - lossAmount;
         return { net, gross, lossAmount, final };
     }
-
     function getAvgBuyPrice(item) {
         const cities = ['fortSterling', 'bridgewatch', 'lymhurst', 'martlock', 'thetford'];
         let sum = 0, count = 0;
         cities.forEach(c => { let p = item.buyPrices[c]; if (p > 0) { sum += p; count++; } });
         return count > 0 ? sum / count : 0;
     }
-
     function getAvgSellPrice(item) { return item.blackSell; }
-
     function computeProfitForOperation(objectName, buyQty, sellQty) {
         const obj = items.find(i => i.name === objectName);
         if (!obj) return 0;
@@ -373,42 +448,33 @@
         const units = Math.min(buyQty, sellQty);
         return profitPerUnit * units;
     }
-
-    // ========== PROCESAR ITEM (para mostrar) ==========
+    
+    // ========== RENDER OBJETOS (igual que antes) ==========
     function processItem(item) {
         const cities = ['fortSterling', 'bridgewatch', 'lymhurst', 'martlock', 'thetford'];
         const cityNames = { fortSterling:'🏔️ Fort Sterling', bridgewatch:'🏜️ Bridgewatch', lymhurst:'🌳 Lymhurst', martlock:'⚙️ Martlock', thetford:'✨ Thetford' };
-        const results = [];
-        let totalProfit = 0;
-        let validCount = 0;
+        const results = []; let totalProfit = 0, validCount = 0;
         cities.forEach(city => {
             const buy = item.buyPrices[city];
             if (buy > 0 && item.blackSell > 0) {
                 const profit = calculateProfitDetails(buy, item.blackSell);
                 results.push({ city: cityNames[city], buy, profit: profit.final });
-                totalProfit += profit.final;
-                validCount++;
+                totalProfit += profit.final; validCount++;
             }
         });
         const avgProfit = validCount > 0 ? totalProfit / validCount : 0;
         return { results, avgProfit, validCount };
     }
-
-    // ========== RENDER ESTADÍSTICAS ==========
     function renderStats() {
         const statsDiv = document.getElementById('statsArea');
         if (items.length === 0) { statsDiv.innerHTML = '<div class="stat-card"><h4>SIN DATOS</h4><div class="value">Agrega objetos</div></div>'; return; }
         const processed = items.map(i => ({ name: i.name, ...processItem(i) }));
         const bestProfit = processed.reduce((a,b) => (a.avgProfit > b.avgProfit ? a : b));
         const totalAvgProfit = processed.reduce((s,i) => s + i.avgProfit, 0);
-        statsDiv.innerHTML = `
-            <div class="stat-card"><h4>🏆 MEJOR GANANCIA</h4><div class="value">${bestProfit.name}</div><div>${Math.round(bestProfit.avgProfit).toLocaleString()} silver</div></div>
-            <div class="stat-card"><h4>💰 GANANCIA TOTAL PROMEDIO</h4><div class="value">${Math.round(totalAvgProfit).toLocaleString()} silver</div><div>por unidad</div></div>
-            <div class="stat-card"><h4>🏙️ CIUDADES CON DATOS</h4><div class="value">${processed.reduce((s,i) => s + i.validCount, 0)}</div><div>en total</div></div>
-        `;
+        statsDiv.innerHTML = `<div class="stat-card"><h4>🏆 MEJOR GANANCIA</h4><div class="value">${bestProfit.name}</div><div>${Math.round(bestProfit.avgProfit).toLocaleString()} silver</div></div>
+            <div class="stat-card"><h4>💰 GANANCIA PROMEDIO</h4><div class="value">${Math.round(totalAvgProfit).toLocaleString()} silver</div><div>por unidad</div></div>
+            <div class="stat-card"><h4>🏙️ CIUDADES CON DATOS</h4><div class="value">${processed.reduce((s,i) => s + i.validCount, 0)}</div><div>en total</div></div>`;
     }
-
-    // ========== RENDER LISTA PLEGABLE ==========
     function renderItems() {
         const container = document.getElementById('itemsList');
         if (items.length === 0) { container.innerHTML = '<div class="card" style="text-align:center">No hay objetos. Agrega uno arriba.</div>'; renderStats(); return; }
@@ -417,38 +483,29 @@
         container.innerHTML = processed.map((item, idx) => {
             const rank = idx === 0 ? '⚔️' : idx === 1 ? '🔪' : idx === 2 ? '🏴' : '';
             const isExpanded = expandedItems[item.name] || false;
-            const avgBuy = getAvgBuyPrice(item);
-            const avgSell = getAvgSellPrice(item);
+            const avgBuy = getAvgBuyPrice(item); const avgSell = getAvgSellPrice(item);
             const profitDetails = calculateProfitDetails(avgBuy, avgSell);
             const cityRows = item.results.map(r => `<div style="font-size:0.75rem; margin-top:4px;">${r.city}: Compra ${Math.round(r.buy).toLocaleString()} → Ganancia neta: ${Math.round(r.profit).toLocaleString()} silver</div>`).join('');
             return `<div class="item"><div class="item-header" onclick="toggleItem('${item.name.replace(/'/g, "\\'")}')"><div class="item-name">${rank} ${item.name}<span class="item-preview">${Math.round(item.avgProfit).toLocaleString()} silver neto promedio</span></div><i class="fas fa-chevron-down expand-icon ${isExpanded ? 'rotated' : ''}"></i></div>
             <div class="item-content ${isExpanded ? 'open' : ''}">
-                <div class="black-sell"><label>🏴‍☠️ BLACK MARKET</label><input type="text" value="${item.blackSell}" onchange="updateBlackSell('${item.name.replace(/'/g, "\\'")}', this.value)" inputmode="decimal"></div>
+                <div class="black-sell"><label>🏴‍☠️ BLACK MARKET</label><input type="text" value="${formatNumber(item.blackSell)}" onchange="updateBlackSell('${item.name.replace(/'/g, "\\'")}', this.value)" inputmode="decimal"></div>
                 <div class="city-prices">
-                    <div><label>🏔️ Fort Sterling</label><input type="text" value="${item.buyPrices.fortSterling || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'fortSterling', this.value)" inputmode="decimal"></div>
-                    <div><label>🏜️ Bridgewatch</label><input type="text" value="${item.buyPrices.bridgewatch || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'bridgewatch', this.value)" inputmode="decimal"></div>
-                    <div><label>🌳 Lymhurst</label><input type="text" value="${item.buyPrices.lymhurst || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'lymhurst', this.value)" inputmode="decimal"></div>
-                    <div><label>⚙️ Martlock</label><input type="text" value="${item.buyPrices.martlock || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'martlock', this.value)" inputmode="decimal"></div>
-                    <div><label>✨ Thetford</label><input type="text" value="${item.buyPrices.thetford || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'thetford', this.value)" inputmode="decimal"></div>
+                    <div><label>🏔️ Fort Sterling</label><input type="text" value="${formatNumber(item.buyPrices.fortSterling)}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'fortSterling', this.value)" inputmode="decimal"></div>
+                    <div><label>🏜️ Bridgewatch</label><input type="text" value="${formatNumber(item.buyPrices.bridgewatch)}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'bridgewatch', this.value)" inputmode="decimal"></div>
+                    <div><label>🌳 Lymhurst</label><input type="text" value="${formatNumber(item.buyPrices.lymhurst)}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'lymhurst', this.value)" inputmode="decimal"></div>
+                    <div><label>⚙️ Martlock</label><input type="text" value="${formatNumber(item.buyPrices.martlock)}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'martlock', this.value)" inputmode="decimal"></div>
+                    <div><label>✨ Thetford</label><input type="text" value="${formatNumber(item.buyPrices.thetford)}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'thetford', this.value)" inputmode="decimal"></div>
                 </div>
-                <div class="profit-detail">
-                    <div><strong>📊 Desglose (promedio):</strong></div>
-                    <div>Compra promedio: ${Math.round(avgBuy).toLocaleString()} silver</div>
-                    <div>Venta Black Market: ${Math.round(avgSell).toLocaleString()} silver</div>
-                    <div>→ Neto después de ${(getTax()*100).toFixed(1)}% impuesto: ${Math.round(profitDetails.net).toLocaleString()}</div>
-                    <div>→ Ganancia bruta: ${Math.round(profitDetails.gross).toLocaleString()}</div>
-                    <div>→ Pérdida fija (${(getLoss()*100).toFixed(1)}%): ${Math.round(profitDetails.lossAmount).toLocaleString()}</div>
-                    <div><strong>✨ Ganancia neta por unidad: ${Math.round(profitDetails.final).toLocaleString()} silver</strong></div>
-                </div>
+                <div class="profit-detail"><div><strong>📊 Desglose (promedio):</strong></div>
+                <div>Compra promedio: ${Math.round(avgBuy).toLocaleString()} silver</div><div>Venta Black Market: ${Math.round(avgSell).toLocaleString()} silver</div>
+                <div>→ Neto después de ${(getTax()*100).toFixed(1)}% impuesto: ${Math.round(profitDetails.net).toLocaleString()}</div>
+                <div>→ Ganancia bruta: ${Math.round(profitDetails.gross).toLocaleString()}</div>
+                <div>→ Pérdida fija (${(getLoss()*100).toFixed(1)}%): ${Math.round(profitDetails.lossAmount).toLocaleString()}</div>
+                <div><strong>✨ Ganancia neta por unidad: ${Math.round(profitDetails.final).toLocaleString()} silver</strong></div></div>
                 ${cityRows}
                 <div class="profit-line">📊 GANANCIA PROMEDIO: ${Math.round(item.avgProfit).toLocaleString()} silver</div>
-                <div class="results">
-                    <div><div class="sub">Ciudades</div><div>${item.validCount}/5</div></div>
-                    <div><div class="sub">Impuesto</div><div>${(getTax()*100).toFixed(1)}%</div></div>
-                    <div><div class="sub">Pérdida</div><div>${(getLoss()*100).toFixed(1)}%</div></div>
-                    <div><div class="sub">Margen total</div><div>${((getTax()+getLoss())*100).toFixed(1)}%</div></div>
-                </div>
-                <div style="display: flex; justify-content: flex-end; margin-top: 10px;"><button class="delete-btn" onclick="deleteItem('${item.name.replace(/'/g, "\\'")}')"><i class="fas fa-trash"></i> Eliminar</button></div>
+                <div class="results"><div><div class="sub">Ciudades</div><div>${item.validCount}/5</div></div><div><div class="sub">Impuesto</div><div>${(getTax()*100).toFixed(1)}%</div></div><div><div class="sub">Pérdida</div><div>${(getLoss()*100).toFixed(1)}%</div></div><div><div class="sub">Margen total</div><div>${((getTax()+getLoss())*100).toFixed(1)}%</div></div></div>
+                <div style="display: flex; justify-content: flex-end;"><button class="delete-btn" onclick="deleteItem('${item.name.replace(/'/g, "\\'")}')"><i class="fas fa-trash"></i> Eliminar</button></div>
             </div></div>`;
         }).join('');
         renderStats();
@@ -458,7 +515,6 @@
     function updateBuy(name, city, val) { const item = items.find(i => i.name === name); if (item) { item.buyPrices[city] = parseNumber(val); renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); } }
     function updateBlackSell(name, val) { const item = items.find(i => i.name === name); if (item) { item.blackSell = parseNumber(val); renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); } }
     function deleteItem(name) { items = items.filter(i => i.name !== name); delete simQtys[name]; delete expandedItems[name]; renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); updateOperationsSelect(); }
-
     function addItem() {
         const name = document.getElementById('newName').value.trim();
         const blackSell = parseNumber(document.getElementById('blackSell').value);
@@ -470,67 +526,21 @@
             thetford: parseNumber(document.getElementById('buyTH').value)
         };
         if (!name) { toast('Nombre requerido'); return; }
-        if (blackSell <= 0) { toast('Precio Black Market requerido > 0'); return; }
+        if (blackSell <= 0) { toast('Precio Black Market > 0'); return; }
         if (Object.values(buyPrices).every(v => v === 0)) { toast('Al menos un precio de compra'); return; }
         if (items.some(i => i.name.toLowerCase() === name.toLowerCase())) { toast('Ya existe ese objeto'); return; }
         items.push({ name, blackSell, buyPrices });
-        simQtys[name] = 0;
-        expandedItems[name] = false;
+        simQtys[name] = 0; expandedItems[name] = false;
         document.getElementById('newName').value = ''; document.getElementById('blackSell').value = '';
         ['buyFS','buyBW','buyLH','buyML','buyTH'].forEach(id => document.getElementById(id).value = '');
-        renderItems();
-        updateOperationsSelect();
-        toast(`${name} agregado`);
+        renderItems(); updateOperationsSelect(); toast(`${name} agregado`);
     }
-
-    // ========== PERSISTENCIA ==========
-    function saveToLocal() { 
-        localStorage.setItem('bmData', JSON.stringify({ items, tax: getTax()*100, loss: getLoss()*100, expandedItems }));
-        localStorage.setItem('operationsData', JSON.stringify(operations));
-        localStorage.setItem('enchantData', JSON.stringify({
-            baseItemsRune: document.getElementById('baseItemsRune').value, runasPorItem: document.getElementById('runasPorItem').value, precioRuna: document.getElementById('precioRuna').value,
-            baseItemsSoul: document.getElementById('baseItemsSoul').value, almasPorItem: document.getElementById('almasPorItem').value, precioAlma: document.getElementById('precioAlma').value,
-            baseItemsRelic: document.getElementById('baseItemsRelic').value, reliquiasPorItem: document.getElementById('reliquiasPorItem').value, precioReliquia: document.getElementById('precioReliquia').value
-        }));
-    }
-    function loadEnchantData() {
-        const saved = localStorage.getItem('enchantData');
-        if (saved) {
-            const d = JSON.parse(saved);
-            if (d.baseItemsRune !== undefined) document.getElementById('baseItemsRune').value = d.baseItemsRune;
-            if (d.runasPorItem !== undefined) document.getElementById('runasPorItem').value = d.runasPorItem;
-            if (d.precioRuna !== undefined) document.getElementById('precioRuna').value = d.precioRuna;
-            if (d.baseItemsSoul !== undefined) document.getElementById('baseItemsSoul').value = d.baseItemsSoul;
-            if (d.almasPorItem !== undefined) document.getElementById('almasPorItem').value = d.almasPorItem;
-            if (d.precioAlma !== undefined) document.getElementById('precioAlma').value = d.precioAlma;
-            if (d.baseItemsRelic !== undefined) document.getElementById('baseItemsRelic').value = d.baseItemsRelic;
-            if (d.reliquiasPorItem !== undefined) document.getElementById('reliquiasPorItem').value = d.reliquiasPorItem;
-            if (d.precioReliquia !== undefined) document.getElementById('precioReliquia').value = d.precioReliquia;
-        }
-        updateRuneCalc(); updateSoulCalc(); updateRelicCalc();
-    }
-    function loadOperations() { const saved = localStorage.getItem('operationsData'); if (saved) operations = JSON.parse(saved); else operations = []; }
-    function loadFromLocal() {
-        const data = localStorage.getItem('bmData');
-        if (data) { const d = JSON.parse(data); items = d.items || []; document.getElementById('taxRate').value = d.tax || 10.5; document.getElementById('lossRate').value = d.loss || 20.0; expandedItems = d.expandedItems || {}; }
-        else { items = []; expandedItems = {}; }
-        simQtys = {};
-        loadOperations();
-        renderItems();
-        loadEnchantData();
-        updateOperationsSelect();
-    }
-    function saveData() { saveToLocal(); toast('Datos guardados'); }
-    function clearAll() { if(confirm('¿Eliminar todos los objetos y operaciones?')) { items = []; simQtys = {}; expandedItems = {}; operations = []; renderItems(); saveToLocal(); toast('Todo limpiado'); } }
-    function exportData() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify({items, operations})])); a.download = `bm_${Date.now()}.json`; a.click(); toast('Exportado'); }
-    function importTrigger() { document.getElementById('importFile').click(); }
-    function importData(input) { const file = input.files[0]; if(!file) return; const r = new FileReader(); r.onload = e => { try { const imported = JSON.parse(e.target.result); items = imported.items || []; operations = imported.operations || []; simQtys = {}; expandedItems = {}; renderItems(); updateOperationsSelect(); saveToLocal(); toast('Importado'); } catch(err) { toast('Error'); } }; r.readAsText(file); input.value = ''; }
-
+    
     // ========== SIMULADOR ==========
     function getAvgProfit(item) { return processItem(item).avgProfit; }
     function renderSimulator() {
         const container = document.getElementById('simItems');
-        if (items.length === 0) { container.innerHTML = '<div style="text-align:center">Sin objetos para simular</div>'; return; }
+        if (items.length === 0) { container.innerHTML = '<div style="text-align:center">Sin objetos</div>'; return; }
         const data = items.map(i => ({ name: i.name, profit: getAvgProfit(i) }));
         data.forEach(d => { if (simQtys[d.name] === undefined) simQtys[d.name] = 0; });
         container.innerHTML = data.map(d => `<div class="sim-item"><div class="sim-item-header"><span><i class="fas fa-box"></i> ${d.name}</span><div class="sim-control"><button onclick="changeQty('${d.name}',-1)">-</button><input type="number" value="${simQtys[d.name]}" onchange="setQty('${d.name}',this.value)" min="0"><button onclick="changeQty('${d.name}',1)">+</button></div></div><div><i class="fas fa-chart-line"></i> Ganancia/unidad: ${Math.round(d.profit).toLocaleString()} silver · <i class="fas fa-coins"></i> Total: ${Math.round(d.profit * simQtys[d.name]).toLocaleString()} silver</div></div>`).join('');
@@ -540,10 +550,10 @@
     function changeQty(n, d) { simQtys[n] = Math.max(0, (simQtys[n] || 0) + d); renderSimulator(); saveToLocal(); }
     function setQty(n, v) { let q = parseInt(v); if (isNaN(q) || q < 0) q = 0; simQtys[n] = q; renderSimulator(); saveToLocal(); }
     function resetSimQtys() { Object.keys(simQtys).forEach(k => simQtys[k] = 0); renderSimulator(); toast('Cantidades reiniciadas'); saveToLocal(); }
-    function applyGlobalQty() { const toggle = document.getElementById('globalQtyToggle'); if (!toggle.checked) return; const val = parseInt(document.getElementById('globalQtyVal').value); if (isNaN(val) || val < 0) return; Object.keys(simQtys).forEach(k => simQtys[k] = val); renderSimulator(); toast(`Volumen ${val} aplicado a todos`); saveToLocal(); }
+    function applyGlobalQty() { const toggle = document.getElementById('globalQtyToggle'); if (!toggle.checked) return; const val = parseInt(document.getElementById('globalQtyVal').value); if (isNaN(val) || val < 0) return; Object.keys(simQtys).forEach(k => simQtys[k] = val); renderSimulator(); toast(`Volumen ${val} aplicado`); saveToLocal(); }
     function openSimulator() { renderSimulator(); document.getElementById('simModal').classList.add('active'); }
     function closeSimulator() { document.getElementById('simModal').classList.remove('active'); }
-
+    
     // ========== ENCANTAMIENTOS ==========
     const tabs = document.querySelectorAll('.enchant-tab');
     const panels = { rune: document.getElementById('panelRune'), soul: document.getElementById('panelSoul'), relic: document.getElementById('panelRelic') };
@@ -556,43 +566,45 @@
     document.getElementById('baseItemsRelic').addEventListener('input', updateRelicCalc); document.getElementById('reliquiasPorItem').addEventListener('input', updateRelicCalc); document.getElementById('precioReliquia').addEventListener('input', updateRelicCalc);
     function openEnchantCalculator() { updateRuneCalc(); updateSoulCalc(); updateRelicCalc(); document.getElementById('enchantModal').classList.add('active'); }
     function closeEnchantCalculator() { document.getElementById('enchantModal').classList.remove('active'); }
-
-    // ========== OPERACIONES (SIMPLIFICADO) ==========
+    function loadEnchantData() {
+        const saved = localStorage.getItem('enchantData');
+        if (saved) { const d = JSON.parse(saved);
+            if (d.baseItemsRune !== undefined) document.getElementById('baseItemsRune').value = d.baseItemsRune;
+            if (d.runasPorItem !== undefined) document.getElementById('runasPorItem').value = d.runasPorItem;
+            if (d.precioRuna !== undefined) document.getElementById('precioRuna').value = d.precioRuna;
+            if (d.baseItemsSoul !== undefined) document.getElementById('baseItemsSoul').value = d.baseItemsSoul;
+            if (d.almasPorItem !== undefined) document.getElementById('almasPorItem').value = d.almasPorItem;
+            if (d.precioAlma !== undefined) document.getElementById('precioAlma').value = d.precioAlma;
+            if (d.baseItemsRelic !== undefined) document.getElementById('baseItemsRelic').value = d.baseItemsRelic;
+            if (d.reliquiasPorItem !== undefined) document.getElementById('reliquiasPorItem').value = d.reliquiasPorItem;
+            if (d.precioReliquia !== undefined) document.getElementById('precioReliquia').value = d.precioReliquia;
+        }
+        updateRuneCalc(); updateSoulCalc(); updateRelicCalc();
+    }
+    
+    // ========== PERFILES Y OPERACIONES ==========
     function updateOperationsSelect() {
         const select = document.getElementById('opObject');
         if (select) { select.innerHTML = '<option value="">Selecciona objeto</option>'; items.forEach(item => { const opt = document.createElement('option'); opt.value = item.name; opt.textContent = item.name; select.appendChild(opt); }); }
     }
-    function addOperation() {
-        const date = document.getElementById('opDate').value;
-        const objectName = document.getElementById('opObject').value;
-        const buyQty = parseNumber(document.getElementById('opBuyQty').value);
-        const sellQty = parseNumber(document.getElementById('opSellQty').value);
-        if (!date || !objectName || (buyQty===0 && sellQty===0)) { toast('Completa fecha, objeto y cantidad'); return; }
-        const profit = computeProfitForOperation(objectName, buyQty, sellQty);
-        operations.push({ date, objectName, buyQty, sellQty, profit });
-        saveToLocal();
-        applyDateRange();
-        toast('Operación añadida');
-        document.getElementById('opDate').value = ''; document.getElementById('opObject').value = ''; document.getElementById('opBuyQty').value = ''; document.getElementById('opSellQty').value = '';
-    }
-    function deleteOperation(index) { operations.splice(index,1); saveToLocal(); applyDateRange(); toast('Operación eliminada'); }
-    function getOperationsInRange(fromDate, toDate) {
-        if (!fromDate || !toDate) return operations;
-        const from = new Date(fromDate); const to = new Date(toDate); to.setHours(23,59,59);
-        return operations.filter(op => { const d = new Date(op.date); return d >= from && d <= to; });
-    }
-    function updatePieChart(ops) {
-        const objMap = new Map();
-        ops.forEach(op => objMap.set(op.objectName, (objMap.get(op.objectName)||0) + op.profit));
-        const labels = Array.from(objMap.keys());
-        const data = Array.from(objMap.values());
-        if (pieChart) pieChart.destroy();
-        const ctx = document.getElementById('profitPieChart').getContext('2d');
-        pieChart = new Chart(ctx, { type: 'pie', data: { labels: labels, datasets: [{ data: data, backgroundColor: ['#b91c1c','#3b82f6','#a855f7','#f59e0b','#10b981','#ef4444','#06b6d4','#ec489a'] }] }, options: { responsive: true, maintainAspectRatio: true, plugins: { tooltip: { callbacks: { label: (ctx) => `${ctx.label}: ${ctx.raw.toLocaleString()} silver` } } } } });
-    }
-    function renderOperationsTable(ops) {
-        const tbody = document.getElementById('operationsTableBody');
-        if (!tbody) return;
+    function refreshProfileUI() {
+        const select = document.getElementById('profileSelect');
+        if (select) {
+            select.innerHTML = '';
+            profiles.forEach(prof => {
+                const option = document.createElement('option');
+                option.value = prof.id;
+                option.textContent = prof.name + (prof.id === "general" ? " (todos)" : ` (${prof.startDate || '?'} → ${prof.endDate || '?'})`);
+                select.appendChild(option);
+            });
+            select.value = currentProfileId;
+        }
+        // Cargar operaciones del perfil actual
+        const ops = getOperationsForProfile(currentProfileId);
+        const totalProfit = ops.reduce((s,o) => s + o.profit, 0);
+        document.getElementById('profileTotalProfit').innerHTML = `💰 Ganancia total: ${Math.round(totalProfit).toLocaleString()} silver`;
+        // Renderizar tabla
+        const tbody = document.getElementById('profileTableBody');
         tbody.innerHTML = '';
         ops.forEach((op, idx) => {
             const row = tbody.insertRow();
@@ -602,36 +614,104 @@
             row.insertCell(3).textContent = op.sellQty;
             row.insertCell(4).textContent = Math.round(op.profit).toLocaleString();
             const delCell = row.insertCell(5);
-            const delBtn = document.createElement('button'); delBtn.textContent = '🗑️'; delBtn.className = 'delete-op-btn'; delBtn.onclick = () => deleteOperation(idx);
+            const delBtn = document.createElement('button'); delBtn.textContent = '🗑️'; delBtn.className = 'delete-op-btn'; delBtn.onclick = () => deleteOperationFromProfile(idx);
             delCell.appendChild(delBtn);
         });
+        // Gráfico de torta
+        const objMap = new Map();
+        ops.forEach(op => objMap.set(op.objectName, (objMap.get(op.objectName)||0) + op.profit));
+        const labels = Array.from(objMap.keys());
+        const data = Array.from(objMap.values());
+        if (pieChart) pieChart.destroy();
+        const ctx = document.getElementById('profilePieChart').getContext('2d');
+        pieChart = new Chart(ctx, { type: 'pie', data: { labels: labels, datasets: [{ data: data, backgroundColor: ['#b91c1c','#3b82f6','#a855f7','#f59e0b','#10b981','#ef4444','#06b6d4','#ec489a'] }] }, options: { responsive: true, maintainAspectRatio: true, plugins: { tooltip: { callbacks: { label: (ctx) => `${ctx.label}: ${ctx.raw.toLocaleString()} silver` } } } } });
     }
-    function updateTotalProfitCard(ops) { const total = ops.reduce((s,o)=>s+o.profit,0); document.getElementById('totalProfitCard').innerHTML = `💰 Ganancia total: ${Math.round(total).toLocaleString()} silver`; }
-    function applyDateRange() {
-        const from = document.getElementById('dateFrom').value;
-        const to = document.getElementById('dateTo').value;
-        currentDateFrom = from; currentDateTo = to;
-        const filtered = getOperationsInRange(from, to);
-        renderOperationsTable(filtered);
-        updateTotalProfitCard(filtered);
-        updatePieChart(filtered);
+    function addOperationToCurrentProfile() {
+        const date = document.getElementById('opDate').value;
+        const objectName = document.getElementById('opObject').value;
+        const buyQty = parseNumber(document.getElementById('opBuyQty').value);
+        const sellQty = parseNumber(document.getElementById('opSellQty').value);
+        if (!date || !objectName || (buyQty===0 && sellQty===0)) { toast('Completa fecha, objeto y cantidad'); return; }
+        const profit = computeProfitForOperation(objectName, buyQty, sellQty);
+        if (currentProfileId === "general") {
+            toast('No se pueden añadir operaciones al perfil general. Crea un perfil personalizado.');
+            return;
+        }
+        const profile = profiles.find(p => p.id === currentProfileId);
+        if (profile) {
+            profile.operations.push({ date, objectName, buyQty, sellQty, profit });
+            saveToLocal();
+            refreshProfileUI();
+            toast('Operación añadida');
+            document.getElementById('opDate').value = ''; document.getElementById('opObject').value = ''; document.getElementById('opBuyQty').value = ''; document.getElementById('opSellQty').value = '';
+        }
     }
-    function openOperationsModal() {
-        if (!currentDateFrom) { const today = new Date(); const thirtyAgo = new Date(); thirtyAgo.setDate(today.getDate()-30); document.getElementById('dateFrom').value = thirtyAgo.toISOString().split('T')[0]; document.getElementById('dateTo').value = today.toISOString().split('T')[0]; currentDateFrom = document.getElementById('dateFrom').value; currentDateTo = document.getElementById('dateTo').value; }
-        else { document.getElementById('dateFrom').value = currentDateFrom; document.getElementById('dateTo').value = currentDateTo; }
-        applyDateRange();
-        updateOperationsSelect();
-        document.getElementById('operationsModal').classList.add('active');
+    function deleteOperationFromProfile(index) {
+        if (currentProfileId === "general") { toast('No se pueden eliminar desde el perfil general'); return; }
+        const profile = profiles.find(p => p.id === currentProfileId);
+        if (profile) {
+            profile.operations.splice(index, 1);
+            saveToLocal();
+            refreshProfileUI();
+            toast('Operación eliminada');
+        }
     }
-    function closeOperationsModal() { document.getElementById('operationsModal').classList.remove('active'); }
-
-    // ========== UI ==========
+    function newProfile() {
+        let name = prompt('Nombre del perfil (ej: 1-3 abril)');
+        if (!name) return;
+        let start = prompt('Fecha inicio (AAAA-MM-DD)');
+        let end = prompt('Fecha fin (AAAA-MM-DD)');
+        if (!start || !end) return;
+        const newId = 'profile_' + Date.now();
+        profiles.push({ id: newId, name: name, startDate: start, endDate: end, operations: [] });
+        saveToLocal();
+        currentProfileId = newId;
+        refreshProfileUI();
+        toast('Perfil creado');
+    }
+    function editProfile() {
+        if (currentProfileId === "general") { toast('No se puede editar el perfil general'); return; }
+        const profile = profiles.find(p => p.id === currentProfileId);
+        if (!profile) return;
+        let newName = prompt('Nuevo nombre', profile.name);
+        if (newName) profile.name = newName;
+        let newStart = prompt('Nueva fecha inicio (AAAA-MM-DD)', profile.startDate);
+        if (newStart) profile.startDate = newStart;
+        let newEnd = prompt('Nueva fecha fin (AAAA-MM-DD)', profile.endDate);
+        if (newEnd) profile.endDate = newEnd;
+        saveToLocal();
+        refreshProfileUI();
+        toast('Perfil actualizado');
+    }
+    function deleteProfile() {
+        if (currentProfileId === "general") { toast('No se puede eliminar el perfil general'); return; }
+        if (confirm('¿Eliminar este perfil y todas sus operaciones?')) {
+            profiles = profiles.filter(p => p.id !== currentProfileId);
+            currentProfileId = "general";
+            saveToLocal();
+            refreshProfileUI();
+            toast('Perfil eliminado');
+        }
+    }
+    function openProfilesModal() {
+        refreshProfileUI();
+        document.getElementById('profilesModal').classList.add('active');
+    }
+    function closeProfilesModal() { document.getElementById('profilesModal').classList.remove('active'); }
+    document.getElementById('profileSelect')?.addEventListener('change', (e) => { currentProfileId = e.target.value; refreshProfileUI(); });
+    
+    // ========== OTRAS UTILIDADES ==========
+    function saveData() { saveToLocal(); toast('Datos guardados'); }
+    function clearAll() { if(confirm('¿Eliminar todos los objetos, perfiles y operaciones?')) { items = []; simQtys = {}; expandedItems = {}; profiles = [{ id: "general", name: "Perfil General", startDate: null, endDate: null, operations: [] }]; currentProfileId = "general"; renderItems(); saveToLocal(); toast('Todo limpiado'); } }
+    function exportData() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify({items, profiles})])); a.download = `bm_${Date.now()}.json`; a.click(); toast('Exportado'); }
+    function importTrigger() { document.getElementById('importFile').click(); }
+    function importData(input) { const file = input.files[0]; if(!file) return; const r = new FileReader(); r.onload = e => { try { const imported = JSON.parse(e.target.result); items = imported.items || []; profiles = imported.profiles || [{ id: "general", name: "Perfil General", startDate: null, endDate: null, operations: [] }]; simQtys = {}; expandedItems = {}; renderItems(); saveToLocal(); toast('Importado'); } catch(err) { toast('Error'); } }; r.readAsText(file); input.value = ''; }
     function toast(msg) { const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = `<i class="fas fa-skull"></i> ${msg}`; document.body.appendChild(t); setTimeout(() => t.remove(), 2000); }
     function toggleTheme() { document.body.classList.toggle('light'); saveToLocal(); }
     let formOpen = false;
     function toggleForm() { const c = document.getElementById('formContent'); const i = document.getElementById('formIcon'); if (formOpen) { c.classList.remove('open'); i.classList.remove('fa-chevron-up'); i.classList.add('fa-chevron-down'); } else { c.classList.add('open'); i.classList.remove('fa-chevron-down'); i.classList.add('fa-chevron-up'); } formOpen = !formOpen; }
-
-    // ========== BOTÓN FLOTANTE ==========
+    
+    // ========== BOTÓN FLOTANTE ARRASTRABLE ==========
     const floatContainer = document.getElementById('floatingContainer');
     const floatBtn = document.getElementById('floatBtn');
     const floatMenu = document.getElementById('floatMenu');
@@ -648,8 +728,14 @@
     document.getElementById('taxRate').oninput = () => { renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); saveToLocal(); };
     document.getElementById('lossRate').oninput = () => { renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); saveToLocal(); };
     
+    // Aplicar autoformato a todos los inputs numéricos después de cargar
+    function applyAutoFormatToAllInputs() {
+        document.querySelectorAll('input[inputmode="decimal"]').forEach(inp => autoFormatInput(inp));
+    }
+    
     loadFloatPosition();
     loadFromLocal();
+    setTimeout(applyAutoFormatToAllInputs, 100);
 </script>
 </body>
 </html>
