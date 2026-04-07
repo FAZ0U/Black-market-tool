@@ -9,11 +9,9 @@
     <title>Black Market Tool</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Chart.js para gráficos -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         :root {
             --bg: #0a0a0a;
             --card: #111111;
@@ -27,7 +25,6 @@
             --almas: #a855f7;
             --reliquias: #f59e0b;
         }
-        
         body.light {
             --bg: #e8e8e8;
             --card: #ffffff;
@@ -38,42 +35,19 @@
             --accent: #b91c1c;
             --accent-hover: #7f1a1a;
         }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            padding: 16px;
-            transition: all 0.3s ease;
-        }
-        
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 16px; transition: all 0.3s ease; }
         .container { max-width: 700px; margin: 0 auto; }
-        
-        /* Header */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--accent);
-            padding-bottom: 12px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid var(--accent); padding-bottom: 12px; flex-wrap: wrap; gap: 10px; }
         .logo-area { display: flex; align-items: center; gap: 12px; }
         .logo { width: 45px; height: 45px; object-fit: contain; }
         h1 { font-family: 'Cinzel', serif; font-size: 1.4rem; background: linear-gradient(135deg, #fff, var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent; }
         .sub { font-size: 0.65rem; color: var(--text-sec); }
         .theme-btn { background: var(--card); border: 1px solid var(--border); border-radius: 30px; padding: 6px 12px; cursor: pointer; color: var(--text); }
-        
-        /* Tarjetas */
         .card { background: var(--card); border-radius: 20px; padding: 16px; margin-bottom: 16px; border: 1px solid var(--border); }
         .row-2 { display: flex; gap: 12px; flex-wrap: wrap; }
         .row-2 > div { flex: 1; background: var(--input); border-radius: 16px; padding: 10px; text-align: center; border-left: 3px solid var(--accent); }
         .row-2 label { font-size: 0.7rem; color: var(--text-sec); display: block; margin-bottom: 5px; }
         .row-2 input { background: transparent; border: none; font-size: 1.3rem; font-weight: bold; color: var(--accent); width: 100%; text-align: center; outline: none; }
-        
-        /* Formulario */
         .form-group { margin-bottom: 12px; }
         .form-group label { font-size: 0.7rem; color: var(--text-sec); display: block; margin-bottom: 4px; }
         .form-group input, .city-input input { width: 100%; background: var(--input); border: 1px solid var(--border); padding: 10px; border-radius: 12px; color: var(--text); outline: none; }
@@ -81,30 +55,17 @@
         .city-input label { font-size: 0.6rem; display: block; margin-bottom: 2px; color: var(--text-sec); }
         .black-market-box { background: rgba(185,28,28,0.15); padding: 12px; border-radius: 14px; margin: 12px 0; border-left: 3px solid var(--accent); }
         .black-market-box label { color: var(--accent); font-weight: bold; font-size: 0.7rem; }
-        
         .btn { background: var(--accent); border: none; padding: 14px; border-radius: 14px; color: white; font-weight: bold; cursor: pointer; width: 100%; margin: 8px 0; transition: all 0.2s; }
         .btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
         .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 10px; border-radius: 12px; cursor: pointer; transition: all 0.2s; text-align: center; }
         .btn-outline:hover { background: var(--accent); color: white; }
-        
         .data-buttons { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; margin-top: 12px; }
-        
-        /* Stats */
         .stats { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; margin: 20px 0; }
         .stat-card { background: var(--card); border-radius: 16px; padding: 12px; text-align: center; border: 1px solid var(--border); }
         .stat-card h4 { font-size: 0.65rem; color: var(--text-sec); margin-bottom: 5px; }
         .stat-card .value { font-size: 1rem; font-weight: bold; color: var(--accent); }
-        
-        /* Items plegables */
         .item { background: var(--card); border-radius: 20px; margin-bottom: 12px; border: 1px solid var(--border); overflow: hidden; }
-        .item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
+        .item-header { display: flex; justify-content: space-between; align-items: center; padding: 14px; cursor: pointer; transition: background 0.2s; }
         .item-header:hover { background: var(--input); }
         .item-name { font-family: 'Cinzel', serif; font-size: 1rem; color: var(--accent); font-weight: bold; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
         .item-preview { font-size: 0.75rem; color: var(--text-sec); margin-left: 8px; }
@@ -112,7 +73,6 @@
         .item-content.open { max-height: 2000px; padding: 0 14px 14px 14px; }
         .expand-icon { color: var(--accent); transition: transform 0.3s; }
         .expand-icon.rotated { transform: rotate(180deg); }
-        
         .city-prices { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; background: var(--input); padding: 10px; border-radius: 14px; margin: 10px 0; }
         .city-prices div { background: var(--card); padding: 6px; border-radius: 10px; }
         .city-prices label { font-size: 0.55rem; display: block; color: var(--text-sec); }
@@ -124,32 +84,22 @@
         .results { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; background: var(--input); padding: 8px; border-radius: 14px; margin-top: 10px; text-align: center; }
         .results div .sub { font-size: 0.6rem; color: var(--text-sec); margin-bottom: 3px; }
         .delete-btn { background: rgba(185,28,28,0.2); border: none; padding: 4px 12px; border-radius: 20px; color: var(--accent); cursor: pointer; }
-        
-        /* Modales */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; padding: 20px; overflow: auto; }
         .modal.active { display: flex; align-items: center; justify-content: center; }
-        .modal-content { background: var(--card); border-radius: 28px; max-width: 800px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 20px; border: 1px solid var(--accent); }
+        .modal-content { background: var(--card); border-radius: 28px; max-width: 900px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 20px; border: 1px solid var(--accent); }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
-        
-        /* Simulador de volumen */
         .sim-item { background: var(--input); border-radius: 14px; padding: 10px; margin-bottom: 10px; }
         .sim-item-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
         .sim-control { display: flex; gap: 8px; align-items: center; }
         .sim-control input { width: 60px; background: var(--card); border: 1px solid var(--border); padding: 5px; border-radius: 8px; text-align: center; color: var(--text); }
         .sim-control button { background: var(--accent); border: none; width: 28px; height: 28px; border-radius: 8px; color: white; cursor: pointer; font-weight: bold; }
         .sim-total { text-align: center; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
-        .sim-total h3 { color: var(--accent); font-size: 1.3rem; }
-        
-        /* Calculadora de encantamientos */
         .enchant-tabs { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
         .enchant-tab { flex: 1; text-align: center; padding: 10px; cursor: pointer; border-radius: 12px; transition: all 0.2s; font-weight: bold; }
         .enchant-tab.rune { color: var(--runas); }
         .enchant-tab.soul { color: var(--almas); }
         .enchant-tab.relic { color: var(--reliquias); }
         .enchant-tab.active { background: var(--input); border-bottom: 3px solid; }
-        .enchant-tab.rune.active { border-bottom-color: var(--runas); }
-        .enchant-tab.soul.active { border-bottom-color: var(--almas); }
-        .enchant-tab.relic.active { border-bottom-color: var(--reliquias); }
         .enchant-panel { display: none; }
         .enchant-panel.active { display: block; }
         .enchant-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
@@ -157,20 +107,19 @@
         .enchant-card label { font-size: 0.7rem; color: var(--text-sec); display: block; margin-bottom: 5px; }
         .enchant-card input { background: transparent; border: none; font-size: 1.2rem; font-weight: bold; color: var(--accent); width: 100%; text-align: center; outline: none; }
         .enchant-result { background: var(--accent); color: white; padding: 12px; border-radius: 14px; text-align: center; margin-top: 16px; }
-        
-        /* Registro de operaciones */
+        .enchant-detail { font-size: 0.75rem; color: var(--text-sec); text-align: center; margin-top: 8px; }
         .operations-filters { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; align-items: flex-end; }
         .filter-group { display: flex; flex-direction: column; gap: 4px; }
         .filter-group label { font-size: 0.7rem; color: var(--text-sec); }
         .filter-group input { background: var(--input); border: 1px solid var(--border); padding: 8px; border-radius: 10px; color: var(--text); }
+        .granularity-buttons { display: flex; gap: 8px; justify-content: center; margin: 16px 0; }
+        .charts-row { display: flex; flex-wrap: wrap; gap: 20px; margin: 20px 0; }
+        .chart-box { flex: 1; min-width: 250px; background: var(--input); border-radius: 16px; padding: 12px; }
         .operations-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
         .operations-table th, .operations-table td { padding: 8px; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.8rem; }
         .operations-table th { color: var(--accent); }
         .delete-op-btn { background: none; border: none; color: var(--accent); cursor: pointer; }
-        .chart-container { margin: 20px 0; height: 250px; }
         .total-profit-card { background: var(--accent); color: white; padding: 12px; border-radius: 16px; text-align: center; margin-bottom: 16px; }
-        
-        /* Botón flotante */
         .floating-container { position: fixed; z-index: 100; }
         .floating-btn { width: 56px; height: 56px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: grab; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.2s; user-select: none; }
         .floating-btn:active { cursor: grabbing; }
@@ -180,8 +129,6 @@
         .floating-menu.active { display: block; }
         .floating-menu button { background: transparent; border: none; padding: 12px; width: 100%; text-align: left; color: var(--text); cursor: pointer; border-radius: 10px; display: flex; align-items: center; gap: 10px; }
         .floating-menu button:hover { background: var(--input); color: var(--accent); }
-        
-        /* Utilidades */
         .toggle-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 4px 0; }
         .toggle-header span { font-weight: bold; color: var(--accent); }
         .form-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
@@ -189,12 +136,12 @@
         .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--accent); color: white; padding: 8px 20px; border-radius: 40px; font-size: 0.85rem; z-index: 2000; animation: fadeOut 2s forwards; }
         @keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
         footer { text-align: center; font-size: 0.6rem; color: var(--text-sec); margin-top: 20px; padding: 16px; }
-        
         @media (max-width: 550px) {
             body { padding: 10px; }
             .cities-grid, .city-prices { grid-template-columns: 1fr; }
             .stats, .data-buttons, .row-2, .enchant-row { grid-template-columns: 1fr; }
             .operations-filters { flex-direction: column; }
+            .charts-row { flex-direction: column; }
             .modal-content { max-width: 95%; }
             .operations-table th, .operations-table td { font-size: 0.7rem; padding: 4px; }
         }
@@ -310,31 +257,22 @@
             <div class="enchant-tab relic" data-tab="relic">💎 Reliquias<br><span style="font-size:0.6rem;">.2 → .3</span></div>
         </div>
         <div id="panelRune" class="enchant-panel active">
-            <div class="enchant-row">
-                <div class="enchant-card"><label>📦 ITEMS BASE</label><input type="number" id="baseItemsRune" value="0" min="0" step="1"></div>
-                <div class="enchant-card"><label>🏺 RUNAS POR ITEM</label><input type="number" id="runasPorItem" value="0" min="0" step="1"></div>
-                <div class="enchant-card"><label>💰 PRECIO POR RUNAS</label><input type="number" id="precioRuna" value="0" min="0" step="1"></div>
-            </div>
-            <div class="enchant-result"><span id="totalRunas">0</span> runas necesarias<br><span id="costoRunas" style="font-size:1rem;">Costo total: 0 silver</span></div>
-            <div class="enchant-detail"><i class="fas fa-info-circle"></i> Para encantar de Tier a .1 (ej: T5 → T5.1)</div>
+            <div class="enchant-row"><div class="enchant-card"><label>📦 ITEMS BASE</label><input type="number" id="baseItemsRune" value="0" min="0" step="1"></div>
+            <div class="enchant-card"><label>🏺 RUNAS POR ITEM</label><input type="number" id="runasPorItem" value="0" min="0" step="1"></div>
+            <div class="enchant-card"><label>💰 PRECIO POR RUNAS</label><input type="number" id="precioRuna" value="0" min="0" step="1"></div></div>
+            <div class="enchant-result"><span id="totalRunas">0</span> runas necesarias<br><span id="costoRunas">Costo total: 0 silver</span></div>
         </div>
         <div id="panelSoul" class="enchant-panel">
-            <div class="enchant-row">
-                <div class="enchant-card"><label>📦 ITEMS BASE</label><input type="number" id="baseItemsSoul" value="0" min="0" step="1"></div>
-                <div class="enchant-card"><label>✨ ALMAS POR ITEM</label><input type="number" id="almasPorItem" value="0" min="0" step="1"></div>
-                <div class="enchant-card"><label>💰 PRECIO POR ALMAS</label><input type="number" id="precioAlma" value="0" min="0" step="1"></div>
-            </div>
-            <div class="enchant-result"><span id="totalAlmas">0</span> almas necesarias<br><span id="costoAlmas" style="font-size:1rem;">Costo total: 0 silver</span></div>
-            <div class="enchant-detail"><i class="fas fa-info-circle"></i> Para encantar de .1 a .2 (ej: T5.1 → T5.2)</div>
+            <div class="enchant-row"><div class="enchant-card"><label>📦 ITEMS BASE</label><input type="number" id="baseItemsSoul" value="0" min="0" step="1"></div>
+            <div class="enchant-card"><label>✨ ALMAS POR ITEM</label><input type="number" id="almasPorItem" value="0" min="0" step="1"></div>
+            <div class="enchant-card"><label>💰 PRECIO POR ALMAS</label><input type="number" id="precioAlma" value="0" min="0" step="1"></div></div>
+            <div class="enchant-result"><span id="totalAlmas">0</span> almas necesarias<br><span id="costoAlmas">Costo total: 0 silver</span></div>
         </div>
         <div id="panelRelic" class="enchant-panel">
-            <div class="enchant-row">
-                <div class="enchant-card"><label>📦 ITEMS BASE</label><input type="number" id="baseItemsRelic" value="0" min="0" step="1"></div>
-                <div class="enchant-card"><label>💎 RELIQUIAS POR ITEM</label><input type="number" id="reliquiasPorItem" value="0" min="0" step="1"></div>
-                <div class="enchant-card"><label>💰 PRECIO POR RELIQUIAS</label><input type="number" id="precioReliquia" value="0" min="0" step="1"></div>
-            </div>
-            <div class="enchant-result"><span id="totalReliquias">0</span> reliquias necesarias<br><span id="costoReliquias" style="font-size:1rem;">Costo total: 0 silver</span></div>
-            <div class="enchant-detail"><i class="fas fa-info-circle"></i> Para encantar de .2 a .3 (ej: T5.2 → T5.3)</div>
+            <div class="enchant-row"><div class="enchant-card"><label>📦 ITEMS BASE</label><input type="number" id="baseItemsRelic" value="0" min="0" step="1"></div>
+            <div class="enchant-card"><label>💎 RELIQUIAS POR ITEM</label><input type="number" id="reliquiasPorItem" value="0" min="0" step="1"></div>
+            <div class="enchant-card"><label>💰 PRECIO POR RELIQUIAS</label><input type="number" id="precioReliquia" value="0" min="0" step="1"></div></div>
+            <div class="enchant-result"><span id="totalReliquias">0</span> reliquias necesarias<br><span id="costoReliquias">Costo total: 0 silver</span></div>
         </div>
     </div>
 </div>
@@ -347,48 +285,36 @@
             <button class="btn-outline" onclick="closeOperationsModal()"><i class="fas fa-times"></i> Cerrar</button>
         </div>
         
-        <!-- Filtros de rango -->
+        <!-- Filtros -->
         <div class="operations-filters">
-            <div class="filter-group">
-                <label>📅 Desde</label>
-                <input type="date" id="dateFrom">
-            </div>
-            <div class="filter-group">
-                <label>📅 Hasta</label>
-                <input type="date" id="dateTo">
-            </div>
-            <button class="btn-outline" onclick="applyDateRange()" style="margin-top: 20px;">Aplicar rango</button>
-            <button class="btn-outline" onclick="setQuickRange('day')" style="margin-top: 20px;">Hoy</button>
-            <button class="btn-outline" onclick="setQuickRange('week')" style="margin-top: 20px;">Última semana</button>
-            <button class="btn-outline" onclick="setQuickRange('month')" style="margin-top: 20px;">Último mes</button>
+            <div class="filter-group"><label>📅 Desde</label><input type="date" id="dateFrom"></div>
+            <div class="filter-group"><label>📅 Hasta</label><input type="date" id="dateTo"></div>
+            <button class="btn-outline" onclick="applyDateRange()">Aplicar rango</button>
+            <button class="btn-outline" onclick="setQuickRange('day')">Hoy</button>
+            <button class="btn-outline" onclick="setQuickRange('week')">Última semana</button>
+            <button class="btn-outline" onclick="setQuickRange('month')">Último mes</button>
         </div>
         
-        <!-- Formulario para añadir operación -->
-        <div class="card" style="margin-bottom: 16px;">
-            <div style="font-weight: bold; margin-bottom: 8px;">➕ Nueva operación</div>
-            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                <input type="date" id="opDate" style="flex:1; background:var(--input); border:1px solid var(--border); padding:8px; border-radius:10px; color:var(--text);">
-                <select id="opObject" style="flex:2; background:var(--input); border:1px solid var(--border); padding:8px; border-radius:10px; color:var(--text);"></select>
-                <input type="number" id="opBuyQty" placeholder="Cant. comprada" style="flex:1; background:var(--input); border:1px solid var(--border); padding:8px; border-radius:10px; color:var(--text);">
-                <input type="number" id="opSellQty" placeholder="Cant. vendida" style="flex:1; background:var(--input); border:1px solid var(--border); padding:8px; border-radius:10px; color:var(--text);">
-                <button class="btn-outline" onclick="addOperation()" style="padding:8px 16px;">Añadir</button>
-            </div>
+        <!-- Granularidad -->
+        <div class="granularity-buttons">
+            <button class="btn-outline granularity-btn" data-granularity="day">📆 Por día</button>
+            <button class="btn-outline granularity-btn" data-granularity="3days">📊 Cada 3 días</button>
+            <button class="btn-outline granularity-btn" data-granularity="month">📅 Por mes</button>
         </div>
         
-        <!-- Tarjeta de ganancia total en el período -->
-        <div class="total-profit-card" id="totalProfitCard">Ganancia total: 0 silver</div>
+        <!-- Tarjeta total -->
+        <div class="total-profit-card" id="totalProfitCard">💰 Ganancia total: 0 silver</div>
         
-        <!-- Gráfico -->
-        <div class="chart-container">
-            <canvas id="profitChart"></canvas>
+        <!-- Gráficos -->
+        <div class="charts-row">
+            <div class="chart-box"><canvas id="profitBarChart"></canvas></div>
+            <div class="chart-box"><canvas id="profitPieChart"></canvas></div>
         </div>
         
         <!-- Tabla de operaciones -->
         <div style="overflow-x: auto;">
             <table class="operations-table" id="operationsTable">
-                <thead>
-                    <tr><th>Fecha</th><th>Objeto</th><th>Compra</th><th>Venta</th><th>Ganancia</th><th></th></tr>
-                </thead>
+                <thead><tr><th>Fecha</th><th>Objeto</th><th>Compra</th><th>Venta</th><th>Ganancia</th><th></th></tr></thead>
                 <tbody id="operationsTableBody"></tbody>
             </table>
         </div>
@@ -400,8 +326,10 @@
     let items = [];
     let simQtys = {};
     let expandedItems = {};
-    let operations = [];      // { date, objectName, buyQty, sellQty, profit }
-    let profitChart = null;
+    let operations = [];
+    let barChart = null;
+    let pieChart = null;
+    let currentGranularity = 'day';
     let currentDateFrom = null;
     let currentDateTo = null;
 
@@ -414,27 +342,15 @@
         const net = sell * (1 - getTax());
         const gross = net - buy;
         const final = gross * (1 - getLoss());
-        const rent = buy > 0 ? (final / buy) * 100 : 0;
-        return { final, rent };
+        return { final };
     }
-
-    // Precio promedio de compra de un objeto (media de ciudades)
     function getAvgBuyPrice(item) {
         const cities = ['fortSterling', 'bridgewatch', 'lymhurst', 'martlock', 'thetford'];
         let sum = 0, count = 0;
-        cities.forEach(c => {
-            let p = item.buyPrices[c];
-            if (p > 0) { sum += p; count++; }
-        });
+        cities.forEach(c => { let p = item.buyPrices[c]; if (p > 0) { sum += p; count++; } });
         return count > 0 ? sum / count : 0;
     }
-
-    // Precio de venta promedio (Black Market)
-    function getAvgSellPrice(item) {
-        return item.blackSell;
-    }
-
-    // Ganancia de una operación usando precios actuales del objeto
+    function getAvgSellPrice(item) { return item.blackSell; }
     function computeProfitForOperation(objectName, buyQty, sellQty) {
         const obj = items.find(i => i.name === objectName);
         if (!obj) return 0;
@@ -442,10 +358,6 @@
         const sellPrice = getAvgSellPrice(obj);
         if (buyPrice <= 0 || sellPrice <= 0) return 0;
         const profitPerUnit = calcProfit(buyPrice, sellPrice).final;
-        // La ganancia total se basa en la cantidad vendida (asumimos que se vende lo que se compró, pero puede haber excedente)
-        // Para simplificar: ganancia = (cantidad_vendida * profitPerUnit) - (cantidad_comprada * coste_base?) No, el profitPerUnit ya incluye compra y venta.
-        // Dado que profitPerUnit = (sellPrice * (1-tax) - buyPrice) * (1-loss), entonces gananciaTotal = profitPerUnit * Math.min(buyQty, sellQty)
-        // Pero lo correcto es aplicar a las unidades vendidas. Asumimos que se venden todas las compradas o menos.
         const units = Math.min(buyQty, sellQty);
         return profitPerUnit * units;
     }
@@ -457,148 +369,73 @@
         const results = [];
         let totalProfit = 0;
         let validCount = 0;
-        
         cities.forEach(city => {
             const buy = item.buyPrices[city];
             if (buy > 0 && item.blackSell > 0) {
                 const profit = calcProfit(buy, item.blackSell);
-                results.push({ city: cityNames[city], buy, profit: profit.final, rent: profit.rent });
+                results.push({ city: cityNames[city], buy, profit: profit.final });
                 totalProfit += profit.final;
                 validCount++;
             }
         });
-        
         const avgProfit = validCount > 0 ? totalProfit / validCount : 0;
-        const avgRent = validCount > 0 ? results.reduce((s,r) => s + r.rent, 0) / validCount : 0;
-        return { results, avgProfit, avgRent, validCount };
+        return { results, avgProfit, validCount };
     }
 
-    // ========== RENDER ESTADÍSTICAS ==========
     function renderStats() {
         const statsDiv = document.getElementById('statsArea');
-        if (items.length === 0) {
-            statsDiv.innerHTML = '<div class="stat-card"><h4>SIN DATOS</h4><div class="value">Agrega objetos</div></div>';
-            return;
-        }
+        if (items.length === 0) { statsDiv.innerHTML = '<div class="stat-card"><h4>SIN DATOS</h4><div class="value">Agrega objetos</div></div>'; return; }
         const processed = items.map(i => ({ name: i.name, ...processItem(i) }));
         const bestProfit = processed.reduce((a,b) => (a.avgProfit > b.avgProfit ? a : b));
-        const bestRent = processed.reduce((a,b) => (a.avgRent > b.avgRent ? a : b));
         const totalAvgProfit = processed.reduce((s,i) => s + i.avgProfit, 0);
         statsDiv.innerHTML = `
             <div class="stat-card"><h4>🏆 MEJOR GANANCIA</h4><div class="value">${bestProfit.name}</div><div>${Math.round(bestProfit.avgProfit).toLocaleString()} silver</div></div>
-            <div class="stat-card"><h4>📈 MEJOR RENTABILIDAD</h4><div class="value">${bestRent.name}</div><div>${bestRent.avgRent.toFixed(1)}%</div></div>
             <div class="stat-card"><h4>💰 GANANCIA TOTAL PROMEDIO</h4><div class="value">${Math.round(totalAvgProfit).toLocaleString()} silver</div><div>por unidad</div></div>
             <div class="stat-card"><h4>🏙️ CIUDADES CON DATOS</h4><div class="value">${processed.reduce((s,i) => s + i.validCount, 0)}</div><div>en total</div></div>
         `;
     }
 
-    // ========== RENDER LISTA PLEGABLE ==========
     function renderItems() {
         const container = document.getElementById('itemsList');
-        if (items.length === 0) {
-            container.innerHTML = '<div class="card" style="text-align:center">No hay objetos. Agrega uno arriba.</div>';
-            renderStats();
-            return;
-        }
-        
+        if (items.length === 0) { container.innerHTML = '<div class="card" style="text-align:center">No hay objetos. Agrega uno arriba.</div>'; renderStats(); return; }
         const processed = items.map(item => ({ ...item, ...processItem(item) }));
         processed.sort((a,b) => b.avgProfit - a.avgProfit);
-        
         container.innerHTML = processed.map((item, idx) => {
             const rank = idx === 0 ? '⚔️' : idx === 1 ? '🔪' : idx === 2 ? '🏴' : '';
             const isExpanded = expandedItems[item.name] || false;
-            const cityRows = item.results.map(r => `
-                <div style="font-size:0.75rem; margin-top:4px;">${r.city}: Compra ${Math.round(r.buy).toLocaleString()} → <span style="color:var(--accent)">${Math.round(r.profit).toLocaleString()} silver</span> (${r.rent.toFixed(1)}%)</div>
-            `).join('');
-            
-            return `
-            <div class="item">
-                <div class="item-header" onclick="toggleItem('${item.name.replace(/'/g, "\\'")}')">
-                    <div class="item-name">
-                        ${rank} ${item.name}
-                        <span class="item-preview">${Math.round(item.avgProfit).toLocaleString()} silver promedio</span>
-                    </div>
-                    <i class="fas fa-chevron-down expand-icon ${isExpanded ? 'rotated' : ''}"></i>
-                </div>
-                <div class="item-content ${isExpanded ? 'open' : ''}">
-                    <div class="black-sell">
-                        <label>🏴‍☠️ BLACK MARKET</label>
-                        <input type="number" value="${item.blackSell}" onchange="updateBlackSell('${item.name.replace(/'/g, "\\'")}', this.value)">
-                    </div>
-                    <div class="city-prices">
-                        <div><label>🏔️ Fort Sterling</label><input type="number" value="${item.buyPrices.fortSterling || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'fortSterling', this.value)"></div>
-                        <div><label>🏜️ Bridgewatch</label><input type="number" value="${item.buyPrices.bridgewatch || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'bridgewatch', this.value)"></div>
-                        <div><label>🌳 Lymhurst</label><input type="number" value="${item.buyPrices.lymhurst || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'lymhurst', this.value)"></div>
-                        <div><label>⚙️ Martlock</label><input type="number" value="${item.buyPrices.martlock || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'martlock', this.value)"></div>
-                        <div><label>✨ Thetford</label><input type="number" value="${item.buyPrices.thetford || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'thetford', this.value)"></div>
-                    </div>
-                    ${cityRows}
-                    <div class="profit-line">📊 GANANCIA PROMEDIO: ${Math.round(item.avgProfit).toLocaleString()} silver (${item.avgRent.toFixed(1)}% rentabilidad)</div>
-                    <div class="results">
-                        <div><div class="sub">Ciudades</div><div>${item.validCount}/5</div></div>
-                        <div><div class="sub">Impuesto</div><div>${(getTax()*100).toFixed(1)}%</div></div>
-                        <div><div class="sub">Pérdida</div><div>${(getLoss()*100).toFixed(1)}%</div></div>
-                        <div><div class="sub">Margen</div><div>${((getTax()+getLoss())*100).toFixed(1)}%</div></div>
-                    </div>
-                    <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
-                        <button class="delete-btn" onclick="deleteItem('${item.name.replace(/'/g, "\\'")}')"><i class="fas fa-trash"></i> Eliminar</button>
-                    </div>
-                </div>
-            </div>`;
+            const cityRows = item.results.map(r => `<div style="font-size:0.75rem; margin-top:4px;">${r.city}: Compra ${Math.round(r.buy).toLocaleString()} → <span style="color:var(--accent)">${Math.round(r.profit).toLocaleString()} silver</span></div>`).join('');
+            return `<div class="item"><div class="item-header" onclick="toggleItem('${item.name.replace(/'/g, "\\'")}')"><div class="item-name">${rank} ${item.name}<span class="item-preview">${Math.round(item.avgProfit).toLocaleString()} silver promedio</span></div><i class="fas fa-chevron-down expand-icon ${isExpanded ? 'rotated' : ''}"></i></div>
+            <div class="item-content ${isExpanded ? 'open' : ''}"><div class="black-sell"><label>🏴‍☠️ BLACK MARKET</label><input type="number" value="${item.blackSell}" onchange="updateBlackSell('${item.name.replace(/'/g, "\\'")}', this.value)"></div>
+            <div class="city-prices"><div><label>🏔️ Fort Sterling</label><input type="number" value="${item.buyPrices.fortSterling || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'fortSterling', this.value)"></div>
+            <div><label>🏜️ Bridgewatch</label><input type="number" value="${item.buyPrices.bridgewatch || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'bridgewatch', this.value)"></div>
+            <div><label>🌳 Lymhurst</label><input type="number" value="${item.buyPrices.lymhurst || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'lymhurst', this.value)"></div>
+            <div><label>⚙️ Martlock</label><input type="number" value="${item.buyPrices.martlock || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'martlock', this.value)"></div>
+            <div><label>✨ Thetford</label><input type="number" value="${item.buyPrices.thetford || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'thetford', this.value)"></div></div>
+            ${cityRows}<div class="profit-line">📊 GANANCIA PROMEDIO: ${Math.round(item.avgProfit).toLocaleString()} silver</div>
+            <div class="results"><div><div class="sub">Ciudades</div><div>${item.validCount}/5</div></div><div><div class="sub">Impuesto</div><div>${(getTax()*100).toFixed(1)}%</div></div><div><div class="sub">Pérdida</div><div>${(getLoss()*100).toFixed(1)}%</div></div><div><div class="sub">Margen</div><div>${((getTax()+getLoss())*100).toFixed(1)}%</div></div></div>
+            <div style="display: flex; justify-content: flex-end; margin-top: 10px;"><button class="delete-btn" onclick="deleteItem('${item.name.replace(/'/g, "\\'")}')"><i class="fas fa-trash"></i> Eliminar</button></div></div></div>`;
         }).join('');
         renderStats();
         saveToLocal();
     }
-    
-    function toggleItem(name) {
-        expandedItems[name] = !expandedItems[name];
-        renderItems();
-        saveToLocal();
-    }
+    function toggleItem(name) { expandedItems[name] = !expandedItems[name]; renderItems(); saveToLocal(); }
+    function updateBuy(name, city, val) { const item = items.find(i => i.name === name); if (item) { item.buyPrices[city] = parseFloat(val) || 0; renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); } }
+    function updateBlackSell(name, val) { const item = items.find(i => i.name === name); if (item) { item.blackSell = parseFloat(val) || 0; renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); } }
+    function deleteItem(name) { items = items.filter(i => i.name !== name); delete simQtys[name]; delete expandedItems[name]; renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); updateOperationsSelect(); }
 
-    // ========== ACTUALIZACIONES ==========
-    function updateBuy(name, city, val) {
-        const item = items.find(i => i.name === name);
-        if (item) { item.buyPrices[city] = parseFloat(val) || 0; renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); }
-    }
-    function updateBlackSell(name, val) {
-        const item = items.find(i => i.name === name);
-        if (item) { item.blackSell = parseFloat(val) || 0; renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); }
-    }
-    function deleteItem(name) { 
-        items = items.filter(i => i.name !== name); 
-        delete simQtys[name]; 
-        delete expandedItems[name];
-        renderItems(); 
-        if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); 
-        updateOperationsSelect(); // actualizar selector de objetos en operaciones
-    }
-
-    // ========== AGREGAR OBJETO ==========
     function addItem() {
         const name = document.getElementById('newName').value.trim();
         const blackSell = parseFloat(document.getElementById('blackSell').value);
-        const buyPrices = {
-            fortSterling: parseFloat(document.getElementById('buyFS').value) || 0,
-            bridgewatch: parseFloat(document.getElementById('buyBW').value) || 0,
-            lymhurst: parseFloat(document.getElementById('buyLH').value) || 0,
-            martlock: parseFloat(document.getElementById('buyML').value) || 0,
-            thetford: parseFloat(document.getElementById('buyTH').value) || 0
-        };
-        
+        const buyPrices = { fortSterling: parseFloat(document.getElementById('buyFS').value)||0, bridgewatch: parseFloat(document.getElementById('buyBW').value)||0, lymhurst: parseFloat(document.getElementById('buyLH').value)||0, martlock: parseFloat(document.getElementById('buyML').value)||0, thetford: parseFloat(document.getElementById('buyTH').value)||0 };
         if (!name) { toast('Nombre requerido'); return; }
         if (!blackSell || blackSell <= 0) { toast('Precio Black Market requerido'); return; }
         if (Object.values(buyPrices).every(v => v === 0)) { toast('Al menos un precio de compra'); return; }
         if (items.some(i => i.name.toLowerCase() === name.toLowerCase())) { toast('Ya existe ese objeto'); return; }
-        
         items.push({ name, blackSell, buyPrices });
         simQtys[name] = 0;
         expandedItems[name] = false;
-        
-        document.getElementById('newName').value = '';
-        document.getElementById('blackSell').value = '';
+        document.getElementById('newName').value = ''; document.getElementById('blackSell').value = '';
         ['buyFS','buyBW','buyLH','buyML','buyTH'].forEach(id => document.getElementById(id).value = '');
-        
         renderItems();
         updateOperationsSelect();
         toast(`${name} agregado`);
@@ -608,226 +445,141 @@
     function saveToLocal() { 
         localStorage.setItem('bmData', JSON.stringify({ items, tax: getTax()*100, loss: getLoss()*100, expandedItems }));
         localStorage.setItem('operationsData', JSON.stringify(operations));
-        const enchantData = {
-            baseItemsRune: document.getElementById('baseItemsRune').value,
-            runasPorItem: document.getElementById('runasPorItem').value,
-            precioRuna: document.getElementById('precioRuna').value,
-            baseItemsSoul: document.getElementById('baseItemsSoul').value,
-            almasPorItem: document.getElementById('almasPorItem').value,
-            precioAlma: document.getElementById('precioAlma').value,
-            baseItemsRelic: document.getElementById('baseItemsRelic').value,
-            reliquiasPorItem: document.getElementById('reliquiasPorItem').value,
-            precioReliquia: document.getElementById('precioReliquia').value
-        };
-        localStorage.setItem('enchantData', JSON.stringify(enchantData));
+        localStorage.setItem('enchantData', JSON.stringify({
+            baseItemsRune: document.getElementById('baseItemsRune').value, runasPorItem: document.getElementById('runasPorItem').value, precioRuna: document.getElementById('precioRuna').value,
+            baseItemsSoul: document.getElementById('baseItemsSoul').value, almasPorItem: document.getElementById('almasPorItem').value, precioAlma: document.getElementById('precioAlma').value,
+            baseItemsRelic: document.getElementById('baseItemsRelic').value, reliquiasPorItem: document.getElementById('reliquiasPorItem').value, precioReliquia: document.getElementById('precioReliquia').value
+        }));
     }
-    
     function loadEnchantData() {
         const saved = localStorage.getItem('enchantData');
         if (saved) {
-            const data = JSON.parse(saved);
-            if (data.baseItemsRune !== undefined) document.getElementById('baseItemsRune').value = data.baseItemsRune;
-            if (data.runasPorItem !== undefined) document.getElementById('runasPorItem').value = data.runasPorItem;
-            if (data.precioRuna !== undefined) document.getElementById('precioRuna').value = data.precioRuna;
-            if (data.baseItemsSoul !== undefined) document.getElementById('baseItemsSoul').value = data.baseItemsSoul;
-            if (data.almasPorItem !== undefined) document.getElementById('almasPorItem').value = data.almasPorItem;
-            if (data.precioAlma !== undefined) document.getElementById('precioAlma').value = data.precioAlma;
-            if (data.baseItemsRelic !== undefined) document.getElementById('baseItemsRelic').value = data.baseItemsRelic;
-            if (data.reliquiasPorItem !== undefined) document.getElementById('reliquiasPorItem').value = data.reliquiasPorItem;
-            if (data.precioReliquia !== undefined) document.getElementById('precioReliquia').value = data.precioReliquia;
+            const d = JSON.parse(saved);
+            if (d.baseItemsRune !== undefined) document.getElementById('baseItemsRune').value = d.baseItemsRune;
+            if (d.runasPorItem !== undefined) document.getElementById('runasPorItem').value = d.runasPorItem;
+            if (d.precioRuna !== undefined) document.getElementById('precioRuna').value = d.precioRuna;
+            if (d.baseItemsSoul !== undefined) document.getElementById('baseItemsSoul').value = d.baseItemsSoul;
+            if (d.almasPorItem !== undefined) document.getElementById('almasPorItem').value = d.almasPorItem;
+            if (d.precioAlma !== undefined) document.getElementById('precioAlma').value = d.precioAlma;
+            if (d.baseItemsRelic !== undefined) document.getElementById('baseItemsRelic').value = d.baseItemsRelic;
+            if (d.reliquiasPorItem !== undefined) document.getElementById('reliquiasPorItem').value = d.reliquiasPorItem;
+            if (d.precioReliquia !== undefined) document.getElementById('precioReliquia').value = d.precioReliquia;
         }
-        updateRuneCalc();
-        updateSoulCalc();
-        updateRelicCalc();
+        updateRuneCalc(); updateSoulCalc(); updateRelicCalc();
     }
-    
-    function loadOperations() {
-        const saved = localStorage.getItem('operationsData');
-        if (saved) {
-            operations = JSON.parse(saved);
-        } else {
-            operations = [];
-        }
-    }
-    
+    function loadOperations() { const saved = localStorage.getItem('operationsData'); if (saved) operations = JSON.parse(saved); else operations = []; }
     function loadFromLocal() {
         const data = localStorage.getItem('bmData');
-        if (data) {
-            const d = JSON.parse(data);
-            items = d.items || [];
-            document.getElementById('taxRate').value = d.tax || 10.5;
-            document.getElementById('lossRate').value = d.loss || 20.0;
-            expandedItems = d.expandedItems || {};
-        } else { 
-            items = [];
-            expandedItems = {};
-        }
+        if (data) { const d = JSON.parse(data); items = d.items || []; document.getElementById('taxRate').value = d.tax || 10.5; document.getElementById('lossRate').value = d.loss || 20.0; expandedItems = d.expandedItems || {}; }
+        else { items = []; expandedItems = {}; }
         simQtys = {};
         loadOperations();
         renderItems();
         loadEnchantData();
         updateOperationsSelect();
     }
-    
     function saveData() { saveToLocal(); toast('Datos guardados'); }
     function clearAll() { if(confirm('¿Eliminar todos los objetos y operaciones?')) { items = []; simQtys = {}; expandedItems = {}; operations = []; renderItems(); saveToLocal(); toast('Todo limpiado'); } }
     function exportData() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify({items, operations})])); a.download = `bm_${Date.now()}.json`; a.click(); toast('Exportado'); }
     function importTrigger() { document.getElementById('importFile').click(); }
     function importData(input) { const file = input.files[0]; if(!file) return; const r = new FileReader(); r.onload = e => { try { const imported = JSON.parse(e.target.result); items = imported.items || []; operations = imported.operations || []; simQtys = {}; expandedItems = {}; renderItems(); updateOperationsSelect(); saveToLocal(); toast('Importado'); } catch(err) { toast('Error'); } }; r.readAsText(file); input.value = ''; }
 
-    // ========== SIMULADOR DE VOLUMEN ==========
+    // ========== SIMULADOR ==========
     function getAvgProfit(item) { return processItem(item).avgProfit; }
-    
     function renderSimulator() {
         const container = document.getElementById('simItems');
         if (items.length === 0) { container.innerHTML = '<div style="text-align:center">Sin objetos para simular</div>'; return; }
-        
         const data = items.map(i => ({ name: i.name, profit: getAvgProfit(i) }));
         data.forEach(d => { if (simQtys[d.name] === undefined) simQtys[d.name] = 0; });
-        
-        container.innerHTML = data.map(d => {
-            const q = simQtys[d.name] || 0;
-            return `<div class="sim-item">
-                        <div class="sim-item-header">
-                            <span><i class="fas fa-box"></i> ${d.name}</span>
-                            <div class="sim-control">
-                                <button onclick="changeQty('${d.name}',-1)">-</button>
-                                <input type="number" value="${q}" onchange="setQty('${d.name}',this.value)" min="0">
-                                <button onclick="changeQty('${d.name}',1)">+</button>
-                            </div>
-                        </div>
-                        <div><i class="fas fa-chart-line"></i> Ganancia/unidad: ${Math.round(d.profit).toLocaleString()} silver · <i class="fas fa-coins"></i> Total: ${Math.round(d.profit * q).toLocaleString()} silver</div>
-                    </div>`;
-        }).join('');
-        
+        container.innerHTML = data.map(d => `<div class="sim-item"><div class="sim-item-header"><span><i class="fas fa-box"></i> ${d.name}</span><div class="sim-control"><button onclick="changeQty('${d.name}',-1)">-</button><input type="number" value="${simQtys[d.name]}" onchange="setQty('${d.name}',this.value)" min="0"><button onclick="changeQty('${d.name}',1)">+</button></div></div><div><i class="fas fa-chart-line"></i> Ganancia/unidad: ${Math.round(d.profit).toLocaleString()} silver · <i class="fas fa-coins"></i> Total: ${Math.round(d.profit * simQtys[d.name]).toLocaleString()} silver</div></div>`).join('');
         const total = data.reduce((sum, d) => sum + (d.profit * (simQtys[d.name] || 0)), 0);
         document.getElementById('simTotalProfit').innerHTML = `${Math.round(total).toLocaleString()} silver <i class="fas fa-skull"></i>`;
     }
-    
     function changeQty(n, d) { simQtys[n] = Math.max(0, (simQtys[n] || 0) + d); renderSimulator(); saveToLocal(); }
     function setQty(n, v) { let q = parseInt(v); if (isNaN(q) || q < 0) q = 0; simQtys[n] = q; renderSimulator(); saveToLocal(); }
     function resetSimQtys() { Object.keys(simQtys).forEach(k => simQtys[k] = 0); renderSimulator(); toast('Cantidades reiniciadas'); saveToLocal(); }
-    function applyGlobalQty() { 
-        const toggle = document.getElementById('globalQtyToggle'); 
-        if (!toggle.checked) return; 
-        const val = parseInt(document.getElementById('globalQtyVal').value); 
-        if (isNaN(val) || val < 0) return; 
-        Object.keys(simQtys).forEach(k => simQtys[k] = val); 
-        renderSimulator(); 
-        toast(`Volumen ${val} aplicado a todos`);
-        saveToLocal();
-    }
-    
+    function applyGlobalQty() { const toggle = document.getElementById('globalQtyToggle'); if (!toggle.checked) return; const val = parseInt(document.getElementById('globalQtyVal').value); if (isNaN(val) || val < 0) return; Object.keys(simQtys).forEach(k => simQtys[k] = val); renderSimulator(); toast(`Volumen ${val} aplicado a todos`); saveToLocal(); }
     function openSimulator() { renderSimulator(); document.getElementById('simModal').classList.add('active'); }
     function closeSimulator() { document.getElementById('simModal').classList.remove('active'); }
 
-    // ========== CALCULADORA DE ENCANTAMIENTOS ==========
+    // ========== ENCANTAMIENTOS ==========
     const tabs = document.querySelectorAll('.enchant-tab');
     const panels = { rune: document.getElementById('panelRune'), soul: document.getElementById('panelSoul'), relic: document.getElementById('panelRelic') };
-    
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            const target = tab.dataset.tab;
-            tabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            Object.values(panels).forEach(p => p.classList.remove('active'));
-            panels[target].classList.add('active');
-        });
-    });
-    
-    function updateRuneCalc() {
-        const it = parseFloat(document.getElementById('baseItemsRune').value) || 0;
-        const runas = parseFloat(document.getElementById('runasPorItem').value) || 0;
-        const precio = parseFloat(document.getElementById('precioRuna').value) || 0;
-        const total = it * runas;
-        document.getElementById('totalRunas').innerHTML = total.toLocaleString();
-        document.getElementById('costoRunas').innerHTML = `Costo total: ${(total * precio).toLocaleString()} silver`;
-        saveToLocal();
-    }
-    function updateSoulCalc() {
-        const it = parseFloat(document.getElementById('baseItemsSoul').value) || 0;
-        const almas = parseFloat(document.getElementById('almasPorItem').value) || 0;
-        const precio = parseFloat(document.getElementById('precioAlma').value) || 0;
-        const total = it * almas;
-        document.getElementById('totalAlmas').innerHTML = total.toLocaleString();
-        document.getElementById('costoAlmas').innerHTML = `Costo total: ${(total * precio).toLocaleString()} silver`;
-        saveToLocal();
-    }
-    function updateRelicCalc() {
-        const it = parseFloat(document.getElementById('baseItemsRelic').value) || 0;
-        const rel = parseFloat(document.getElementById('reliquiasPorItem').value) || 0;
-        const precio = parseFloat(document.getElementById('precioReliquia').value) || 0;
-        const total = it * rel;
-        document.getElementById('totalReliquias').innerHTML = total.toLocaleString();
-        document.getElementById('costoReliquias').innerHTML = `Costo total: ${(total * precio).toLocaleString()} silver`;
-        saveToLocal();
-    }
-    
-    document.getElementById('baseItemsRune').addEventListener('input', updateRuneCalc);
-    document.getElementById('runasPorItem').addEventListener('input', updateRuneCalc);
-    document.getElementById('precioRuna').addEventListener('input', updateRuneCalc);
-    document.getElementById('baseItemsSoul').addEventListener('input', updateSoulCalc);
-    document.getElementById('almasPorItem').addEventListener('input', updateSoulCalc);
-    document.getElementById('precioAlma').addEventListener('input', updateSoulCalc);
-    document.getElementById('baseItemsRelic').addEventListener('input', updateRelicCalc);
-    document.getElementById('reliquiasPorItem').addEventListener('input', updateRelicCalc);
-    document.getElementById('precioReliquia').addEventListener('input', updateRelicCalc);
-    
+    tabs.forEach(tab => { tab.addEventListener('click', () => { const target = tab.dataset.tab; tabs.forEach(t => t.classList.remove('active')); tab.classList.add('active'); Object.values(panels).forEach(p => p.classList.remove('active')); panels[target].classList.add('active'); }); });
+    function updateRuneCalc() { const it = parseFloat(document.getElementById('baseItemsRune').value)||0; const ru = parseFloat(document.getElementById('runasPorItem').value)||0; const pr = parseFloat(document.getElementById('precioRuna').value)||0; const total = it*ru; document.getElementById('totalRunas').innerHTML = total.toLocaleString(); document.getElementById('costoRunas').innerHTML = `Costo total: ${(total*pr).toLocaleString()} silver`; saveToLocal(); }
+    function updateSoulCalc() { const it = parseFloat(document.getElementById('baseItemsSoul').value)||0; const al = parseFloat(document.getElementById('almasPorItem').value)||0; const pr = parseFloat(document.getElementById('precioAlma').value)||0; const total = it*al; document.getElementById('totalAlmas').innerHTML = total.toLocaleString(); document.getElementById('costoAlmas').innerHTML = `Costo total: ${(total*pr).toLocaleString()} silver`; saveToLocal(); }
+    function updateRelicCalc() { const it = parseFloat(document.getElementById('baseItemsRelic').value)||0; const re = parseFloat(document.getElementById('reliquiasPorItem').value)||0; const pr = parseFloat(document.getElementById('precioReliquia').value)||0; const total = it*re; document.getElementById('totalReliquias').innerHTML = total.toLocaleString(); document.getElementById('costoReliquias').innerHTML = `Costo total: ${(total*pr).toLocaleString()} silver`; saveToLocal(); }
+    document.getElementById('baseItemsRune').addEventListener('input', updateRuneCalc); document.getElementById('runasPorItem').addEventListener('input', updateRuneCalc); document.getElementById('precioRuna').addEventListener('input', updateRuneCalc);
+    document.getElementById('baseItemsSoul').addEventListener('input', updateSoulCalc); document.getElementById('almasPorItem').addEventListener('input', updateSoulCalc); document.getElementById('precioAlma').addEventListener('input', updateSoulCalc);
+    document.getElementById('baseItemsRelic').addEventListener('input', updateRelicCalc); document.getElementById('reliquiasPorItem').addEventListener('input', updateRelicCalc); document.getElementById('precioReliquia').addEventListener('input', updateRelicCalc);
     function openEnchantCalculator() { updateRuneCalc(); updateSoulCalc(); updateRelicCalc(); document.getElementById('enchantModal').classList.add('active'); }
     function closeEnchantCalculator() { document.getElementById('enchantModal').classList.remove('active'); }
 
-    // ========== REGISTRO DE OPERACIONES ==========
+    // ========== OPERACIONES ==========
     function updateOperationsSelect() {
         const select = document.getElementById('opObject');
-        if (!select) return;
-        select.innerHTML = '<option value="">Selecciona objeto</option>';
-        items.forEach(item => {
-            const option = document.createElement('option');
-            option.value = item.name;
-            option.textContent = item.name;
-            select.appendChild(option);
-        });
+        if (select) { select.innerHTML = '<option value="">Selecciona objeto</option>'; items.forEach(item => { const opt = document.createElement('option'); opt.value = item.name; opt.textContent = item.name; select.appendChild(opt); }); }
     }
-    
     function addOperation() {
         const date = document.getElementById('opDate').value;
         const objectName = document.getElementById('opObject').value;
         const buyQty = parseFloat(document.getElementById('opBuyQty').value) || 0;
         const sellQty = parseFloat(document.getElementById('opSellQty').value) || 0;
-        if (!date || !objectName || (buyQty === 0 && sellQty === 0)) {
-            toast('Completa fecha, objeto y al menos una cantidad');
-            return;
-        }
+        if (!date || !objectName || (buyQty===0 && sellQty===0)) { toast('Completa fecha, objeto y cantidad'); return; }
         const profit = computeProfitForOperation(objectName, buyQty, sellQty);
         operations.push({ date, objectName, buyQty, sellQty, profit });
         saveToLocal();
-        applyDateRange(); // refrescar vista y gráfico
-        toast('Operación añadida');
-        // Limpiar campos
-        document.getElementById('opDate').value = '';
-        document.getElementById('opObject').value = '';
-        document.getElementById('opBuyQty').value = '';
-        document.getElementById('opSellQty').value = '';
-    }
-    
-    function deleteOperation(index) {
-        operations.splice(index, 1);
-        saveToLocal();
         applyDateRange();
-        toast('Operación eliminada');
+        toast('Operación añadida');
+        document.getElementById('opDate').value = ''; document.getElementById('opObject').value = ''; document.getElementById('opBuyQty').value = ''; document.getElementById('opSellQty').value = '';
     }
-    
+    function deleteOperation(index) { operations.splice(index,1); saveToLocal(); applyDateRange(); toast('Operación eliminada'); }
     function getOperationsInRange(fromDate, toDate) {
         if (!fromDate || !toDate) return operations;
-        const from = new Date(fromDate);
-        const to = new Date(toDate);
-        to.setHours(23,59,59);
-        return operations.filter(op => {
-            const opDate = new Date(op.date);
-            return opDate >= from && opDate <= to;
-        });
+        const from = new Date(fromDate); const to = new Date(toDate); to.setHours(23,59,59);
+        return operations.filter(op => { const d = new Date(op.date); return d >= from && d <= to; });
     }
-    
+    function groupByInterval(ops, interval) {
+        if (ops.length===0) return [];
+        const sorted = [...ops].sort((a,b)=>new Date(a.date)-new Date(b.date));
+        if (interval==='day') {
+            const map = new Map(); sorted.forEach(op => map.set(op.date, (map.get(op.date)||0)+op.profit));
+            return Array.from(map.entries()).map(([date,profit])=>({date,profit})).sort((a,b)=>new Date(a.date)-new Date(b.date));
+        } else if (interval==='3days') {
+            const result = []; let groupStart=null, groupProfit=0, groupEnd=null;
+            for (let i=0; i<sorted.length; i++) {
+                const cur = new Date(sorted[i].date);
+                if (!groupStart) { groupStart=cur; groupProfit=sorted[i].profit; groupEnd=sorted[i].date; }
+                else {
+                    const diff = Math.floor((cur - groupStart)/(1000*60*60*24));
+                    if (diff<3) { groupProfit+=sorted[i].profit; groupEnd=sorted[i].date; }
+                    else { result.push({ date: groupStart.toISOString().split('T')[0], profit: groupProfit, endDate: groupEnd }); groupStart=cur; groupProfit=sorted[i].profit; groupEnd=sorted[i].date; }
+                }
+            }
+            if (groupStart) result.push({ date: groupStart.toISOString().split('T')[0], profit: groupProfit, endDate: groupEnd });
+            return result;
+        } else { // month
+            const map = new Map(); sorted.forEach(op => { const d = new Date(op.date); const ym = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`; map.set(ym, (map.get(ym)||0)+op.profit); });
+            return Array.from(map.entries()).map(([date,profit])=>({date,profit})).sort();
+        }
+    }
+    function updateCharts(ops) {
+        const grouped = groupByInterval(ops, currentGranularity);
+        const barLabels = grouped.map(g => currentGranularity==='3days' && g.endDate ? `${g.date} → ${g.endDate}` : g.date);
+        const barData = grouped.map(g => g.profit);
+        if (barChart) barChart.destroy();
+        const ctxBar = document.getElementById('profitBarChart').getContext('2d');
+        barChart = new Chart(ctxBar, { type: 'bar', data: { labels: barLabels, datasets: [{ label: 'Ganancia (silver)', data: barData, backgroundColor: '#b91c1c', borderRadius: 8 }] }, options: { responsive: true, maintainAspectRatio: true, plugins: { tooltip: { callbacks: { label: (ctx) => `${ctx.raw.toLocaleString()} silver` } } } } });
+        
+        // Gráfico de torta: ganancia por objeto en el período
+        const objMap = new Map();
+        ops.forEach(op => objMap.set(op.objectName, (objMap.get(op.objectName)||0) + op.profit));
+        const pieLabels = Array.from(objMap.keys());
+        const pieData = Array.from(objMap.values());
+        if (pieChart) pieChart.destroy();
+        const ctxPie = document.getElementById('profitPieChart').getContext('2d');
+        pieChart = new Chart(ctxPie, { type: 'pie', data: { labels: pieLabels, datasets: [{ data: pieData, backgroundColor: ['#b91c1c','#3b82f6','#a855f7','#f59e0b','#10b981','#ef4444','#06b6d4','#ec489a'] }] }, options: { responsive: true, plugins: { tooltip: { callbacks: { label: (ctx) => `${ctx.label}: ${ctx.raw.toLocaleString()} silver` } } } } });
+    }
     function renderOperationsTable(ops) {
         const tbody = document.getElementById('operationsTableBody');
         if (!tbody) return;
@@ -840,209 +592,68 @@
             row.insertCell(3).textContent = op.sellQty;
             row.insertCell(4).textContent = Math.round(op.profit).toLocaleString();
             const delCell = row.insertCell(5);
-            const delBtn = document.createElement('button');
-            delBtn.textContent = '🗑️';
-            delBtn.className = 'delete-op-btn';
-            delBtn.onclick = () => deleteOperation(idx);
+            const delBtn = document.createElement('button'); delBtn.textContent = '🗑️'; delBtn.className = 'delete-op-btn'; delBtn.onclick = () => deleteOperation(idx);
             delCell.appendChild(delBtn);
         });
     }
-    
-    function updateChart(ops) {
-        if (!profitChart) {
-            const ctx = document.getElementById('profitChart').getContext('2d');
-            profitChart = new Chart(ctx, {
-                type: 'line',
-                data: { labels: [], datasets: [{ label: 'Ganancia (silver)', data: [], borderColor: '#b91c1c', backgroundColor: 'rgba(185,28,28,0.1)', fill: true, tension: 0.3 }] },
-                options: { responsive: true, maintainAspectRatio: true }
-            });
-        }
-        // Agrupar por fecha
-        const map = new Map();
-        ops.forEach(op => {
-            const d = op.date;
-            map.set(d, (map.get(d) || 0) + op.profit);
-        });
-        const sortedDates = Array.from(map.keys()).sort();
-        const profits = sortedDates.map(d => map.get(d));
-        profitChart.data.labels = sortedDates;
-        profitChart.data.datasets[0].data = profits;
-        profitChart.update();
-    }
-    
-    function updateTotalProfit(ops) {
-        const total = ops.reduce((sum, op) => sum + op.profit, 0);
-        const card = document.getElementById('totalProfitCard');
-        if (card) card.innerHTML = `💰 Ganancia total en el período: ${Math.round(total).toLocaleString()} silver`;
-    }
-    
+    function updateTotalProfitCard(ops) { const total = ops.reduce((s,o)=>s+o.profit,0); document.getElementById('totalProfitCard').innerHTML = `💰 Ganancia total en el período: ${Math.round(total).toLocaleString()} silver`; }
     function applyDateRange() {
         const from = document.getElementById('dateFrom').value;
         const to = document.getElementById('dateTo').value;
-        currentDateFrom = from;
-        currentDateTo = to;
+        currentDateFrom = from; currentDateTo = to;
         const filtered = getOperationsInRange(from, to);
         renderOperationsTable(filtered);
-        updateTotalProfit(filtered);
-        updateChart(filtered);
+        updateTotalProfitCard(filtered);
+        updateCharts(filtered);
     }
-    
     function setQuickRange(range) {
-        const today = new Date();
-        let from = new Date();
-        if (range === 'day') {
-            from = today;
-        } else if (range === 'week') {
-            from.setDate(today.getDate() - 7);
-        } else if (range === 'month') {
-            from.setMonth(today.getMonth() - 1);
-        }
-        const dateFromStr = from.toISOString().split('T')[0];
-        const dateToStr = today.toISOString().split('T')[0];
-        document.getElementById('dateFrom').value = dateFromStr;
-        document.getElementById('dateTo').value = dateToStr;
+        const today = new Date(); let from = new Date();
+        if (range === 'day') from = today;
+        else if (range === 'week') from.setDate(today.getDate()-7);
+        else if (range === 'month') from.setMonth(today.getMonth()-1);
+        document.getElementById('dateFrom').value = from.toISOString().split('T')[0];
+        document.getElementById('dateTo').value = today.toISOString().split('T')[0];
         applyDateRange();
     }
-    
+    function setGranularity(gran) {
+        currentGranularity = gran;
+        const from = document.getElementById('dateFrom').value, to = document.getElementById('dateTo').value;
+        const filtered = getOperationsInRange(from, to);
+        updateCharts(filtered);
+        document.querySelectorAll('.granularity-btn').forEach(btn => { if (btn.dataset.granularity === gran) btn.style.background = 'var(--accent)'; else btn.style.background = ''; });
+    }
+    function initGranularityButtons() { document.querySelectorAll('.granularity-btn').forEach(btn => { btn.addEventListener('click', () => setGranularity(btn.dataset.granularity)); }); }
     function openOperationsModal() {
-        // Inicializar fechas por defecto (últimos 30 días)
-        if (!currentDateFrom) {
-            const today = new Date();
-            const thirtyDaysAgo = new Date();
-            thirtyDaysAgo.setDate(today.getDate() - 30);
-            document.getElementById('dateFrom').value = thirtyDaysAgo.toISOString().split('T')[0];
-            document.getElementById('dateTo').value = today.toISOString().split('T')[0];
-            currentDateFrom = document.getElementById('dateFrom').value;
-            currentDateTo = document.getElementById('dateTo').value;
-        } else {
-            document.getElementById('dateFrom').value = currentDateFrom;
-            document.getElementById('dateTo').value = currentDateTo;
-        }
-        applyDateRange();
+        if (!currentDateFrom) { const today = new Date(); const thirtyAgo = new Date(); thirtyAgo.setDate(today.getDate()-30); document.getElementById('dateFrom').value = thirtyAgo.toISOString().split('T')[0]; document.getElementById('dateTo').value = today.toISOString().split('T')[0]; currentDateFrom = document.getElementById('dateFrom').value; currentDateTo = document.getElementById('dateTo').value; }
+        else { document.getElementById('dateFrom').value = currentDateFrom; document.getElementById('dateTo').value = currentDateTo; }
+        applyDateRange(); initGranularityButtons(); setGranularity(currentGranularity);
         document.getElementById('operationsModal').classList.add('active');
     }
-    
-    function closeOperationsModal() {
-        document.getElementById('operationsModal').classList.remove('active');
-    }
+    function closeOperationsModal() { document.getElementById('operationsModal').classList.remove('active'); }
 
     // ========== UI ==========
     function toast(msg) { const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = `<i class="fas fa-skull"></i> ${msg}`; document.body.appendChild(t); setTimeout(() => t.remove(), 2000); }
     function toggleTheme() { document.body.classList.toggle('light'); saveToLocal(); }
-    
     let formOpen = false;
-    function toggleForm() { 
-        const c = document.getElementById('formContent'); 
-        const i = document.getElementById('formIcon'); 
-        if (formOpen) { 
-            c.classList.remove('open'); 
-            i.classList.remove('fa-chevron-up'); 
-            i.classList.add('fa-chevron-down'); 
-        } else { 
-            c.classList.add('open'); 
-            i.classList.remove('fa-chevron-down'); 
-            i.classList.add('fa-chevron-up'); 
-        } 
-        formOpen = !formOpen; 
-    }
-    
-    // ========== BOTÓN FLOTANTE ARRASTRABLE ==========
+    function toggleForm() { const c = document.getElementById('formContent'); const i = document.getElementById('formIcon'); if (formOpen) { c.classList.remove('open'); i.classList.remove('fa-chevron-up'); i.classList.add('fa-chevron-down'); } else { c.classList.add('open'); i.classList.remove('fa-chevron-down'); i.classList.add('fa-chevron-up'); } formOpen = !formOpen; }
+
+    // ========== BOTÓN FLOTANTE ==========
     const floatContainer = document.getElementById('floatingContainer');
     const floatBtn = document.getElementById('floatBtn');
     const floatMenu = document.getElementById('floatMenu');
-    let isDragging = false;
-    let dragStartX, dragStartY;
-    let containerStartX, containerStartY;
-    let menuTimeout;
-    
-    function loadFloatPosition() {
-        const saved = localStorage.getItem('floatPosition');
-        if (saved) {
-            const pos = JSON.parse(saved);
-            floatContainer.style.left = pos.left;
-            floatContainer.style.top = pos.top;
-            floatContainer.style.bottom = 'auto';
-            floatContainer.style.right = 'auto';
-        } else {
-            floatContainer.style.bottom = '20px';
-            floatContainer.style.right = '20px';
-        }
-    }
-    
-    function saveFloatPosition() {
-        const rect = floatContainer.getBoundingClientRect();
-        localStorage.setItem('floatPosition', JSON.stringify({ left: rect.left + 'px', top: rect.top + 'px' }));
-    }
-    
-    floatBtn.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        dragStartX = e.clientX;
-        dragStartY = e.clientY;
-        const rect = floatContainer.getBoundingClientRect();
-        containerStartX = rect.left;
-        containerStartY = rect.top;
-        floatBtn.style.cursor = 'grabbing';
-        e.preventDefault();
-    });
-    
-    document.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        const dx = e.clientX - dragStartX;
-        const dy = e.clientY - dragStartY;
-        let newLeft = containerStartX + dx;
-        let newTop = containerStartY + dy;
-        const maxX = window.innerWidth - floatContainer.offsetWidth;
-        const maxY = window.innerHeight - floatContainer.offsetHeight;
-        newLeft = Math.min(maxX, Math.max(0, newLeft));
-        newTop = Math.min(maxY, Math.max(0, newTop));
-        floatContainer.style.left = newLeft + 'px';
-        floatContainer.style.top = newTop + 'px';
-        floatContainer.style.bottom = 'auto';
-        floatContainer.style.right = 'auto';
-    });
-    
-    document.addEventListener('mouseup', () => {
-        if (isDragging) {
-            isDragging = false;
-            floatBtn.style.cursor = 'grab';
-            saveFloatPosition();
-        }
-    });
-    
-    floatBtn.onclick = (e) => {
-        if (!isDragging) {
-            e.stopPropagation();
-            if (floatMenu.classList.contains('active')) {
-                floatMenu.classList.remove('active');
-                if (menuTimeout) clearTimeout(menuTimeout);
-            } else {
-                floatMenu.classList.add('active');
-                if (menuTimeout) clearTimeout(menuTimeout);
-                menuTimeout = setTimeout(() => floatMenu.classList.remove('active'), 5000);
-            }
-        }
-    };
-    
-    document.addEventListener('click', (e) => {
-        if (!floatContainer.contains(e.target)) {
-            floatMenu.classList.remove('active');
-            if (menuTimeout) clearTimeout(menuTimeout);
-        }
-    });
-    
-    // ========== LISTENERS ==========
-    document.getElementById('globalQtyToggle').onchange = () => { 
-        const d = document.getElementById('globalQtyVal'); 
-        const b = document.getElementById('applyGlobalBtn'); 
-        d.disabled = !document.getElementById('globalQtyToggle').checked; 
-        b.disabled = !document.getElementById('globalQtyToggle').checked; 
-        saveToLocal();
-    };
-    document.getElementById('globalQtyVal').addEventListener('input', () => { saveToLocal(); });
+    let isDragging = false, dragStartX, dragStartY, containerStartX, containerStartY, menuTimeout;
+    function loadFloatPosition() { const saved = localStorage.getItem('floatPosition'); if (saved) { const pos = JSON.parse(saved); floatContainer.style.left = pos.left; floatContainer.style.top = pos.top; floatContainer.style.bottom = 'auto'; floatContainer.style.right = 'auto'; } else { floatContainer.style.bottom = '20px'; floatContainer.style.right = '20px'; } }
+    function saveFloatPosition() { const rect = floatContainer.getBoundingClientRect(); localStorage.setItem('floatPosition', JSON.stringify({ left: rect.left + 'px', top: rect.top + 'px' })); }
+    floatBtn.addEventListener('mousedown', (e) => { isDragging = true; dragStartX = e.clientX; dragStartY = e.clientY; const rect = floatContainer.getBoundingClientRect(); containerStartX = rect.left; containerStartY = rect.top; floatBtn.style.cursor = 'grabbing'; e.preventDefault(); });
+    document.addEventListener('mousemove', (e) => { if (!isDragging) return; const dx = e.clientX - dragStartX; const dy = e.clientY - dragStartY; let newLeft = containerStartX + dx; let newTop = containerStartY + dy; const maxX = window.innerWidth - floatContainer.offsetWidth; const maxY = window.innerHeight - floatContainer.offsetHeight; newLeft = Math.min(maxX, Math.max(0, newLeft)); newTop = Math.min(maxY, Math.max(0, newTop)); floatContainer.style.left = newLeft + 'px'; floatContainer.style.top = newTop + 'px'; floatContainer.style.bottom = 'auto'; floatContainer.style.right = 'auto'; });
+    document.addEventListener('mouseup', () => { if (isDragging) { isDragging = false; floatBtn.style.cursor = 'grab'; saveFloatPosition(); } });
+    floatBtn.onclick = (e) => { if (!isDragging) { e.stopPropagation(); if (floatMenu.classList.contains('active')) { floatMenu.classList.remove('active'); if (menuTimeout) clearTimeout(menuTimeout); } else { floatMenu.classList.add('active'); if (menuTimeout) clearTimeout(menuTimeout); menuTimeout = setTimeout(() => floatMenu.classList.remove('active'), 5000); } } };
+    document.addEventListener('click', (e) => { if (!floatContainer.contains(e.target)) { floatMenu.classList.remove('active'); if (menuTimeout) clearTimeout(menuTimeout); } });
+    document.getElementById('globalQtyToggle').onchange = () => { const d = document.getElementById('globalQtyVal'); const b = document.getElementById('applyGlobalBtn'); d.disabled = !document.getElementById('globalQtyToggle').checked; b.disabled = !document.getElementById('globalQtyToggle').checked; saveToLocal(); };
+    document.getElementById('globalQtyVal').addEventListener('input', () => saveToLocal());
     document.getElementById('taxRate').oninput = () => { renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); saveToLocal(); };
     document.getElementById('lossRate').oninput = () => { renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); saveToLocal(); };
     
-    // ========== INICIO ==========
     loadFloatPosition();
     loadFromLocal();
 </script>
