@@ -11,7 +11,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
-        /* ========== ESTILOS (iguales a la versión anterior pero completos) ========== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
             --bg: #0a0a0a;
@@ -161,8 +160,8 @@
     <!-- Impuestos -->
     <div class="card">
         <div class="row-2">
-            <div><label>💰 IMPUESTO</label><input type="number" id="taxRate" step="0.1" value="10.5"></div>
-            <div><label>⚠️ PÉRDIDA FIJA</label><input type="number" id="lossRate" step="0.1" value="20.0"></div>
+            <div><label>💰 IMPUESTO (%)</label><input type="text" id="taxRate" step="any" value="10.5" inputmode="decimal"></div>
+            <div><label>⚠️ PÉRDIDA FIJA (%)</label><input type="text" id="lossRate" step="any" value="20.0" inputmode="decimal"></div>
         </div>
     </div>
 
@@ -176,15 +175,15 @@
             <div class="form-group"><label>NOMBRE</label><input type="text" id="newName" placeholder="Ej: Bolsa T5"></div>
             <label>PRECIO DE COMPRA POR CIUDAD</label>
             <div class="cities-grid">
-                <div class="city-input"><label>🏔️ Fort Sterling</label><input type="number" id="buyFS"></div>
-                <div class="city-input"><label>🏜️ Bridgewatch</label><input type="number" id="buyBW"></div>
-                <div class="city-input"><label>🌳 Lymhurst</label><input type="number" id="buyLH"></div>
-                <div class="city-input"><label>⚙️ Martlock</label><input type="number" id="buyML"></div>
-                <div class="city-input"><label>✨ Thetford</label><input type="number" id="buyTH"></div>
+                <div class="city-input"><label>🏔️ Fort Sterling</label><input type="text" id="buyFS" inputmode="decimal" step="any"></div>
+                <div class="city-input"><label>🏜️ Bridgewatch</label><input type="text" id="buyBW" inputmode="decimal" step="any"></div>
+                <div class="city-input"><label>🌳 Lymhurst</label><input type="text" id="buyLH" inputmode="decimal" step="any"></div>
+                <div class="city-input"><label>⚙️ Martlock</label><input type="text" id="buyML" inputmode="decimal" step="any"></div>
+                <div class="city-input"><label>✨ Thetford</label><input type="text" id="buyTH" inputmode="decimal" step="any"></div>
             </div>
             <div class="black-market-box">
                 <label>🏴‍☠️ PRECIO VENTA BLACK MARKET</label>
-                <input type="number" id="blackSell" placeholder="Precio único de venta">
+                <input type="text" id="blackSell" placeholder="Precio único de venta" inputmode="decimal" step="any">
             </div>
             <button class="btn" onclick="addItem()"><i class="fas fa-skull"></i> AGREGAR OBJETO</button>
         </div>
@@ -258,27 +257,27 @@
             <div class="enchant-tab relic" data-tab="relic">💎 Reliquias<br><span style="font-size:0.6rem;">.2 → .3</span></div>
         </div>
         <div id="panelRune" class="enchant-panel active">
-            <div class="enchant-row"><div class="enchant-card"><label>📦 ITEMS BASE</label><input type="number" id="baseItemsRune" value="0" min="0" step="1"></div>
-            <div class="enchant-card"><label>🏺 RUNAS POR ITEM</label><input type="number" id="runasPorItem" value="0" min="0" step="1"></div>
-            <div class="enchant-card"><label>💰 PRECIO POR RUNAS</label><input type="number" id="precioRuna" value="0" min="0" step="1"></div></div>
+            <div class="enchant-row"><div class="enchant-card"><label>📦 ITEMS BASE</label><input type="text" id="baseItemsRune" value="0" inputmode="decimal" step="any"></div>
+            <div class="enchant-card"><label>🏺 RUNAS POR ITEM</label><input type="text" id="runasPorItem" value="0" inputmode="decimal" step="any"></div>
+            <div class="enchant-card"><label>💰 PRECIO POR RUNAS</label><input type="text" id="precioRuna" value="0" inputmode="decimal" step="any"></div></div>
             <div class="enchant-result"><span id="totalRunas">0</span> runas necesarias<br><span id="costoRunas">Costo total: 0 silver</span></div>
         </div>
         <div id="panelSoul" class="enchant-panel">
-            <div class="enchant-row"><div class="enchant-card"><label>📦 ITEMS BASE</label><input type="number" id="baseItemsSoul" value="0" min="0" step="1"></div>
-            <div class="enchant-card"><label>✨ ALMAS POR ITEM</label><input type="number" id="almasPorItem" value="0" min="0" step="1"></div>
-            <div class="enchant-card"><label>💰 PRECIO POR ALMAS</label><input type="number" id="precioAlma" value="0" min="0" step="1"></div></div>
+            <div class="enchant-row"><div class="enchant-card"><label>📦 ITEMS BASE</label><input type="text" id="baseItemsSoul" value="0" inputmode="decimal" step="any"></div>
+            <div class="enchant-card"><label>✨ ALMAS POR ITEM</label><input type="text" id="almasPorItem" value="0" inputmode="decimal" step="any"></div>
+            <div class="enchant-card"><label>💰 PRECIO POR ALMAS</label><input type="text" id="precioAlma" value="0" inputmode="decimal" step="any"></div></div>
             <div class="enchant-result"><span id="totalAlmas">0</span> almas necesarias<br><span id="costoAlmas">Costo total: 0 silver</span></div>
         </div>
         <div id="panelRelic" class="enchant-panel">
-            <div class="enchant-row"><div class="enchant-card"><label>📦 ITEMS BASE</label><input type="number" id="baseItemsRelic" value="0" min="0" step="1"></div>
-            <div class="enchant-card"><label>💎 RELIQUIAS POR ITEM</label><input type="number" id="reliquiasPorItem" value="0" min="0" step="1"></div>
-            <div class="enchant-card"><label>💰 PRECIO POR RELIQUIAS</label><input type="number" id="precioReliquia" value="0" min="0" step="1"></div></div>
+            <div class="enchant-row"><div class="enchant-card"><label>📦 ITEMS BASE</label><input type="text" id="baseItemsRelic" value="0" inputmode="decimal" step="any"></div>
+            <div class="enchant-card"><label>💎 RELIQUIAS POR ITEM</label><input type="text" id="reliquiasPorItem" value="0" inputmode="decimal" step="any"></div>
+            <div class="enchant-card"><label>💰 PRECIO POR RELIQUIAS</label><input type="text" id="precioReliquia" value="0" inputmode="decimal" step="any"></div></div>
             <div class="enchant-result"><span id="totalReliquias">0</span> reliquias necesarias<br><span id="costoReliquias">Costo total: 0 silver</span></div>
         </div>
     </div>
 </div>
 
-<!-- Modal Registro de Operaciones (CON FORMULARIO DE NUEVA OPERACIÓN) -->
+<!-- Modal Registro de Operaciones -->
 <div id="operationsModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -286,19 +285,19 @@
             <button class="btn-outline" onclick="closeOperationsModal()"><i class="fas fa-times"></i> Cerrar</button>
         </div>
         
-        <!-- FORMULARIO PARA AÑADIR OPERACIÓN -->
+        <!-- FORMULARIO NUEVA OPERACIÓN -->
         <div class="card" style="margin-bottom: 16px;">
             <div style="font-weight: bold; margin-bottom: 8px;">➕ Nueva operación</div>
             <div style="display: flex; flex-wrap: wrap; gap: 8px;">
                 <input type="date" id="opDate" style="flex:1; background:var(--input); border:1px solid var(--border); padding:8px; border-radius:10px; color:var(--text);">
                 <select id="opObject" style="flex:2; background:var(--input); border:1px solid var(--border); padding:8px; border-radius:10px; color:var(--text);"></select>
-                <input type="number" id="opBuyQty" placeholder="Cant. comprada" style="flex:1; background:var(--input); border:1px solid var(--border); padding:8px; border-radius:10px; color:var(--text);">
-                <input type="number" id="opSellQty" placeholder="Cant. vendida" style="flex:1; background:var(--input); border:1px solid var(--border); padding:8px; border-radius:10px; color:var(--text);">
+                <input type="text" id="opBuyQty" placeholder="Cant. comprada" style="flex:1; background:var(--input); border:1px solid var(--border); padding:8px; border-radius:10px; color:var(--text); inputmode="numeric"">
+                <input type="text" id="opSellQty" placeholder="Cant. vendida" style="flex:1; background:var(--input); border:1px solid var(--border); padding:8px; border-radius:10px; color:var(--text); inputmode="numeric"">
                 <button class="btn-outline" onclick="addOperation()" style="padding:8px 16px;">Añadir</button>
             </div>
         </div>
         
-        <!-- Filtros de rango -->
+        <!-- Filtros rango -->
         <div class="operations-filters">
             <div class="filter-group"><label>📅 Desde</label><input type="date" id="dateFrom"></div>
             <div class="filter-group"><label>📅 Hasta</label><input type="date" id="dateTo"></div>
@@ -324,7 +323,7 @@
             <div class="chart-box"><canvas id="profitPieChart"></canvas></div>
         </div>
         
-        <!-- Tabla de operaciones -->
+        <!-- Tabla operaciones -->
         <div style="overflow-x: auto;">
             <table class="operations-table" id="operationsTable">
                 <thead><tr><th>Fecha</th><th>Objeto</th><th>Compra</th><th>Venta</th><th>Ganancia</th><th></th></tr></thead>
@@ -335,6 +334,17 @@
 </div>
 
 <script>
+    // ========== FUNCIONES DE NORMALIZACIÓN DE NÚMEROS ==========
+    function parseNumber(value) {
+        if (value === undefined || value === null) return 0;
+        let str = String(value).trim();
+        if (str === '') return 0;
+        // Reemplazar coma por punto
+        str = str.replace(',', '.');
+        let num = parseFloat(str);
+        return isNaN(num) ? 0 : num;
+    }
+
     // ========== DATOS GLOBALES ==========
     let items = [];
     let simQtys = {};
@@ -347,8 +357,8 @@
     let currentDateTo = null;
 
     // ========== IMPUESTOS ==========
-    function getTax() { return parseFloat(document.getElementById('taxRate').value) / 100; }
-    function getLoss() { return parseFloat(document.getElementById('lossRate').value) / 100; }
+    function getTax() { return parseNumber(document.getElementById('taxRate').value) / 100; }
+    function getLoss() { return parseNumber(document.getElementById('lossRate').value) / 100; }
 
     // ========== CÁLCULO DETALLADO ==========
     function calculateProfitDetails(buy, sell) {
@@ -383,7 +393,7 @@
         return profitPerUnit * units;
     }
 
-    // ========== PROCESAR ITEM PARA MOSTRAR EN LA LISTA ==========
+    // ========== PROCESAR ITEM ==========
     function processItem(item) {
         const cities = ['fortSterling', 'bridgewatch', 'lymhurst', 'martlock', 'thetford'];
         const cityNames = { fortSterling:'🏔️ Fort Sterling', bridgewatch:'🏜️ Bridgewatch', lymhurst:'🌳 Lymhurst', martlock:'⚙️ Martlock', thetford:'✨ Thetford' };
@@ -417,7 +427,7 @@
         `;
     }
 
-    // ========== RENDER LISTA DE OBJETOS (PLEGABLE, CON DETALLE DE CÁLCULO) ==========
+    // ========== RENDER LISTA PLEGABLE ==========
     function renderItems() {
         const container = document.getElementById('itemsList');
         if (items.length === 0) { container.innerHTML = '<div class="card" style="text-align:center">No hay objetos. Agrega uno arriba.</div>'; renderStats(); return; }
@@ -433,19 +443,19 @@
                 <div style="font-size:0.75rem; margin-top:4px;">
                     ${r.city}: Compra ${Math.round(r.buy).toLocaleString()} → 
                     Neto: ${Math.round(r.net).toLocaleString()} | 
-                    Ganancia bruta: ${Math.round(r.gross).toLocaleString()} | 
+                    Bruto: ${Math.round(r.gross).toLocaleString()} | 
                     Pérdida: ${Math.round(r.lossAmount).toLocaleString()} | 
                     <strong>Ganancia neta: ${Math.round(r.profit).toLocaleString()} silver</strong>
                 </div>`).join('');
             return `<div class="item"><div class="item-header" onclick="toggleItem('${item.name.replace(/'/g, "\\'")}')"><div class="item-name">${rank} ${item.name}<span class="item-preview">${Math.round(item.avgProfit).toLocaleString()} silver neto promedio</span></div><i class="fas fa-chevron-down expand-icon ${isExpanded ? 'rotated' : ''}"></i></div>
             <div class="item-content ${isExpanded ? 'open' : ''}">
-                <div class="black-sell"><label>🏴‍☠️ BLACK MARKET</label><input type="number" value="${item.blackSell}" onchange="updateBlackSell('${item.name.replace(/'/g, "\\'")}', this.value)"></div>
+                <div class="black-sell"><label>🏴‍☠️ BLACK MARKET</label><input type="text" value="${item.blackSell}" onchange="updateBlackSell('${item.name.replace(/'/g, "\\'")}', this.value)" inputmode="decimal"></div>
                 <div class="city-prices">
-                    <div><label>🏔️ Fort Sterling</label><input type="number" value="${item.buyPrices.fortSterling || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'fortSterling', this.value)"></div>
-                    <div><label>🏜️ Bridgewatch</label><input type="number" value="${item.buyPrices.bridgewatch || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'bridgewatch', this.value)"></div>
-                    <div><label>🌳 Lymhurst</label><input type="number" value="${item.buyPrices.lymhurst || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'lymhurst', this.value)"></div>
-                    <div><label>⚙️ Martlock</label><input type="number" value="${item.buyPrices.martlock || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'martlock', this.value)"></div>
-                    <div><label>✨ Thetford</label><input type="number" value="${item.buyPrices.thetford || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'thetford', this.value)"></div>
+                    <div><label>🏔️ Fort Sterling</label><input type="text" value="${item.buyPrices.fortSterling || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'fortSterling', this.value)" inputmode="decimal"></div>
+                    <div><label>🏜️ Bridgewatch</label><input type="text" value="${item.buyPrices.bridgewatch || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'bridgewatch', this.value)" inputmode="decimal"></div>
+                    <div><label>🌳 Lymhurst</label><input type="text" value="${item.buyPrices.lymhurst || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'lymhurst', this.value)" inputmode="decimal"></div>
+                    <div><label>⚙️ Martlock</label><input type="text" value="${item.buyPrices.martlock || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'martlock', this.value)" inputmode="decimal"></div>
+                    <div><label>✨ Thetford</label><input type="text" value="${item.buyPrices.thetford || ''}" onchange="updateBuy('${item.name.replace(/'/g, "\\'")}', 'thetford', this.value)" inputmode="decimal"></div>
                 </div>
                 <div class="profit-detail">
                     <div><strong>📊 Desglose del cálculo (promedio):</strong></div>
@@ -471,16 +481,22 @@
         saveToLocal();
     }
     function toggleItem(name) { expandedItems[name] = !expandedItems[name]; renderItems(); saveToLocal(); }
-    function updateBuy(name, city, val) { const item = items.find(i => i.name === name); if (item) { item.buyPrices[city] = parseFloat(val) || 0; renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); } }
-    function updateBlackSell(name, val) { const item = items.find(i => i.name === name); if (item) { item.blackSell = parseFloat(val) || 0; renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); } }
+    function updateBuy(name, city, val) { const item = items.find(i => i.name === name); if (item) { item.buyPrices[city] = parseNumber(val); renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); } }
+    function updateBlackSell(name, val) { const item = items.find(i => i.name === name); if (item) { item.blackSell = parseNumber(val); renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); } }
     function deleteItem(name) { items = items.filter(i => i.name !== name); delete simQtys[name]; delete expandedItems[name]; renderItems(); if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); updateOperationsSelect(); }
 
     function addItem() {
         const name = document.getElementById('newName').value.trim();
-        const blackSell = parseFloat(document.getElementById('blackSell').value);
-        const buyPrices = { fortSterling: parseFloat(document.getElementById('buyFS').value)||0, bridgewatch: parseFloat(document.getElementById('buyBW').value)||0, lymhurst: parseFloat(document.getElementById('buyLH').value)||0, martlock: parseFloat(document.getElementById('buyML').value)||0, thetford: parseFloat(document.getElementById('buyTH').value)||0 };
+        const blackSell = parseNumber(document.getElementById('blackSell').value);
+        const buyPrices = {
+            fortSterling: parseNumber(document.getElementById('buyFS').value),
+            bridgewatch: parseNumber(document.getElementById('buyBW').value),
+            lymhurst: parseNumber(document.getElementById('buyLH').value),
+            martlock: parseNumber(document.getElementById('buyML').value),
+            thetford: parseNumber(document.getElementById('buyTH').value)
+        };
         if (!name) { toast('Nombre requerido'); return; }
-        if (!blackSell || blackSell <= 0) { toast('Precio Black Market requerido'); return; }
+        if (blackSell <= 0) { toast('Precio Black Market requerido > 0'); return; }
         if (Object.values(buyPrices).every(v => v === 0)) { toast('Al menos un precio de compra'); return; }
         if (items.some(i => i.name.toLowerCase() === name.toLowerCase())) { toast('Ya existe ese objeto'); return; }
         items.push({ name, blackSell, buyPrices });
@@ -558,9 +574,9 @@
     const tabs = document.querySelectorAll('.enchant-tab');
     const panels = { rune: document.getElementById('panelRune'), soul: document.getElementById('panelSoul'), relic: document.getElementById('panelRelic') };
     tabs.forEach(tab => { tab.addEventListener('click', () => { const target = tab.dataset.tab; tabs.forEach(t => t.classList.remove('active')); tab.classList.add('active'); Object.values(panels).forEach(p => p.classList.remove('active')); panels[target].classList.add('active'); }); });
-    function updateRuneCalc() { const it = parseFloat(document.getElementById('baseItemsRune').value)||0; const ru = parseFloat(document.getElementById('runasPorItem').value)||0; const pr = parseFloat(document.getElementById('precioRuna').value)||0; const total = it*ru; document.getElementById('totalRunas').innerHTML = total.toLocaleString(); document.getElementById('costoRunas').innerHTML = `Costo total: ${(total*pr).toLocaleString()} silver`; saveToLocal(); }
-    function updateSoulCalc() { const it = parseFloat(document.getElementById('baseItemsSoul').value)||0; const al = parseFloat(document.getElementById('almasPorItem').value)||0; const pr = parseFloat(document.getElementById('precioAlma').value)||0; const total = it*al; document.getElementById('totalAlmas').innerHTML = total.toLocaleString(); document.getElementById('costoAlmas').innerHTML = `Costo total: ${(total*pr).toLocaleString()} silver`; saveToLocal(); }
-    function updateRelicCalc() { const it = parseFloat(document.getElementById('baseItemsRelic').value)||0; const re = parseFloat(document.getElementById('reliquiasPorItem').value)||0; const pr = parseFloat(document.getElementById('precioReliquia').value)||0; const total = it*re; document.getElementById('totalReliquias').innerHTML = total.toLocaleString(); document.getElementById('costoReliquias').innerHTML = `Costo total: ${(total*pr).toLocaleString()} silver`; saveToLocal(); }
+    function updateRuneCalc() { const it = parseNumber(document.getElementById('baseItemsRune').value); const ru = parseNumber(document.getElementById('runasPorItem').value); const pr = parseNumber(document.getElementById('precioRuna').value); const total = it*ru; document.getElementById('totalRunas').innerHTML = total.toLocaleString(); document.getElementById('costoRunas').innerHTML = `Costo total: ${(total*pr).toLocaleString()} silver`; saveToLocal(); }
+    function updateSoulCalc() { const it = parseNumber(document.getElementById('baseItemsSoul').value); const al = parseNumber(document.getElementById('almasPorItem').value); const pr = parseNumber(document.getElementById('precioAlma').value); const total = it*al; document.getElementById('totalAlmas').innerHTML = total.toLocaleString(); document.getElementById('costoAlmas').innerHTML = `Costo total: ${(total*pr).toLocaleString()} silver`; saveToLocal(); }
+    function updateRelicCalc() { const it = parseNumber(document.getElementById('baseItemsRelic').value); const re = parseNumber(document.getElementById('reliquiasPorItem').value); const pr = parseNumber(document.getElementById('precioReliquia').value); const total = it*re; document.getElementById('totalReliquias').innerHTML = total.toLocaleString(); document.getElementById('costoReliquias').innerHTML = `Costo total: ${(total*pr).toLocaleString()} silver`; saveToLocal(); }
     document.getElementById('baseItemsRune').addEventListener('input', updateRuneCalc); document.getElementById('runasPorItem').addEventListener('input', updateRuneCalc); document.getElementById('precioRuna').addEventListener('input', updateRuneCalc);
     document.getElementById('baseItemsSoul').addEventListener('input', updateSoulCalc); document.getElementById('almasPorItem').addEventListener('input', updateSoulCalc); document.getElementById('precioAlma').addEventListener('input', updateSoulCalc);
     document.getElementById('baseItemsRelic').addEventListener('input', updateRelicCalc); document.getElementById('reliquiasPorItem').addEventListener('input', updateRelicCalc); document.getElementById('precioReliquia').addEventListener('input', updateRelicCalc);
@@ -575,8 +591,8 @@
     function addOperation() {
         const date = document.getElementById('opDate').value;
         const objectName = document.getElementById('opObject').value;
-        const buyQty = parseFloat(document.getElementById('opBuyQty').value) || 0;
-        const sellQty = parseFloat(document.getElementById('opSellQty').value) || 0;
+        const buyQty = parseNumber(document.getElementById('opBuyQty').value);
+        const sellQty = parseNumber(document.getElementById('opSellQty').value);
         if (!date || !objectName || (buyQty===0 && sellQty===0)) { toast('Completa fecha, objeto y cantidad'); return; }
         const profit = computeProfitForOperation(objectName, buyQty, sellQty);
         operations.push({ date, objectName, buyQty, sellQty, profit });
@@ -678,7 +694,7 @@
         if (!currentDateFrom) { const today = new Date(); const thirtyAgo = new Date(); thirtyAgo.setDate(today.getDate()-30); document.getElementById('dateFrom').value = thirtyAgo.toISOString().split('T')[0]; document.getElementById('dateTo').value = today.toISOString().split('T')[0]; currentDateFrom = document.getElementById('dateFrom').value; currentDateTo = document.getElementById('dateTo').value; }
         else { document.getElementById('dateFrom').value = currentDateFrom; document.getElementById('dateTo').value = currentDateTo; }
         applyDateRange(); initGranularityButtons(); setGranularity(currentGranularity);
-        updateOperationsSelect();  // asegurar que el select tenga los objetos
+        updateOperationsSelect();
         document.getElementById('operationsModal').classList.add('active');
     }
     function closeOperationsModal() { document.getElementById('operationsModal').classList.remove('active'); }
@@ -689,7 +705,7 @@
     let formOpen = false;
     function toggleForm() { const c = document.getElementById('formContent'); const i = document.getElementById('formIcon'); if (formOpen) { c.classList.remove('open'); i.classList.remove('fa-chevron-up'); i.classList.add('fa-chevron-down'); } else { c.classList.add('open'); i.classList.remove('fa-chevron-down'); i.classList.add('fa-chevron-up'); } formOpen = !formOpen; }
 
-    // ========== BOTÓN FLOTANTE ==========
+    // ========== BOTÓN FLOTANTE ARRASTRABLE ==========
     const floatContainer = document.getElementById('floatingContainer');
     const floatBtn = document.getElementById('floatBtn');
     const floatMenu = document.getElementById('floatMenu');
