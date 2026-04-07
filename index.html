@@ -9,6 +9,8 @@
     <title>Black Market Tool</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -126,8 +128,10 @@
         /* Modales */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; padding: 20px; overflow: auto; }
         .modal.active { display: flex; align-items: center; justify-content: center; }
-        .modal-content { background: var(--card); border-radius: 28px; max-width: 650px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 20px; border: 1px solid var(--accent); }
+        .modal-content { background: var(--card); border-radius: 28px; max-width: 800px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 20px; border: 1px solid var(--accent); }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+        
+        /* Simulador de volumen */
         .sim-item { background: var(--input); border-radius: 14px; padding: 10px; margin-bottom: 10px; }
         .sim-item-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
         .sim-control { display: flex; gap: 8px; align-items: center; }
@@ -146,18 +150,25 @@
         .enchant-tab.rune.active { border-bottom-color: var(--runas); }
         .enchant-tab.soul.active { border-bottom-color: var(--almas); }
         .enchant-tab.relic.active { border-bottom-color: var(--reliquias); }
-        
         .enchant-panel { display: none; }
         .enchant-panel.active { display: block; }
-        
         .enchant-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
         .enchant-card { flex: 1; background: var(--input); border-radius: 16px; padding: 12px; text-align: center; }
         .enchant-card label { font-size: 0.7rem; color: var(--text-sec); display: block; margin-bottom: 5px; }
         .enchant-card input { background: transparent; border: none; font-size: 1.2rem; font-weight: bold; color: var(--accent); width: 100%; text-align: center; outline: none; }
-        
         .enchant-result { background: var(--accent); color: white; padding: 12px; border-radius: 14px; text-align: center; margin-top: 16px; }
-        .enchant-result span { font-size: 1.2rem; font-weight: bold; }
-        .enchant-detail { font-size: 0.75rem; color: var(--text-sec); text-align: center; margin-top: 8px; }
+        
+        /* Registro de operaciones */
+        .operations-filters { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; align-items: flex-end; }
+        .filter-group { display: flex; flex-direction: column; gap: 4px; }
+        .filter-group label { font-size: 0.7rem; color: var(--text-sec); }
+        .filter-group input { background: var(--input); border: 1px solid var(--border); padding: 8px; border-radius: 10px; color: var(--text); }
+        .operations-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+        .operations-table th, .operations-table td { padding: 8px; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.8rem; }
+        .operations-table th { color: var(--accent); }
+        .delete-op-btn { background: none; border: none; color: var(--accent); cursor: pointer; }
+        .chart-container { margin: 20px 0; height: 250px; }
+        .total-profit-card { background: var(--accent); color: white; padding: 12px; border-radius: 16px; text-align: center; margin-bottom: 16px; }
         
         /* Botón flotante */
         .floating-container { position: fixed; z-index: 100; }
@@ -181,15 +192,11 @@
         
         @media (max-width: 550px) {
             body { padding: 10px; }
-            .cities-grid { grid-template-columns: 1fr; }
-            .city-prices { grid-template-columns: 1fr; }
-            .stats { grid-template-columns: 1fr; }
-            .data-buttons { grid-template-columns: 1fr; }
-            .row-2 { flex-direction: column; }
-            .enchant-row { flex-direction: column; }
-            h1 { font-size: 1.1rem; }
-            .logo { width: 35px; height: 35px; }
-            .item-name { font-size: 0.9rem; }
+            .cities-grid, .city-prices { grid-template-columns: 1fr; }
+            .stats, .data-buttons, .row-2, .enchant-row { grid-template-columns: 1fr; }
+            .operations-filters { flex-direction: column; }
+            .modal-content { max-width: 95%; }
+            .operations-table th, .operations-table td { font-size: 0.7rem; padding: 4px; }
         }
     </style>
 </head>
@@ -261,13 +268,14 @@
     <div class="floating-menu" id="floatMenu">
         <button onclick="openSimulator()"><i class="fas fa-chart-line"></i> Simulador de volumen</button>
         <button onclick="openEnchantCalculator()"><i class="fas fa-magic"></i> Calculadora de encantamientos</button>
+        <button onclick="openOperationsModal()"><i class="fas fa-clipboard-list"></i> Registro de operaciones</button>
     </div>
     <div class="floating-btn" id="floatBtn">
         <i class="fas fa-skull"></i>
     </div>
 </div>
 
-<!-- Modal Simulador -->
+<!-- Modal Simulador de Volumen -->
 <div id="simModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -296,13 +304,11 @@
             <h2><i class="fas fa-magic"></i> Calculadora de encantamientos</h2>
             <button class="btn-outline" onclick="closeEnchantCalculator()"><i class="fas fa-times"></i> Cerrar</button>
         </div>
-        
         <div class="enchant-tabs">
             <div class="enchant-tab rune active" data-tab="rune">🏺 Runas<br><span style="font-size:0.6rem;">Tier → .1</span></div>
             <div class="enchant-tab soul" data-tab="soul">✨ Almas<br><span style="font-size:0.6rem;">.1 → .2</span></div>
             <div class="enchant-tab relic" data-tab="relic">💎 Reliquias<br><span style="font-size:0.6rem;">.2 → .3</span></div>
         </div>
-        
         <div id="panelRune" class="enchant-panel active">
             <div class="enchant-row">
                 <div class="enchant-card"><label>📦 ITEMS BASE</label><input type="number" id="baseItemsRune" value="0" min="0" step="1"></div>
@@ -312,7 +318,6 @@
             <div class="enchant-result"><span id="totalRunas">0</span> runas necesarias<br><span id="costoRunas" style="font-size:1rem;">Costo total: 0 silver</span></div>
             <div class="enchant-detail"><i class="fas fa-info-circle"></i> Para encantar de Tier a .1 (ej: T5 → T5.1)</div>
         </div>
-        
         <div id="panelSoul" class="enchant-panel">
             <div class="enchant-row">
                 <div class="enchant-card"><label>📦 ITEMS BASE</label><input type="number" id="baseItemsSoul" value="0" min="0" step="1"></div>
@@ -322,7 +327,6 @@
             <div class="enchant-result"><span id="totalAlmas">0</span> almas necesarias<br><span id="costoAlmas" style="font-size:1rem;">Costo total: 0 silver</span></div>
             <div class="enchant-detail"><i class="fas fa-info-circle"></i> Para encantar de .1 a .2 (ej: T5.1 → T5.2)</div>
         </div>
-        
         <div id="panelRelic" class="enchant-panel">
             <div class="enchant-row">
                 <div class="enchant-card"><label>📦 ITEMS BASE</label><input type="number" id="baseItemsRelic" value="0" min="0" step="1"></div>
@@ -335,11 +339,71 @@
     </div>
 </div>
 
+<!-- Modal Registro de Operaciones -->
+<div id="operationsModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2><i class="fas fa-clipboard-list"></i> Registro de operaciones</h2>
+            <button class="btn-outline" onclick="closeOperationsModal()"><i class="fas fa-times"></i> Cerrar</button>
+        </div>
+        
+        <!-- Filtros de rango -->
+        <div class="operations-filters">
+            <div class="filter-group">
+                <label>📅 Desde</label>
+                <input type="date" id="dateFrom">
+            </div>
+            <div class="filter-group">
+                <label>📅 Hasta</label>
+                <input type="date" id="dateTo">
+            </div>
+            <button class="btn-outline" onclick="applyDateRange()" style="margin-top: 20px;">Aplicar rango</button>
+            <button class="btn-outline" onclick="setQuickRange('day')" style="margin-top: 20px;">Hoy</button>
+            <button class="btn-outline" onclick="setQuickRange('week')" style="margin-top: 20px;">Última semana</button>
+            <button class="btn-outline" onclick="setQuickRange('month')" style="margin-top: 20px;">Último mes</button>
+        </div>
+        
+        <!-- Formulario para añadir operación -->
+        <div class="card" style="margin-bottom: 16px;">
+            <div style="font-weight: bold; margin-bottom: 8px;">➕ Nueva operación</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                <input type="date" id="opDate" style="flex:1; background:var(--input); border:1px solid var(--border); padding:8px; border-radius:10px; color:var(--text);">
+                <select id="opObject" style="flex:2; background:var(--input); border:1px solid var(--border); padding:8px; border-radius:10px; color:var(--text);"></select>
+                <input type="number" id="opBuyQty" placeholder="Cant. comprada" style="flex:1; background:var(--input); border:1px solid var(--border); padding:8px; border-radius:10px; color:var(--text);">
+                <input type="number" id="opSellQty" placeholder="Cant. vendida" style="flex:1; background:var(--input); border:1px solid var(--border); padding:8px; border-radius:10px; color:var(--text);">
+                <button class="btn-outline" onclick="addOperation()" style="padding:8px 16px;">Añadir</button>
+            </div>
+        </div>
+        
+        <!-- Tarjeta de ganancia total en el período -->
+        <div class="total-profit-card" id="totalProfitCard">Ganancia total: 0 silver</div>
+        
+        <!-- Gráfico -->
+        <div class="chart-container">
+            <canvas id="profitChart"></canvas>
+        </div>
+        
+        <!-- Tabla de operaciones -->
+        <div style="overflow-x: auto;">
+            <table class="operations-table" id="operationsTable">
+                <thead>
+                    <tr><th>Fecha</th><th>Objeto</th><th>Compra</th><th>Venta</th><th>Ganancia</th><th></th></tr>
+                </thead>
+                <tbody id="operationsTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 <script>
     // ========== DATOS GLOBALES ==========
     let items = [];
     let simQtys = {};
-    let expandedItems = {}; // Guardar estado de expansión
+    let expandedItems = {};
+    let operations = [];      // { date, objectName, buyQty, sellQty, profit }
+    let profitChart = null;
+    let currentDateFrom = null;
+    let currentDateTo = null;
 
     // ========== IMPUESTOS ==========
     function getTax() { return parseFloat(document.getElementById('taxRate').value) / 100; }
@@ -352,6 +416,38 @@
         const final = gross * (1 - getLoss());
         const rent = buy > 0 ? (final / buy) * 100 : 0;
         return { final, rent };
+    }
+
+    // Precio promedio de compra de un objeto (media de ciudades)
+    function getAvgBuyPrice(item) {
+        const cities = ['fortSterling', 'bridgewatch', 'lymhurst', 'martlock', 'thetford'];
+        let sum = 0, count = 0;
+        cities.forEach(c => {
+            let p = item.buyPrices[c];
+            if (p > 0) { sum += p; count++; }
+        });
+        return count > 0 ? sum / count : 0;
+    }
+
+    // Precio de venta promedio (Black Market)
+    function getAvgSellPrice(item) {
+        return item.blackSell;
+    }
+
+    // Ganancia de una operación usando precios actuales del objeto
+    function computeProfitForOperation(objectName, buyQty, sellQty) {
+        const obj = items.find(i => i.name === objectName);
+        if (!obj) return 0;
+        const buyPrice = getAvgBuyPrice(obj);
+        const sellPrice = getAvgSellPrice(obj);
+        if (buyPrice <= 0 || sellPrice <= 0) return 0;
+        const profitPerUnit = calcProfit(buyPrice, sellPrice).final;
+        // La ganancia total se basa en la cantidad vendida (asumimos que se vende lo que se compró, pero puede haber excedente)
+        // Para simplificar: ganancia = (cantidad_vendida * profitPerUnit) - (cantidad_comprada * coste_base?) No, el profitPerUnit ya incluye compra y venta.
+        // Dado que profitPerUnit = (sellPrice * (1-tax) - buyPrice) * (1-loss), entonces gananciaTotal = profitPerUnit * Math.min(buyQty, sellQty)
+        // Pero lo correcto es aplicar a las unidades vendidas. Asumimos que se venden todas las compradas o menos.
+        const units = Math.min(buyQty, sellQty);
+        return profitPerUnit * units;
     }
 
     // ========== PROCESAR ITEM ==========
@@ -411,7 +507,6 @@
         container.innerHTML = processed.map((item, idx) => {
             const rank = idx === 0 ? '⚔️' : idx === 1 ? '🔪' : idx === 2 ? '🏴' : '';
             const isExpanded = expandedItems[item.name] || false;
-            
             const cityRows = item.results.map(r => `
                 <div style="font-size:0.75rem; margin-top:4px;">${r.city}: Compra ${Math.round(r.buy).toLocaleString()} → <span style="color:var(--accent)">${Math.round(r.profit).toLocaleString()} silver</span> (${r.rent.toFixed(1)}%)</div>
             `).join('');
@@ -476,6 +571,7 @@
         delete expandedItems[name];
         renderItems(); 
         if (document.getElementById('simModal').classList.contains('active')) renderSimulator(); 
+        updateOperationsSelect(); // actualizar selector de objetos en operaciones
     }
 
     // ========== AGREGAR OBJETO ==========
@@ -504,12 +600,14 @@
         ['buyFS','buyBW','buyLH','buyML','buyTH'].forEach(id => document.getElementById(id).value = '');
         
         renderItems();
+        updateOperationsSelect();
         toast(`${name} agregado`);
     }
 
     // ========== PERSISTENCIA ==========
     function saveToLocal() { 
         localStorage.setItem('bmData', JSON.stringify({ items, tax: getTax()*100, loss: getLoss()*100, expandedItems }));
+        localStorage.setItem('operationsData', JSON.stringify(operations));
         const enchantData = {
             baseItemsRune: document.getElementById('baseItemsRune').value,
             runasPorItem: document.getElementById('runasPorItem').value,
@@ -543,6 +641,15 @@
         updateRelicCalc();
     }
     
+    function loadOperations() {
+        const saved = localStorage.getItem('operationsData');
+        if (saved) {
+            operations = JSON.parse(saved);
+        } else {
+            operations = [];
+        }
+    }
+    
     function loadFromLocal() {
         const data = localStorage.getItem('bmData');
         if (data) {
@@ -556,17 +663,19 @@
             expandedItems = {};
         }
         simQtys = {};
+        loadOperations();
         renderItems();
         loadEnchantData();
+        updateOperationsSelect();
     }
     
     function saveData() { saveToLocal(); toast('Datos guardados'); }
-    function clearAll() { if(confirm('¿Eliminar todos los objetos?')) { items = []; simQtys = {}; expandedItems = {}; renderItems(); saveToLocal(); toast('Todo limpiado'); } }
-    function exportData() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(items)])); a.download = `bm_${Date.now()}.json`; a.click(); toast('Exportado'); }
+    function clearAll() { if(confirm('¿Eliminar todos los objetos y operaciones?')) { items = []; simQtys = {}; expandedItems = {}; operations = []; renderItems(); saveToLocal(); toast('Todo limpiado'); } }
+    function exportData() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify({items, operations})])); a.download = `bm_${Date.now()}.json`; a.click(); toast('Exportado'); }
     function importTrigger() { document.getElementById('importFile').click(); }
-    function importData(input) { const file = input.files[0]; if(!file) return; const r = new FileReader(); r.onload = e => { try { items = JSON.parse(e.target.result); simQtys = {}; expandedItems = {}; renderItems(); saveToLocal(); toast('Importado'); } catch(err) { toast('Error'); } }; r.readAsText(file); input.value = ''; }
+    function importData(input) { const file = input.files[0]; if(!file) return; const r = new FileReader(); r.onload = e => { try { const imported = JSON.parse(e.target.result); items = imported.items || []; operations = imported.operations || []; simQtys = {}; expandedItems = {}; renderItems(); updateOperationsSelect(); saveToLocal(); toast('Importado'); } catch(err) { toast('Error'); } }; r.readAsText(file); input.value = ''; }
 
-    // ========== SIMULADOR ==========
+    // ========== SIMULADOR DE VOLUMEN ==========
     function getAvgProfit(item) { return processItem(item).avgProfit; }
     
     function renderSimulator() {
@@ -627,30 +736,28 @@
     });
     
     function updateRuneCalc() {
-        const items = parseFloat(document.getElementById('baseItemsRune').value) || 0;
+        const it = parseFloat(document.getElementById('baseItemsRune').value) || 0;
         const runas = parseFloat(document.getElementById('runasPorItem').value) || 0;
         const precio = parseFloat(document.getElementById('precioRuna').value) || 0;
-        const total = items * runas;
+        const total = it * runas;
         document.getElementById('totalRunas').innerHTML = total.toLocaleString();
         document.getElementById('costoRunas').innerHTML = `Costo total: ${(total * precio).toLocaleString()} silver`;
         saveToLocal();
     }
-    
     function updateSoulCalc() {
-        const items = parseFloat(document.getElementById('baseItemsSoul').value) || 0;
+        const it = parseFloat(document.getElementById('baseItemsSoul').value) || 0;
         const almas = parseFloat(document.getElementById('almasPorItem').value) || 0;
         const precio = parseFloat(document.getElementById('precioAlma').value) || 0;
-        const total = items * almas;
+        const total = it * almas;
         document.getElementById('totalAlmas').innerHTML = total.toLocaleString();
         document.getElementById('costoAlmas').innerHTML = `Costo total: ${(total * precio).toLocaleString()} silver`;
         saveToLocal();
     }
-    
     function updateRelicCalc() {
-        const items = parseFloat(document.getElementById('baseItemsRelic').value) || 0;
-        const reliquias = parseFloat(document.getElementById('reliquiasPorItem').value) || 0;
+        const it = parseFloat(document.getElementById('baseItemsRelic').value) || 0;
+        const rel = parseFloat(document.getElementById('reliquiasPorItem').value) || 0;
         const precio = parseFloat(document.getElementById('precioReliquia').value) || 0;
-        const total = items * reliquias;
+        const total = it * rel;
         document.getElementById('totalReliquias').innerHTML = total.toLocaleString();
         document.getElementById('costoReliquias').innerHTML = `Costo total: ${(total * precio).toLocaleString()} silver`;
         saveToLocal();
@@ -668,6 +775,156 @@
     
     function openEnchantCalculator() { updateRuneCalc(); updateSoulCalc(); updateRelicCalc(); document.getElementById('enchantModal').classList.add('active'); }
     function closeEnchantCalculator() { document.getElementById('enchantModal').classList.remove('active'); }
+
+    // ========== REGISTRO DE OPERACIONES ==========
+    function updateOperationsSelect() {
+        const select = document.getElementById('opObject');
+        if (!select) return;
+        select.innerHTML = '<option value="">Selecciona objeto</option>';
+        items.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.name;
+            option.textContent = item.name;
+            select.appendChild(option);
+        });
+    }
+    
+    function addOperation() {
+        const date = document.getElementById('opDate').value;
+        const objectName = document.getElementById('opObject').value;
+        const buyQty = parseFloat(document.getElementById('opBuyQty').value) || 0;
+        const sellQty = parseFloat(document.getElementById('opSellQty').value) || 0;
+        if (!date || !objectName || (buyQty === 0 && sellQty === 0)) {
+            toast('Completa fecha, objeto y al menos una cantidad');
+            return;
+        }
+        const profit = computeProfitForOperation(objectName, buyQty, sellQty);
+        operations.push({ date, objectName, buyQty, sellQty, profit });
+        saveToLocal();
+        applyDateRange(); // refrescar vista y gráfico
+        toast('Operación añadida');
+        // Limpiar campos
+        document.getElementById('opDate').value = '';
+        document.getElementById('opObject').value = '';
+        document.getElementById('opBuyQty').value = '';
+        document.getElementById('opSellQty').value = '';
+    }
+    
+    function deleteOperation(index) {
+        operations.splice(index, 1);
+        saveToLocal();
+        applyDateRange();
+        toast('Operación eliminada');
+    }
+    
+    function getOperationsInRange(fromDate, toDate) {
+        if (!fromDate || !toDate) return operations;
+        const from = new Date(fromDate);
+        const to = new Date(toDate);
+        to.setHours(23,59,59);
+        return operations.filter(op => {
+            const opDate = new Date(op.date);
+            return opDate >= from && opDate <= to;
+        });
+    }
+    
+    function renderOperationsTable(ops) {
+        const tbody = document.getElementById('operationsTableBody');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+        ops.forEach((op, idx) => {
+            const row = tbody.insertRow();
+            row.insertCell(0).textContent = op.date;
+            row.insertCell(1).textContent = op.objectName;
+            row.insertCell(2).textContent = op.buyQty;
+            row.insertCell(3).textContent = op.sellQty;
+            row.insertCell(4).textContent = Math.round(op.profit).toLocaleString();
+            const delCell = row.insertCell(5);
+            const delBtn = document.createElement('button');
+            delBtn.textContent = '🗑️';
+            delBtn.className = 'delete-op-btn';
+            delBtn.onclick = () => deleteOperation(idx);
+            delCell.appendChild(delBtn);
+        });
+    }
+    
+    function updateChart(ops) {
+        if (!profitChart) {
+            const ctx = document.getElementById('profitChart').getContext('2d');
+            profitChart = new Chart(ctx, {
+                type: 'line',
+                data: { labels: [], datasets: [{ label: 'Ganancia (silver)', data: [], borderColor: '#b91c1c', backgroundColor: 'rgba(185,28,28,0.1)', fill: true, tension: 0.3 }] },
+                options: { responsive: true, maintainAspectRatio: true }
+            });
+        }
+        // Agrupar por fecha
+        const map = new Map();
+        ops.forEach(op => {
+            const d = op.date;
+            map.set(d, (map.get(d) || 0) + op.profit);
+        });
+        const sortedDates = Array.from(map.keys()).sort();
+        const profits = sortedDates.map(d => map.get(d));
+        profitChart.data.labels = sortedDates;
+        profitChart.data.datasets[0].data = profits;
+        profitChart.update();
+    }
+    
+    function updateTotalProfit(ops) {
+        const total = ops.reduce((sum, op) => sum + op.profit, 0);
+        const card = document.getElementById('totalProfitCard');
+        if (card) card.innerHTML = `💰 Ganancia total en el período: ${Math.round(total).toLocaleString()} silver`;
+    }
+    
+    function applyDateRange() {
+        const from = document.getElementById('dateFrom').value;
+        const to = document.getElementById('dateTo').value;
+        currentDateFrom = from;
+        currentDateTo = to;
+        const filtered = getOperationsInRange(from, to);
+        renderOperationsTable(filtered);
+        updateTotalProfit(filtered);
+        updateChart(filtered);
+    }
+    
+    function setQuickRange(range) {
+        const today = new Date();
+        let from = new Date();
+        if (range === 'day') {
+            from = today;
+        } else if (range === 'week') {
+            from.setDate(today.getDate() - 7);
+        } else if (range === 'month') {
+            from.setMonth(today.getMonth() - 1);
+        }
+        const dateFromStr = from.toISOString().split('T')[0];
+        const dateToStr = today.toISOString().split('T')[0];
+        document.getElementById('dateFrom').value = dateFromStr;
+        document.getElementById('dateTo').value = dateToStr;
+        applyDateRange();
+    }
+    
+    function openOperationsModal() {
+        // Inicializar fechas por defecto (últimos 30 días)
+        if (!currentDateFrom) {
+            const today = new Date();
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(today.getDate() - 30);
+            document.getElementById('dateFrom').value = thirtyDaysAgo.toISOString().split('T')[0];
+            document.getElementById('dateTo').value = today.toISOString().split('T')[0];
+            currentDateFrom = document.getElementById('dateFrom').value;
+            currentDateTo = document.getElementById('dateTo').value;
+        } else {
+            document.getElementById('dateFrom').value = currentDateFrom;
+            document.getElementById('dateTo').value = currentDateTo;
+        }
+        applyDateRange();
+        document.getElementById('operationsModal').classList.add('active');
+    }
+    
+    function closeOperationsModal() {
+        document.getElementById('operationsModal').classList.remove('active');
+    }
 
     // ========== UI ==========
     function toast(msg) { const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = `<i class="fas fa-skull"></i> ${msg}`; document.body.appendChild(t); setTimeout(() => t.remove(), 2000); }
@@ -689,7 +946,7 @@
         formOpen = !formOpen; 
     }
     
-    // ========== BOTÓN FLOTANTE ==========
+    // ========== BOTÓN FLOTANTE ARRASTRABLE ==========
     const floatContainer = document.getElementById('floatingContainer');
     const floatBtn = document.getElementById('floatBtn');
     const floatMenu = document.getElementById('floatMenu');
