@@ -306,7 +306,7 @@
             </div>
         </div>
         
-        <!-- Tarjeta de ganancia total del perfil actual -->
+        <!-- Tarjeta de ganancia total del perfil actual (con lapso de tiempo si es general) -->
         <div class="total-profit-card" id="profileTotalProfit">💰 Ganancia total: 0 silver</div>
         
         <!-- Gráfico de torta del perfil actual -->
@@ -593,7 +593,26 @@
         }
         const ops = getOperationsForProfile(currentProfileId);
         const totalProfit = ops.reduce((s,o) => s + o.profit, 0);
-        document.getElementById('profileTotalProfit').innerHTML = `💰 Ganancia total: ${Math.round(totalProfit).toLocaleString()} silver`;
+        
+        // Calcular lapso de tiempo para el perfil general
+        let extraInfo = '';
+        if (currentProfileId === "general") {
+            let minDate = null, maxDate = null;
+            ops.forEach(op => {
+                const d = new Date(op.date);
+                if (!minDate || d < minDate) minDate = d;
+                if (!maxDate || d > maxDate) maxDate = d;
+            });
+            if (minDate && maxDate) {
+                const diffDays = Math.ceil((maxDate - minDate) / (1000 * 60 * 60 * 24)) + 1;
+                extraInfo = `<br>📅 Período: ${minDate.toLocaleDateString()} → ${maxDate.toLocaleDateString()} (${diffDays} días)<br>📊 Ganancia por día: ${Math.round(totalProfit / diffDays).toLocaleString()} silver/día`;
+            } else if (ops.length === 0) {
+                extraInfo = `<br>📅 No hay operaciones registradas aún.`;
+            }
+        }
+        
+        document.getElementById('profileTotalProfit').innerHTML = `💰 Ganancia total: ${Math.round(totalProfit).toLocaleString()} silver${extraInfo}`;
+        
         const tbody = document.getElementById('profileTableBody');
         tbody.innerHTML = '';
         ops.forEach((op, idx) => {
@@ -651,7 +670,6 @@
         saveToLocal();
         currentProfileId = newId;
         refreshProfileUI();
-        // Limpiar campos
         document.getElementById('newProfileName').value = '';
         document.getElementById('newProfileStart').value = '';
         document.getElementById('newProfileEnd').value = '';
